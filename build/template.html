@@ -1,0 +1,1278 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>步態互動實驗室 v1.8.0</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--stage:#0b1113;--surface:#f2f4f4;--surface-2:#e6eaea;--line:#ccd4d4;
+  --ink:#151b1d;--ink-2:#5a6668;--accent:#0f8f86;--accent-ink:#fff;--radius:3px}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --surface:#141a1c;--surface-2:#1c2426;--line:#2b3538;--ink:#e4eaea;--ink-2:#8b9a9c;
+  --accent:#2fc4b6;--accent-ink:#06201e}}
+:root[data-theme="dark"]{--surface:#141a1c;--surface-2:#1c2426;--line:#2b3538;
+  --ink:#e4eaea;--ink-2:#8b9a9c;--accent:#2fc4b6;--accent-ink:#06201e}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{background:var(--surface);color:var(--ink);
+  font-family:"Noto Sans TC",-apple-system,BlinkMacSystemFont,sans-serif;font-size:14px;line-height:1.6;
+  -webkit-text-size-adjust:100%}
+.app{display:grid;grid-template-columns:232px minmax(0,1fr) 296px;height:100dvh;overflow:hidden}
+.panel{background:var(--surface);border-right:1px solid var(--line);overflow-y:auto;padding:14px 14px 40px}
+.panel--right{border-right:none;border-left:1px solid var(--line)}
+/* 視窗：畫布用絕對定位鋪滿，不依賴百分比高度解析 */
+.stage{position:relative;background:var(--stage);min-width:0;min-height:360px;overflow:hidden}
+#c{position:absolute;top:0;left:0;width:100%;height:100%;display:block;touch-action:none}
+h1{font-size:15px;font-weight:700;margin:0 0 2px}
+.sub{font-size:11.5px;color:var(--ink-2);margin:0 0 16px;font-family:"IBM Plex Mono",monospace;line-height:1.5}
+h2{font-size:12px;font-weight:700;margin:20px 0 8px;padding-bottom:5px;border-bottom:1px solid var(--line)}
+h2:first-of-type{margin-top:14px}
+p.note{font-size:11.5px;color:var(--ink-2);line-height:1.55;margin:6px 0 0}
+.row{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:8px}
+button{font:inherit;font-size:12px;color:var(--ink);background:var(--surface-2);
+  border:1px solid var(--line);border-radius:var(--radius);padding:5px 9px;cursor:pointer}
+button:hover{border-color:var(--accent)}
+button:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+button.on{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);font-weight:500}
+select{font:inherit;font-size:12.5px;width:100%;padding:6px 8px;color:var(--ink);
+  background:var(--surface-2);border:1px solid var(--line);border-radius:var(--radius)}
+input[type=range]{width:100%;accent-color:var(--accent);margin:0}
+label.chk{display:flex;align-items:center;gap:7px;font-size:12.5px;padding:3px 0;cursor:pointer}
+label.chk input{accent-color:var(--accent);margin:0}
+.slab{margin-bottom:12px}
+.slab .top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:3px}
+.slab .val{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--accent);font-variant-numeric:tabular-nums}
+.slab .ends{display:flex;justify-content:space-between;font-size:10.5px;color:var(--ink-2);margin-top:1px}
+.prov{font-size:11px;line-height:1.5;margin:8px 0 14px;padding:7px 9px;border-left:2px solid var(--accent);
+  background:var(--surface-2);color:var(--ink-2)}
+.prov b{color:var(--ink);font-weight:500}
+.hud{position:absolute;top:10px;left:12px;font-family:"IBM Plex Mono",monospace;
+  font-size:11.5px;color:#9fb3b3;pointer-events:none;line-height:1.7;z-index:2}
+.hud b{color:#2fc4b6;font-weight:500;font-size:19px}
+.hud .ev{color:#e8eeee;font-family:"Noto Sans TC",sans-serif;font-size:12.5px}
+#diag{color:#5f7477;font-size:10.5px;margin-top:4px;display:none}  /* 除錯用，預設隱藏，按 d 開關 */
+.pickname{position:absolute;top:10px;right:12px;font-size:12.5px;color:#e8eeee;z-index:2;
+  background:rgba(12,18,20,.8);border:1px solid #2b3538;border-radius:var(--radius);
+  padding:4px 9px;pointer-events:none;opacity:0;transition:opacity .15s}
+.transport{position:absolute;left:12px;right:12px;bottom:12px;z-index:2;
+  background:rgba(11,17,19,.9);border:1px solid #2b3538;border-radius:var(--radius);padding:8px 11px;
+  backdrop-filter:blur(6px)}
+.tline{display:flex;align-items:center;gap:10px}
+.transport button{background:#1c2426;border-color:#2b3538;color:#e4eaea}
+.transport button.on{background:#2fc4b6;color:#06201e;border-color:#2fc4b6}
+.track{position:relative;flex:1;height:30px}
+.track input[type=range]{position:absolute;left:0;right:0;top:11px;width:100%}
+.bands{position:absolute;left:0;right:0;top:0;height:7px;pointer-events:none}
+.bands i{position:absolute;top:0;height:7px;background:#2fc4b6;opacity:.28;border-radius:1px}
+.marks{position:absolute;left:0;right:0;bottom:0;height:11px;pointer-events:none}
+.marks i{position:absolute;bottom:0;width:1px;height:7px;background:#ffc46b}
+.marks span{position:absolute;bottom:0;transform:translateX(-50%);font-size:9px;color:#ffc46b;
+  font-family:"IBM Plex Mono",monospace;white-space:nowrap}
+.transport .pct{font-family:"IBM Plex Mono",monospace;font-size:12px;color:#2fc4b6;min-width:46px;
+  text-align:right;font-variant-numeric:tabular-nums}
+.tabs{display:flex;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;margin-bottom:10px}
+.tabs button{flex:1;border:none;border-radius:0;border-right:1px solid var(--line);font-size:11.5px;padding:6px 4px;line-height:1.3}
+.tabs button:last-child{border-right:none}
+.tabs .kf{font-family:"IBM Plex Mono",monospace;display:block;font-size:13px}
+.tabs .kfl{display:block;font-size:10px;color:var(--ink-2)}
+.tabs button.on .kfl{color:var(--accent-ink);opacity:.75}
+.charts{position:absolute;left:12px;right:12px;bottom:60px;z-index:2;display:flex;gap:8px}
+.charts.off{display:none}
+.chart{flex:1;background:rgba(11,17,19,.9);border:1px solid #2b3538;border-radius:var(--radius);padding:5px 7px 2px}
+.chart .ct{font-size:10.5px;color:#9fb3b3;display:flex;justify-content:space-between;
+  font-family:"Noto Sans TC",sans-serif;line-height:1.4}
+.chart .ct b{color:#2fc4b6;font-weight:500;font-family:"IBM Plex Mono",monospace;font-size:11px}
+.chart svg{display:block;width:100%;height:auto}
+.coup{margin:10px 0 4px;background:var(--surface-2);border:1px solid var(--line);
+  border-radius:var(--radius);padding:8px 9px 4px}
+.coup .lg{display:flex;gap:10px;font-size:10.5px;color:var(--ink-2);margin-bottom:3px;flex-wrap:wrap}
+.coup .lg i{display:inline-block;width:11px;height:2px;vertical-align:middle;margin-right:3px}
+.coup svg{display:block;width:100%;height:auto}
+@media (max-width:900px){.charts{position:static;margin:8px 12px 0;flex-wrap:wrap}
+  .chart{min-width:44%}}
+#err{position:absolute;inset:12px;z-index:9;display:none;background:#2a1113;border:1px solid #7a2b30;
+  color:#ffd9d5;padding:14px;overflow:auto;font-family:"IBM Plex Mono",monospace;font-size:12px;
+  line-height:1.6;white-space:pre-wrap}
+details{margin-top:16px;font-size:11.5px;color:var(--ink-2)}
+details summary{cursor:pointer;color:var(--ink);font-size:12px;font-weight:500}
+details p{margin:8px 0 0;line-height:1.6}
+table.ev{width:100%;border-collapse:collapse;font-size:11.5px;margin-top:6px}
+table.ev td{padding:2px 0;border-bottom:1px solid var(--line)}
+table.ev td:last-child{text-align:right;font-family:"IBM Plex Mono",monospace;color:var(--accent)}
+@media (max-width:900px){
+  .app{grid-template-columns:1fr;grid-template-rows:auto auto auto;height:auto;min-height:100dvh;overflow:visible}
+  .stage{order:1;height:58vh}
+  .panel{order:2;border:none;border-top:1px solid var(--line);overflow:visible}
+  .panel--right{order:3;border-left:none}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="panel">
+    <h1>步態互動實驗室</h1>
+    <p class="sub">v1.8.0 · 公開版：24 個片段，全部為 CC BY 4.0 公開資料集<br>BodyParts3D × Fukuchi × Van Criekinge × PD × 髖退化</p>
+
+    <h2>動作資料</h2>
+    <select id="clipSel"></select>
+    <div id="clipMeta" class="prov" style="margin:8px 0 0"></div>
+    <label class="chk" style="margin-top:6px"><input type="checkbox" id="cmpChk" checked>曲線疊上另一組平均</label>
+    <p class="note" style="color:var(--warn)">本工具無水平位移，且各受試者的髖偏移不同，因此<b>不可由畫面判讀步幅</b>。步幅數值另由「跑步機速度 × 實測步態週期」算出，列於上方與比較表。兩組平均已共用同一偏移，其角度差異才是真的。</p>
+
+    <h2>視角</h2>
+    <div class="row" id="viewBtns">
+      <button data-az="0" class="on">右</button><button data-az="180">左</button>
+      <button data-az="90">前</button><button data-az="270">後</button>
+      <button data-az="0" data-pol="6">上</button>
+      <button id="camReset">重設鏡頭</button>
+    </div>
+    <div class="row" id="zoomBtns">
+      <button data-zoom="body" class="on">全身</button>
+      <button data-zoom="leg">下肢</button>
+      <button data-zoom="foot">足部</button>
+    </div>
+    <p class="note">單指拖曳旋轉，雙指開合縮放，雙指拖曳改變視角；桌機可用滾輪縮放、雙擊拉近。足部視角跟著右踝移動。</p>
+
+    <h2>模式</h2>
+    <div class="row" id="modeBtns">
+      <button data-mode="gait" class="on">步態</button>
+      <button data-mode="static">靜止立位</button>
+    </div>
+
+    <h2>顯示</h2>
+    <div id="segToggles"></div>
+    <p class="note" style="margin-bottom:8px">點畫面上任一塊骨頭可切換透明。</p>
+    <div class="row">
+      <button id="resetBones">全部還原</button>
+      <button id="axHelp">關節標記</button>
+      <button id="chToggle" class="on">角度曲線</button>
+      <button id="gndToggle" class="on">貼地</button>
+    </div>
+
+    <h2>與對照組比較</h2>
+    <div id="cmpTable"></div>
+
+    <h2>步態事件</h2>
+    <table class="ev" id="evTable"></table>
+    <p class="note" id="stanceNote"></p>
+
+    <details>
+      <summary>資料來源與限制</summary>
+      <p><b>骨骼（L1）</b>：BodyParts3D, Copyright© The Database Center for Life Science licensed by CC Attribution-Share Alike 2.1 Japan。126 個部件，僅做座標轉換與數值量化，未修改形狀。此授權為「姓名標示－相同方式分享」，故本頁面（內嵌該網格資料）亦以 CC BY-SA 2.1 Japan 散布。</p>
+      <p><b>骨架（L2）</b>：關節中心全部由骨骼幾何推估，非影像量測值。選擇關節時右側會顯示各自的推估方法。</p>
+      <p><b>動作（L3）</b>：四個公開研究資料集，全部為實測值，無任何手繪或模擬的動作。各片段的受試者數、年齡、步速與臨床分類顯示於左側資訊列。</p><p><b>零位對齊</b>：各資料集的骨盆零位定義與 BodyParts3D 標本的站立姿勢不同，直接套用會產生假的軀幹前傾或側傾。骨盆與腰椎的自由度一律只取「相對該片段週期平均的變化量」，因此<b>擺幅是實測的，絕對角度不是</b>——不可用本工具判讀某人的骨盆前傾有幾度。下肢（髖膝踝距下蹠趾）零位為解剖中立位，各資料集定義一致，未做調整。</p><p><b>步態週期</b>：WBDS clip 的週期由測力板垂直力的自相關求得（取樣率 300 Hz，搜尋範圍 0.7–1.8 s，左右履帶取平均），範圍 0.947–1.070 s，步頻 112–127 步/分。步幅＝跑步機速度 × 週期。v0.7.0 以前此欄為程式預設值 1.1 s，播放速度不正確。</p><p><b>髖關節中心為何不用回歸式</b>：Harrington 等 2007 的回歸式是為皮膚標記步態分析設計的，在看不到骨頭時由骨盆尺寸推估股骨頭中心，經雙螢光透視驗證誤差 12–17 mm 且系統性偏外側。本工具有實際股骨網格，直接以球面擬合量測股骨頭（半徑 23.0／23.3 mm，左右差 0.3 mm），精度優於回歸式，故不採用。</p><p><b>髖角度偏移與貼地</b>：髖角度是相對骨盆量測的，各資料集與本標本的骨盆中立位不同，直接套用會使腿在著地時搆不到地。每個 clip 施加一個常數髖偏移，取值為「使站立期貼地高度變化最小」的幾何閉合條件（範圍 -22.5° 至 +12.5°，各 clip 數值顯示於左側）。修正後骨盆垂直起伏為 0.027–0.041 m，落在行走重心上下位移的生理範圍內。此偏移為常數，不影響擺幅、峰值間距與所有組間比較統計。模型高度由當下處於站立期的腳決定，擺盪腳不參與，可用「貼地」按鈕關閉。</p><p><b>限制</b>：骨頭以剛體旋轉，無關節面滑動、軟骨、韌帶、關節囊、肌肉。距下關節目前以正交軸近似，尚未採用 Inman 斜軸。原始 IK 未追蹤距下與蹠趾，只能手動操作。各片段的受試者數與族群標示於左側資訊列，個案片段為單一受試者，不可當作常模。</p>
+    </details>
+  </aside>
+
+  <main class="stage">
+    <canvas id="c"></canvas>
+    <div id="err"></div>
+    <div class="hud">
+      <div>步行周期 <b id="hudPct">0.0%</b></div>
+      <div class="ev" id="hudEvent">—</div>
+      <div id="contact" style="font-family:'Noto Sans TC',sans-serif;font-size:12px;line-height:1.6"></div>
+      <div id="diag"></div>
+    </div>
+    <div class="pickname" id="pickName"></div>
+    <div class="charts" id="charts"></div>
+    <div class="transport">
+      <div class="tline">
+        <button id="play" class="on">❚❚</button>
+        <div class="track">
+          <div class="bands" id="bands"></div>
+          <input type="range" id="scrub" min="0" max="1000" value="0">
+          <div class="marks" id="marks"></div>
+        </div>
+        <span class="pct" id="tPct">0.0%</span>
+        <button data-speed="0.25">0.25×</button>
+        <button data-speed="0.5" class="on">0.5×</button>
+        <button data-speed="1">1×</button>
+      </div>
+    </div>
+  </main>
+
+  <aside class="panel panel--right">
+    <h2 style="margin-top:14px">選擇關節</h2>
+    <select id="jointSel"></select>
+    <div class="prov" id="prov"></div>
+
+    <h2>疊加偏移</h2>
+    <label class="chk"><input type="checkbox" id="symChk">左右連動（同時套用到對側）</label>
+    <label class="chk" style="margin-bottom:6px"><input type="checkbox" id="cycChk">隨步態週期變化</label>
+    <p class="note" style="margin:0 0 12px">不勾選時，下方滑桿是全程固定的偏移。勾選後每個平面會多一根滑桿：
+    一根設定著地（0%＝100%，同一瞬間）的值，一根設定週期中點（50%）的值，中間以升餘弦平滑過渡，首尾不跳變。</p>
+    <div id="sliders"></div>
+    <div class="row" style="margin-top:14px">
+      <button id="resetJoint">清除此關節</button>
+      <button id="resetAll">清除全部</button>
+    </div>
+
+    <div id="coupBox"></div>
+
+    <h2>目前實際角度</h2>
+    <div id="readout" style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--ink-2);line-height:1.9"></div>
+    <p class="note">＝ 試驗資料 ＋ 你設定的偏移。</p>
+  </aside>
+</div>
+
+<script id="anatomy" type="application/json">__ANATOMY__</script>
+<script id="skeleton" type="application/json">__SKELETON__</script>
+<script id="motion"   type="application/json">__MOTION__</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+function showErr(m){var e=document.getElementById('err');if(!e)return;
+  e.style.display='block';e.textContent+=m+"\n";}
+window.addEventListener('error',function(ev){
+  showErr('JS ERROR: '+ev.message+'\n  @ '+(ev.filename||'')+':'+ev.lineno+':'+(ev.colno||0));});
+(function(){
+"use strict";
+try{
+var D2R=Math.PI/180;
+var L1=JSON.parse(document.getElementById('anatomy').textContent);
+var L2=JSON.parse(document.getElementById('skeleton').textContent);
+var L3=JSON.parse(document.getElementById('motion').textContent);
+var CLIPS=L3.clips, CLIP=CLIPS[0], G=CLIP.data;
+function clipById(id){for(var i=0;i<CLIPS.length;i++) if(CLIPS[i].id===id) return CLIPS[i]; return null;}
+
+var bin=(function(b64){var s=atob(b64),n=s.length,a=new Uint8Array(n);
+  for(var i=0;i<n;i++)a[i]=s.charCodeAt(i);return a.buffer;})(L1.buf);
+
+var canvas=document.getElementById('c'), stage=canvas.parentNode;
+var renderer=new THREE.WebGLRenderer({canvas:canvas,antialias:true});
+renderer.setPixelRatio(Math.min(devicePixelRatio||1,2));
+var scene=new THREE.Scene(); scene.background=new THREE.Color(0x0b1113);
+var camera=new THREE.PerspectiveCamera(34,1,0.02,60);
+scene.add(new THREE.AmbientLight(0xffffff,0.34));
+scene.add(new THREE.HemisphereLight(0xcfeae6,0x0a1012,0.85));
+var kl=new THREE.DirectionalLight(0xffffff,0.66); kl.position.set(2,3.5,2.5); scene.add(kl);
+var fl=new THREE.DirectionalLight(0x7fded2,0.28); fl.position.set(-2.5,1.5,-2); scene.add(fl);
+var grid=new THREE.GridHelper(6,24,0x4a6a6e,0x2c4144);
+grid.material.transparent=true; grid.material.opacity=0.5; scene.add(grid);
+
+/* ---- L2：骨架 ---- */
+var Jc={}, JMETA=L2.joints, HIER=L2.hier;
+Object.keys(JMETA).forEach(function(k){ Jc[k]=JMETA[k].p; });
+var nodes={};
+Object.keys(HIER).forEach(function(seg){
+  var n=new THREE.Group(); n.name=seg; nodes[seg]=n;
+});
+Object.keys(HIER).forEach(function(seg){
+  var par=HIER[seg][0], jc=Jc[HIER[seg][1]], n=nodes[seg];
+  if(par){ var pj=Jc[HIER[par][1]]; n.position.set(jc[0]-pj[0],jc[1]-pj[1],jc[2]-pj[2]); nodes[par].add(n); }
+  else { n.position.set(jc[0],jc[1],jc[2]); scene.add(n); }
+});
+
+/* 關節標記 */
+var axGroup=new THREE.Group(); axGroup.visible=false; scene.add(axGroup);
+Object.keys(HIER).forEach(function(seg){
+  var d=new THREE.Mesh(new THREE.SphereGeometry(0.012,10,8),
+        new THREE.MeshBasicMaterial({color:0xffc46b}));
+  nodes[seg].add(d); axGroup.add(d.userData.proxy=d); d.visible=false; d.userData.isMark=true;
+});
+function setMarks(v){ Object.keys(nodes).forEach(function(s){
+  nodes[s].children.forEach(function(ch){ if(ch.userData.isMark) ch.visible=v; }); }); }
+
+/* ---- L1：幾何 ---- */
+var meshes=[], bySeg={};
+L1.parts.forEach(function(p){
+  var q=new Uint16Array(bin,p.vo,p.nv*3), pos=new Float32Array(p.nv*3);
+  for(var i=0;i<p.nv;i++){
+    pos[i*3]  =p.lo[0]+q[i*3]  /65535*p.sp[0];
+    pos[i*3+1]=p.lo[1]+q[i*3+1]/65535*p.sp[1];
+    pos[i*3+2]=p.lo[2]+q[i*3+2]/65535*p.sp[2];
+  }
+  var g=new THREE.BufferGeometry();
+  g.setAttribute('position',new THREE.BufferAttribute(pos,3));
+  g.setIndex(new THREE.BufferAttribute(new Uint16Array(new Uint16Array(bin,p.io,p.nf*3)),1));
+  g.computeVertexNormals(); g.computeBoundingSphere();
+  var m=new THREE.Mesh(g,new THREE.MeshStandardMaterial({color:0xdfe6e2,roughness:0.74,
+    metalness:0.02,transparent:true,opacity:1,side:THREE.DoubleSide}));
+  m.name=p.n; m.userData.dim=false; m.frustumCulled=false;
+  nodes[p.s].add(m); meshes.push(m); (bySeg[p.s]=bySeg[p.s]||[]).push(m);
+});
+
+/* ---- 貼地探測點：由各節段幾何的局部最低點取得 ---- */
+var probes=[];
+var probeR=[], probeL=[];
+['foot_r','foot_l','toes_r','toes_l'].forEach(function(seg){
+  var lo=Infinity, cx=0, cz=0, n=0;
+  L1.parts.forEach(function(p){
+    if(p.s!==seg) return;
+    if(p.lo[1]<lo) lo=p.lo[1];
+    cx+=p.lo[0]+p.sp[0]/2; cz+=p.lo[2]+p.sp[2]/2; n++;
+  });
+  if(!n) return;
+  [-0.35,0,0.35].forEach(function(f){
+    var o=new THREE.Object3D();
+    o.position.set(cx/n + f*0.06, lo, cz/n);
+    nodes[seg].add(o); probes.push(o);
+    (seg.slice(-1)==='r'?probeR:probeL).push(o);
+  });
+});
+// 腳跟與前足專用探測點（供接觸狀態判斷，不參與貼地計算）
+var CP={};
+['r','l'].forEach(function(sd){
+  var heel=null, fore=[];
+  L1.parts.forEach(function(p){
+    if(p.s!=='foot_'+sd) return;
+    if(p.n.indexOf('跟骨')>=0) heel=p;
+    if(p.n.indexOf('蹠骨')>=0) fore.push(p);
+  });
+  if(heel){
+    var o=new THREE.Object3D();
+    o.position.set(heel.lo[0]+heel.sp[0]*0.30, heel.lo[1], heel.lo[2]+heel.sp[2]/2);
+    nodes['foot_'+sd].add(o); CP['heel_'+sd]=o;
+  }
+  if(fore.length){
+    var ly=Math.min.apply(null,fore.map(function(p){return p.lo[1];}));
+    var lx=fore.reduce(function(a,p){return a+p.lo[0]+p.sp[0]*0.85;},0)/fore.length;
+    var lz=fore.reduce(function(a,p){return a+p.lo[2]+p.sp[2]/2;},0)/fore.length;
+    var o2=new THREE.Object3D(); o2.position.set(lx,ly,lz);
+    nodes['foot_'+sd].add(o2); CP['fore_'+sd]=o2;
+  }
+});
+var _cw=new THREE.Vector3(), _aR=new THREE.Vector3(), _aL=new THREE.Vector3();
+function ankleGap(){
+  nodes.talus_r.getWorldPosition(_aR); nodes.talus_l.getWorldPosition(_aL);
+  return _aR.distanceTo(_aL);
+}
+function probeY(k){ if(!CP[k]) return NaN; CP[k].getWorldPosition(_cw); return _cw.y; }
+
+var _pw=new THREE.Vector3();
+// 平滑最小值（log-sum-exp）：雙支撐期兩腳交替時不會產生不連續
+var SOFT=0.006;
+function lowest(arr){
+  var m=Infinity, i;
+  for(i=0;i<arr.length;i++){ arr[i].getWorldPosition(_pw); if(_pw.y<m) m=_pw.y; }
+  if(!isFinite(m)) return m;
+  var sum=0;
+  for(i=0;i<arr.length;i++){ arr[i].getWorldPosition(_pw); sum+=Math.exp(-(_pw.y-m)/SOFT); }
+  return m - SOFT*Math.log(sum);
+}
+// 該側足部的內外側位置（跟骨與蹠骨連線中點）
+var _fz=new THREE.Vector3();
+function footZ(sd){
+  var h=CP['heel_'+sd], f=CP['fore_'+sd];
+  if(!h||!f) return 0;
+  h.getWorldPosition(_fz); var a=_fz.z;
+  f.getWorldPosition(_fz); return (a+_fz.z)*0.5;
+}
+// 骨盆的內外側位移。垂直方向早就有貼地閉合，側向一直沒有：
+// 骨盆被釘在正中線，髖一內收，唯一能動的就是那隻已經著地的腳，於是它在地上橫向滑。
+// 實測滑動量：健康組 0.4 cm、帕金森 8 cm、剪刀腳 22 cm。
+// 閉合條件與垂直方向相同——站立腳不可滑動。此位移為推得值，非量測值。
+function lateralOffset(p){
+  if(!groundOn) return 0;
+  if(GBUILD) return 0;
+  if(!LPROF) buildGProf();
+  var q=((p%1)+1)%1*100, i=Math.floor(q), f=q-i;
+  var a=LPROF[i%100], b=LPROF[(i+1)%100];
+  return a+(b-a)*f;
+}
+// 只由「當下處於站立期」的腳決定高度；擺盪腳不參與，否則著地前會被頂起來
+function groundOffset(p){
+  if(!groundOn) return 0;
+  if(GBUILD) return 0;          // buildGProf 內部呼叫 pose()，此時不可再求貼地，否則無限遞迴
+  if(!GPROF) buildGProf();
+  var q=((p%1)+1)%1*100, i=Math.floor(q), f=q-i;
+  var a=GPROF[i%100], b=GPROF[(i+1)%100];
+  return a+(b-a)*f;
+}
+var GPROF=null, LPROF=null, GBUILD=false, GMINY=null;
+var LAT_SMOOTH=6;   // 側向曲線平滑窗半寬，由實測掃描定
+var CAM_DNEAR=0.25;   // 最低點相對目標點的最大前後位移（m），由實測掃描定   // GMINY：整個週期中全身最低點的世界高度（貼地後）
+function buildGProf(){
+  GBUILD=true;
+  // 先逐格算出貼地高度，再對整條曲線做環狀平滑（漢寧窗，k=5）。
+  // 站立期交界處若硬切換支撐腳，高度會瞬跳一兩公分，畫面看起來是整個人在抖。
+  var sr=CLIP.stance_r||((CLIP.stats||{})['右站立期佔比'])||60;
+  var sl=CLIP.stance_l||sr;
+  var pl=(CLIP.phase_l!=null)?CLIP.phase_l:0.5;
+  var raw=new Array(100), allLow=new Array(100), bak=phase;
+  var zr=new Array(100), zl=new Array(100);
+  for(var i=0;i<100;i++){
+    pose(i/100);
+    var qr=i%100, ql=(i+pl*100)%100;
+    var use=[];
+    if(qr<sr) use=use.concat(probeR);
+    if(ql<sl) use=use.concat(probeL);
+    if(!use.length) use=probes;
+    var m=lowest(use);
+    raw[i]=isFinite(m)? -m : 0;
+    allLow[i]=lowest(probes);
+    zr[i]=footZ('r'); zl[i]=footZ('l');
+  }
+  pose(bak);
+  GBUILD=false;
+  var k=5, w=[], sum=0;
+  for(var t=0;t<2*k+1;t++){ var v=0.5-0.5*Math.cos(2*Math.PI*(t+1)/(2*k+2)); w.push(v); sum+=v; }
+  var sm=new Array(100);
+  for(var i=0;i<100;i++){
+    var acc=0;
+    for(var t=-k;t<=k;t++) acc+=raw[((i+t)%100+100)%100]*w[t+k];
+    sm[i]=acc/sum;
+  }
+  // 平滑會讓曲線在某些時刻低於實際需要的高度，腳就會沉到格線下方、
+  // 穿過半透明地板造成閃爍。
+  // v1.7.0 以前的做法是「整條抬高最大差值」，在閉合殘差大的 clip（蹲伏步態）
+  // 會把整個人抬高 4 cm 以上，腳全程踩不到地。
+  // 改為逐點取 max(raw, 平滑)：需要腳落地的時刻跟著 raw，其餘時刻用平滑值，
+  // 既不穿模，浮空量也只剩 max(0, 平滑 − raw)。
+  GPROF=new Array(100);
+  for(var i=0;i<100;i++) GPROF[i]=(raw[i]>sm[i])?raw[i]:sm[i];
+  // 擺盪腳在部分時刻會低於地面（本模型無水平位移，這是已知的幾何殘差，
+  // 全部 27 個片段都有，幅度 2–3 cm）。鏡頭必須照這個真正的最低點取景，
+  // 只保證「地面可見」的話腳還是會被下方控制列切掉。
+  GMINY=Infinity;
+  for(var i=0;i<100;i++){ var v=allLow[i]+GPROF[i]; if(v<GMINY) GMINY=v; }
+  if(!isFinite(GMINY)) GMINY=0;
+
+  // ---- 側向閉合 ----
+  // 先取每隻腳在自己站立期的平均內外側位置當「該腳踩定的位置」，
+  // 再求每一格需要的骨盆側移；雙支撐期兩腳的要求會互相衝突，取平均（最小平方意義）。
+  var tR=0,nR=0,tL=0,nL=0;
+  for(var i=0;i<100;i++){
+    var qr=i%100, ql=(i+pl*100)%100;
+    if(qr>=0&&qr<sr){ var f=qr/sr; if(f>0.15&&f<0.75){ tR+=zr[i]; nR++; } }
+    if(ql>=0&&ql<sl){ var f2=ql/sl; if(f2>0.15&&f2<0.75){ tL+=zl[i]; nL++; } }
+  }
+  tR=nR?tR/nR:0; tL=nL?tL/nL:0;
+  // 雙支撐期兩腳的要求會互相衝突。真人此時正把重量由後腳轉到前腳，
+  // 後腳已在卸載，本來就允許移動；因此依「站立期內的位置」給權重：
+  // 剛著地與即將離地的最後 20% 權重遞減，中段為 1。
+  // 只在卸載端遞減。剛著地的腳正在承重，是最不該放掉約束的那一隻——
+  // 若在承重端也遞減，資料中「著地後髖快速內收」的那幾格就沒有約束，腳會瞬間滑開。
+  function wStance(q,st){
+    if(q<0||q>=st) return 0;
+    var f=q/st, e=0.20;
+    if(f>1-e) return 0.5-0.5*Math.cos(Math.PI*(1-f)/e);
+    return 1;
+  }
+  var rawZ=new Array(100);
+  for(var i=0;i<100;i++){
+    var qr=i%100, ql=(i+pl*100)%100;
+    var inR=(qr>=0&&qr<sr), inL=(ql>=0&&ql<sl);
+    var wr=wStance(qr,sr), wl=wStance(ql,sl);
+    // 遞減權重只用來化解「兩腳同時要求」的衝突。若雙支撐期很短（cp_285 只有 4%），
+    // 遞減會製造出兩腳權重皆為零的空窗，那幾格骨盆完全沒有約束，腳就自由滑動。
+    // 因此權重和過小時，退回「凡在站立期者權重為 1」。
+    if(wr+wl<0.05){ wr=inR?1:0; wl=inL?1:0; }
+    var sw=wr+wl;
+    rawZ[i]= (sw>1e-6)? (wr*(tR-zr[i])+wl*(tL-zl[i]))/sw : NaN;
+  }
+  // 沒有任何一腳在站立期的格子（雙擺盪，資料異常時才會出現）以鄰近值補
+  for(var i=0;i<100;i++){
+    if(!isFinite(rawZ[i])){
+      var a=NaN,b=NaN;
+      for(var t2=1;t2<100;t2++){ var j=((i-t2)%100+100)%100; if(isFinite(rawZ[j])){a=rawZ[j];break;} }
+      for(var t2=1;t2<100;t2++){ var j=(i+t2)%100; if(isFinite(rawZ[j])){b=rawZ[j];break;} }
+      rawZ[i]=isFinite(a)?(isFinite(b)?(a+b)*0.5:a):(isFinite(b)?b:0);
+    }
+  }
+  // 側向曲線的平滑窗要比垂直方向窄：站立期的側移要求變化快，窗一寬就被磨平，
+  // 腳又開始滑。權重函數已在交界處做了漸變，這裡只需要很輕的平滑。
+  var k2=LAT_SMOOTH, w2=[], s2=0;
+  for(var t2=0;t2<2*k2+1;t2++){ var v2=0.5-0.5*Math.cos(2*Math.PI*(t2+1)/(2*k2+2)); w2.push(v2); s2+=v2; }
+  LPROF=new Array(100);
+  for(var i=0;i<100;i++){
+    var acc=0;
+    for(var t2=-k2;t2<=k2;t2++) acc+=rawZ[((i+t2)%100+100)%100]*w2[t2+k2];
+    LPROF[i]=acc/s2;
+  }
+}
+
+
+/* ---- L3：動作 ---- */
+var JOINTS=[
+ {id:'pelvis',seg:'pelvis',label:'骨盆',ax:[['sag','後傾','前傾'],['fro','右側上抬','左側上抬'],['tra','右側前旋','左側前旋']]},
+ {id:'lumbar',seg:'lumbar',label:'腰椎',ax:[['sag','伸展','屈曲'],['fro','右側彎','左側彎'],['tra','右旋','左旋']]},
+ {id:'hip_r',seg:'femur_r',label:'髖關節（右）',ax:[['sag','屈曲','伸展'],['fro','內收','外展'],['tra','內旋','外旋']]},
+ {id:'knee_r',seg:'tibia_r',label:'膝關節（右）',ax:[['sag','伸展','屈曲'],['fro','外翻','內翻'],['tra','外旋','內旋']]},
+ {id:'ankle_r',seg:'talus_r',label:'距腿關節（右）',axis:'ank',side:'r',ax:[['sag','蹠屈','背屈']]},
+ {id:'sub_r',seg:'foot_r',label:'距下關節（右）· 無資料',axis:'sub',side:'r',ax:[['sag','旋前（外翻）','旋後（內翻）']]},
+ {id:'mtp_r',seg:'toes_r',label:'蹠趾關節（右）· 模型',ax:[['sag','伸展','屈曲']]},
+ {id:'hip_l',mir:1,seg:'femur_l',label:'髖關節（左）',ax:[['sag','屈曲','伸展'],['fro','內收','外展'],['tra','內旋','外旋']]},
+ {id:'knee_l',mir:1,seg:'tibia_l',label:'膝關節（左）',ax:[['sag','伸展','屈曲'],['fro','外翻','內翻'],['tra','外旋','內旋']]},
+ {id:'ankle_l',mir:1,seg:'talus_l',label:'距腿關節（左）',axis:'ank',side:'l',ax:[['sag','蹠屈','背屈']]},
+ {id:'sub_l',mir:1,seg:'foot_l',label:'距下關節（左）· 無資料',axis:'sub',side:'l',ax:[['sag','旋前（外翻）','旋後（內翻）']]},
+ {id:'mtp_l',mir:1,seg:'toes_l',label:'蹠趾關節（左）· 模型',ax:[['sag','伸展','屈曲']]}
+];
+var JM={}; JOINTS.forEach(function(j){JM[j.id]=j;});
+var off={}; JOINTS.forEach(function(j){off[j.id]={sag:{a:0,b:0},fro:{a:0,b:0},tra:{a:0,b:0}};});
+// 0%/100% 共用 o.a，50% 為 o.b；升餘弦內插，兩端導數為零，首尾連續不跳變
+function offAt(id,ax,p){var o=off[id][ax];
+  return o.a+(o.b-o.a)*(1-Math.cos(2*Math.PI*p))/2;}
+function samp(n,p){var a=G[n];if(!a)return 0;var x=p*100,i=Math.floor(x),f=x-i;
+  return a[i]+(a[Math.min(i+1,100)]-a[i])*f;}
+
+var AXP={sub:{incl:42,dev:23},ank:{down:8,post:6}}, AXIS={};
+function subAxis(side){var v=new THREE.Vector3(1,0,0);
+  v.applyAxisAngle(new THREE.Vector3(0,0,1),AXP.sub.incl*D2R);
+  v.applyAxisAngle(new THREE.Vector3(0,1,0),AXP.sub.dev*D2R);
+  if(side==='l')v.set(-v.x,-v.y,v.z); return v.normalize();}
+function ankAxis(side){var v=new THREE.Vector3(0,0,1);
+  v.applyAxisAngle(new THREE.Vector3(1,0,0),AXP.ank.down*D2R);
+  v.applyAxisAngle(new THREE.Vector3(0,1,0),-AXP.ank.post*D2R);
+  if(side==='l')v.set(-v.x,-v.y,v.z); return v.normalize();}
+function rebuildAxes(){['r','l'].forEach(function(s){
+  AXIS['sub_'+s]=subAxis(s); AXIS['ankle_'+s]=ankAxis(s);});}
+rebuildAxes();
+// 繞斜軸旋轉後分解到三個解剖平面
+var _lo=new THREE.Vector3(),_up=new THREE.Vector3(),_e2=new THREE.Vector3(),_e3=new THREE.Vector3();
+function decomp(ax,deg,side){
+  var k=side==='r'?1:-1;
+  _lo.set(1,0,0).applyAxisAngle(ax,deg*D2R);
+  _up.set(0,1,0).applyAxisAngle(ax,deg*D2R);
+  var add=Math.atan2(-k*_lo.z,_lo.x)/D2R, pf=Math.asin(-_lo.y)/D2R;
+  _e2.copy(_lo).cross(new THREE.Vector3(0,1,0)).normalize();
+  _e3.copy(_e2).cross(_lo);
+  var inv=Math.atan2(k*_up.dot(_e2),_up.dot(_e3))/D2R;
+  return [inv,add,pf];
+}
+var PELV_Y = Jc.pelvis[1], PELV_Z = Jc.pelvis[2], groundOn = true;
+// 螺旋回鎖：脛骨外旋 = f(膝屈曲角)。純模型疊加，非資料，預設關閉。
+var SH={on:false, amp:7.0, onset:20.0};
+// 蹠趾：資料集皆未追蹤，此為文獻驅動的模型疊加。
+var MTP={on:true, amp:38.0, start:55.0, ic:2.0};
+function mtpModel(q, stance){
+  if(!MTP.on) return 0;
+  var to=stance||60, st=Math.min(MTP.start, to-1);
+  if(q<=st) return MTP.ic*(1-q/Math.max(st,1e-6))+0;      // 著地後由小幅背屈回到中立
+  if(q<=to){ var t=(q-st)/Math.max(to-st,1e-6);
+             return MTP.amp*(1-Math.cos(Math.PI*t))/2; }  // 推進期升餘弦上升，趾離地達峰值
+  var u=(q-to)/Math.max(100-to,1e-6);                     // 擺盪期回到著地值
+  return MTP.amp+(MTP.ic-MTP.amp)*(1-Math.cos(Math.PI*u))/2;
+}
+function screwHome(flexDeg){
+  if(!SH.on) return 0;
+  var f=Math.max(0,flexDeg);
+  var t=(SH.onset-f)/Math.max(SH.onset,1e-6);
+  return SH.amp*Math.max(0,Math.min(1,t));   // 0° 屈曲時最大，達 onset 後歸零
+}
+
+var mode='gait',live={};
+var qz=new THREE.Quaternion(),qx=new THREE.Quaternion(),qy=new THREE.Quaternion();
+var AZ=new THREE.Vector3(0,0,1),AX=new THREE.Vector3(1,0,0),AY=new THREE.Vector3(0,1,0);
+function setJ(id,sag,fro,tra,p){
+  var k=JM[id].mir?-1:1;   // 左側：正的額狀／水平偏移在世界座標中方向相反，需取反才符合標籤
+  var s={sag:sag+offAt(id,'sag',p),fro:fro+k*offAt(id,'fro',p),tra:tra+k*offAt(id,'tra',p)};
+  live[id]=s; var n=nodes[JM[id].seg];
+  qz.setFromAxisAngle(AZ,s.sag*D2R); qx.setFromAxisAngle(AX,s.fro*D2R); qy.setFromAxisAngle(AY,s.tra*D2R);
+  n.quaternion.copy(qz).multiply(qx).multiply(qy);
+}
+function setAxisJ(id,deg,p){
+  var d=deg+offAt(id,'sag',p);
+  live[id]={axis:d}; nodes[JM[id].seg].quaternion.setFromAxisAngle(AXIS[id],d*D2R);
+}
+function pose(p){
+  var g=(mode==='gait');
+  setJ('pelvis',g?-samp('pelvis_tilt',p):0,g?samp('pelvis_list',p):0,g?-samp('pelvis_rotation',p):0,p);
+  setJ('lumbar',g?samp('lumbar_extension',p):0,g?samp('lumbar_bending',p):0,g?-samp('lumbar_rotation',p):0,p);
+  [['r',1],['l',-1]].forEach(function(c){var s=c[0],k=c[1];
+    setJ('hip_'+s, g?(samp('hip_flexion_'+s,p)+(CLIP.hip_offset||0)):0, g?k*samp('hip_adduction_'+s,p):0, g?k*samp('hip_rotation_'+s,p):0,p);
+    var _kf = g? -samp('knee_angle_'+s,p) : 0;      // 資料屈曲為負，轉為正值的屈曲角
+    var _sh = screwHome(_kf) * (s==='r' ? -1 : 1);   // 外旋
+    setJ('knee_'+s, g?samp('knee_angle_'+s,p):0, 0, _sh, p);
+    setAxisJ('ankle_'+s, g?samp('ankle_angle_'+s,p):0, p);
+    setAxisJ('sub_'+s, 0, p);
+    var _st = (s==='r') ? (CLIP.stance_r||60) : (CLIP.stance_l||CLIP.stance_r||60);
+    var _ph = (s==='r') ? 0 : ((CLIP.phase_l!=null)?CLIP.phase_l:0.5);
+    var _q  = ((p+_ph)*100)%100;
+    setJ('mtp_'+s, (g?samp('mtp_angle_'+s,p):0) + mtpModel(_q,_st), 0, 0, p);
+  });
+  nodes.pelvis.position.y = PELV_Y;
+  nodes.pelvis.position.z = PELV_Z;
+  nodes.pelvis.updateMatrixWorld(true);
+  var off = groundOffset(p), lat = lateralOffset(p);
+  if(Math.abs(off) > 1e-5 || Math.abs(lat) > 1e-5){
+    nodes.pelvis.position.y = PELV_Y + off;
+    nodes.pelvis.position.z = PELV_Z + lat;
+    nodes.pelvis.updateMatrixWorld(true);
+  }
+}
+
+/* ---- 相機 ---- */
+var az=0,pol=84*D2R,rad=3.5,zoomMode='body';
+var target=new THREE.Vector3(0,0.9,0),tmp=new THREE.Vector3();
+// 播放控制列（窄版時還有圖表）疊在畫布下緣，會蓋住畫面最底部。
+// 若鏡頭不管這件事，腳就落在被蓋住的那條帶子裡——窄視窗下最明顯。
+// 回傳「被遮住的高度佔畫布高度的比例」。
+function bottomHiddenFrac(){
+  var ch=canvas.clientHeight||stage.clientHeight||1, px=0;
+  var tr=document.querySelector('.transport');
+  if(tr) px+=tr.offsetHeight;
+  var ch2=document.getElementById('charts');
+  // 圖表在寬版是絕對定位疊在畫布上；窄版改為靜態排在畫布下方，就不算遮擋
+  if(ch2 && ch2.offsetHeight>0 && getComputedStyle(ch2).position==='absolute') px+=ch2.offsetHeight;
+  return Math.max(0,Math.min(0.45, px/ch));
+}
+function placeCam(){
+  // 全身與下肢的目標點是固定值，直接設定即可；先前每格 lerp 0.25 會讓鏡頭持續微幅擺盪。
+  // 足部模式需跟著右踝移動，改用慢速追蹤並加上死區，避免踝關節一動鏡頭就甩。
+  // 目標高度再往下壓，讓地面剛好落在遮擋帶上緣，腳才看得到。
+  // 透視：最低點（通常是前後擺到底的那隻腳）離鏡頭比目標點近，會被投影得更低。
+  // 用「鏡頭到最近點的距離」而非鏡頭到目標點的距離來算可見高度。
+  var tf=Math.tan(camera.fov*0.5*D2R);
+  var dNear=Math.min(CAM_DNEAR, rad*0.35);
+  var halfH=(rad-dNear)*tf;                       // 最近平面上的半可見高度
+  var floorY=(groundOn&&GPROF&&GMINY!=null)?Math.min(0,GMINY):0;
+  var yMax=floorY + halfH*(1-2*bottomHiddenFrac()) - 0.02;  // 全身最低點要在遮擋帶之上
+  if(zoomMode==='foot'){
+    nodes.talus_r.getWorldPosition(tmp);
+    tmp.y=Math.min(tmp.y,yMax);
+    if(target.distanceTo(tmp)>0.004) target.lerp(tmp,0.06);
+  }
+  else if(zoomMode==='leg'){ target.set(0.09,Math.min(0.50,yMax),0); }
+  else{ target.set(0.09,Math.min(0.95,yMax),0); }
+  camera.position.set(target.x+rad*Math.sin(pol)*Math.sin(az),
+                      target.y+rad*Math.cos(pol),
+                      target.z+rad*Math.sin(pol)*Math.cos(az));
+  if(!isFinite(camera.position.x)||!isFinite(camera.position.y)||!isFinite(camera.position.z)
+     ||!isFinite(target.x)||!isFinite(target.y)||!isFinite(target.z)){
+    az=0; pol=84*D2R; rad=3.5; target.set(0.09,0.95,0);
+    camera.position.set(0.09,1.27,3.48);
+  }
+  camera.lookAt(target);
+}
+var drag=null, ptrs={}, pinch=null;
+function ptrList(){ return Object.keys(ptrs).map(function(k){return ptrs[k];}); }
+canvas.addEventListener('pointerdown',function(e){
+  ptrs[e.pointerId]={x:e.clientX,y:e.clientY};
+  try{canvas.setPointerCapture(e.pointerId);}catch(_){}
+  var L=ptrList();
+  if(L.length===2){
+    drag=null;
+    pinch={d:Math.hypot(L[0].x-L[1].x,L[0].y-L[1].y),
+           cx:(L[0].x+L[1].x)/2, cy:(L[0].y+L[1].y)/2, rad:rad};
+  } else if(L.length===1){
+    drag={x:e.clientX,y:e.clientY,m:0};
+  }
+});
+canvas.addEventListener('pointermove',function(e){
+  if(!(e.pointerId in ptrs)) return;
+  ptrs[e.pointerId]={x:e.clientX,y:e.clientY};
+  var L=ptrList();
+  if(L.length>=2 && pinch){
+    var d2=Math.hypot(L[0].x-L[1].x,L[0].y-L[1].y);
+    if(d2>4){ rad=Math.max(0.18,Math.min(6, pinch.rad*(pinch.d/d2))); }
+    var cx=(L[0].x+L[1].x)/2, cy=(L[0].y+L[1].y)/2;
+    // 雙指平移：改變仰角與方位角
+    az-=(cx-pinch.cx)*0.004;
+    pol=Math.max(0.1,Math.min(Math.PI-0.1,pol-(cy-pinch.cy)*0.003));
+    pinch.cx=cx; pinch.cy=cy;
+    return;
+  }
+  if(!drag) return;
+  var dx=e.clientX-drag.x, dy=e.clientY-drag.y; drag.m+=Math.abs(dx)+Math.abs(dy);
+  az-=dx*0.008; pol=Math.max(0.1,Math.min(Math.PI-0.1,pol-dy*0.006));
+  drag.x=e.clientX; drag.y=e.clientY;
+});
+function endPtr(e){
+  var wasPinch=(ptrList().length>=2);
+  delete ptrs[e.pointerId];
+  if(ptrList().length<2) pinch=null;
+  if(!wasPinch && drag && drag.m<5) pick(e);
+  if(ptrList().length===0) drag=null;
+}
+canvas.addEventListener('pointerup',endPtr);
+canvas.addEventListener('pointercancel',endPtr);
+canvas.addEventListener('pointerleave',function(e){ if(e.pointerType!=='mouse') endPtr(e); });
+canvas.addEventListener('wheel',function(e){e.preventDefault();
+  rad=Math.max(0.18,Math.min(6,rad*(1+Math.sign(e.deltaY)*0.1)));},{passive:false});
+canvas.addEventListener('gesturestart',function(e){e.preventDefault();},{passive:false});
+canvas.addEventListener('dblclick',function(){ rad=Math.max(0.18,rad*0.6); });
+var ray=new THREE.Raycaster(),ndc=new THREE.Vector2(),pn=document.getElementById('pickName');
+function pick(e){
+  var r=canvas.getBoundingClientRect();
+  ndc.x=((e.clientX-r.left)/r.width)*2-1; ndc.y=-((e.clientY-r.top)/r.height)*2+1;
+  ray.setFromCamera(ndc,camera);
+  var h=ray.intersectObjects(meshes,false); if(!h.length)return;
+  var m=h[0].object; m.userData.dim=!m.userData.dim;
+  m.material.opacity=m.userData.dim?0.12:1; m.material.depthWrite=!m.userData.dim;
+  pn.textContent=m.name+(m.userData.dim?'　已透明':'　已還原');
+  pn.style.opacity=1; clearTimeout(pn._t); pn._t=setTimeout(function(){pn.style.opacity=0;},1600);
+}
+
+/* ---- 時間軸事件標記 ---- */
+function drawTimeline(){
+  var b=document.getElementById('bands'), mk=document.getElementById('marks');
+  b.innerHTML=''; mk.innerHTML='';
+  CLIP.bands.forEach(function(x){
+    if(x.label!=='雙支撐期')return;
+    var d=document.createElement('i'); d.style.left=x.a+'%'; d.style.width=(x.b-x.a)+'%';
+    d.title=x.label; b.appendChild(d);
+  });
+  CLIP.events.forEach(function(x){
+    var i=document.createElement('i'); i.style.left=x.p+'%'; mk.appendChild(i);
+    var s=document.createElement('span'); s.style.left=x.p+'%'; s.textContent=x.short; mk.appendChild(s);
+  });
+  var t=document.getElementById('evTable'); t.innerHTML='';
+  CLIP.events.forEach(function(x){
+    var tr=document.createElement('tr');
+    tr.innerHTML='<td>'+x.label+'</td><td>'+x.p.toFixed(1)+'%</td>'+
+      '<td style="opacity:.7">'+(x.src||'來源未標')+'</td>'; t.appendChild(tr);
+  });
+  var st=CLIP.stats||{};
+  document.getElementById('stanceNote').textContent = st['右站立期佔比']
+    ? ('右腳站立期佔 '+st['右站立期佔比']+'%、擺盪期 '+st['右擺盪期佔比']+
+       '%，與教科書常用的 60% 相差 '+(st['右站立期佔比']-60).toFixed(1)+' 個百分點。')
+    : ('此 clip 未提供站立期比例；事件來源見上表（' +
+       (CLIP.events.length ? CLIP.events.map(function(x){return x.src||'來源未標';})
+          .filter(function(v,i,a){return a.indexOf(v)===i;}).join('、') : '無事件') + '）。');
+}
+drawTimeline();
+function phaseName(p){var q=p*100, e=CLIP.events;
+  if(e.length>=4){
+    if(q<e[1].p)return'雙支撐期（右負重反應）';
+    if(q<e[2].p)return'右單腳站立期';
+    if(q<e[3].p)return'雙支撐期（右推進）';
+    return'右腳擺盪期';}
+  var st=(CLIP.stats||{})['右站立期佔比'];
+  if(st) return q<st?'右腳站立期':'右腳擺盪期';
+  return'—';}
+
+/* ---- 角度曲線圖 ---- */
+var SVGNS='http://www.w3.org/2000/svg';
+var CW=200, CH=64, PADT=4, PADB=10;
+var SERIES=[
+ {t:'髖',  pos:'屈曲', neg:'伸展', k:['hip_flexion_r','hip_flexion_l'],  sg:1},
+ {t:'膝',  pos:'屈曲', neg:'伸展', k:['knee_angle_r','knee_angle_l'],    sg:-1},
+ {t:'踝',  pos:'背屈', neg:'蹠屈', k:['ankle_angle_r','ankle_angle_l'],  sg:1}
+];
+var chartEls=[], cmpOn=true;
+function cmpClip(){
+  if(!cmpOn) return null;
+  var map=L3.compare_map||{};
+  var id=map[CLIP.id];
+  if(!id||id===CLIP.id) return null;
+  return clipById(id);
+}
+function buildCharts(){
+  var host=document.getElementById('charts'); host.innerHTML=''; chartEls=[];
+  var cc=cmpClip();
+  SERIES.forEach(function(sr){
+    var vals=[];
+    sr.k.forEach(function(k){ (G[k]||[]).forEach(function(v){ vals.push(v*sr.sg); }); });
+    if(cc) sr.k.forEach(function(k){ (cc.data[k]||[]).forEach(function(v){ vals.push(v*sr.sg); }); });
+    var lo=Math.min.apply(null,vals), hi=Math.max.apply(null,vals);
+    var pad=(hi-lo)*0.12||1; lo-=pad; hi+=pad; sr.lo=lo; sr.hi=hi;
+    function Y(v){ return PADT+(hi-v)/(hi-lo)*(CH-PADT-PADB); }
+    function X(i){ return i/100*CW; }
+    function path(arr){ var p=''; for(var i=0;i<=100;i++) p+=(i?'L':'M')+X(i).toFixed(2)+' '+Y(arr[i]*sr.sg).toFixed(2)+' '; return p; }
+    var d=document.createElement('div'); d.className='chart';
+    var svg='<svg viewBox="0 0 '+CW+' '+CH+'" preserveAspectRatio="none">';
+    (CLIP.bands||[]).forEach(function(b){
+      svg+='<rect x="'+X(b.a)+'" y="'+PADT+'" width="'+(X(b.b)-X(b.a))+'" height="'+(CH-PADT-PADB)+
+           '" fill="#2fc4b6" opacity="0.09"/>'; });
+    if(lo<0&&hi>0) svg+='<line x1="0" y1="'+Y(0)+'" x2="'+CW+'" y2="'+Y(0)+'" stroke="#3a4a4d" stroke-width="0.6"/>';
+    (CLIP.events||[]).forEach(function(e){
+      svg+='<line x1="'+X(e.p)+'" y1="'+PADT+'" x2="'+X(e.p)+'" y2="'+(CH-PADB)+
+           '" stroke="#ffc46b" stroke-width="0.5" opacity="0.45"/>'; });
+    if(cc) svg+='<path d="'+path(cc.data[sr.k[0]])+'" fill="none" stroke="#c98be0" stroke-width="1.2" opacity="0.85"/>';
+    sr.k.forEach(function(k,idx){
+      svg+='<path d="'+path(G[k])+'" fill="none" stroke="'+(idx?'#7f9496':'#2fc4b6')+
+           '" stroke-width="'+(idx?1:1.5)+'" '+(idx?'stroke-dasharray="3 2"':'')+'/>';
+    });
+    svg+='<line class="ph" x1="0" y1="0" x2="0" y2="'+(CH-PADB)+'" stroke="#fff" stroke-width="0.8" opacity="0.8"/>';
+    svg+='<text x="1" y="'+(CH-2)+'" font-size="6" fill="#5f7477">'+lo.toFixed(0)+'°</text>';
+    svg+='<text x="'+(CW-1)+'" y="'+(CH-2)+'" font-size="6" fill="#5f7477" text-anchor="end">'+hi.toFixed(0)+'°</text>';
+    svg+='</svg>';
+    d.innerHTML='<div class="ct"><span>'+sr.t+'　'+sr.neg+' ↔ '+sr.pos+
+      '</span><b class="rv">—</b></div>'+svg;
+    host.appendChild(d);
+    chartEls.push({sr:sr, ph:d.querySelector('.ph'), rv:d.querySelector('.rv')});
+  });
+}
+buildCharts();
+function updCharts(p){
+  var x=p*CW;
+  chartEls.forEach(function(c){
+    c.ph.setAttribute('x1',x); c.ph.setAttribute('x2',x);
+    var v=samp(c.sr.k[0],p)*c.sr.sg;
+    c.rv.textContent=(v>=0?'+':'')+v.toFixed(1)+'°';
+  });
+}
+
+/* ---- 耦合曲線圖 ---- */
+function drawCoupling(id,side){
+  var W=230,H=110,P=16,MX=30;
+  function X(a){ return P+(a+MX)/(2*MX)*(W-P*2); }
+  var pts=[[],[],[]], lo=0, hi=0;
+  for(var a=-MX;a<=MX;a+=2){
+    var d=decomp(AXIS[id],a,side);
+    for(var j=0;j<3;j++){ pts[j].push([a,d[j]]); lo=Math.min(lo,d[j]); hi=Math.max(hi,d[j]); }
+  }
+  lo=-14; hi=14;   // 距下與距腿共用固定刻度，才看得出量級差距
+  function Y(v){ return P/2+(hi-v)/(hi-lo)*(H-P); }
+  var col=['#2fc4b6','#ffc46b','#e86a3a'], nm=['額狀面 內翻','水平面 內收','矢狀面 蹠屈'];
+  var svg='<svg viewBox="0 0 '+W+' '+H+'">';
+  svg+='<line x1="'+X(0)+'" y1="'+(P/2)+'" x2="'+X(0)+'" y2="'+(H-P/2)+'" stroke="var(--line)" stroke-width="0.7"/>';
+  svg+='<line x1="'+P+'" y1="'+Y(0)+'" x2="'+(W-P)+'" y2="'+Y(0)+'" stroke="var(--line)" stroke-width="0.7"/>';
+  pts.forEach(function(ps,j){
+    var d='';
+    ps.forEach(function(q,i){ d+=(i?'L':'M')+X(q[0]).toFixed(1)+' '+Y(q[1]).toFixed(1)+' '; });
+    svg+='<path d="'+d+'" fill="none" stroke="'+col[j]+'" stroke-width="1.6"/>';
+  });
+  var cur=(live[id]&&live[id].axis)||0;
+  svg+='<line class="cph" x1="'+X(cur)+'" y1="'+(P/2)+'" x2="'+X(cur)+'" y2="'+(H-P/2)+
+       '" stroke="var(--ink-2)" stroke-width="0.8" stroke-dasharray="2 2"/>';
+  svg+='<text x="'+P+'" y="'+(H-1)+'" font-size="7" fill="var(--ink-2)">−'+MX+'°</text>';
+  svg+='<text x="'+(W-P)+'" y="'+(H-1)+'" font-size="7" fill="var(--ink-2)" text-anchor="end">+'+MX+'°</text>';
+  svg+='</svg>';
+  var lg='<div class="lg">'+nm.map(function(n,j){
+    return '<span><i style="background:'+col[j]+'"></i>'+n+'</span>';}).join('')+'</div>';
+  document.getElementById('coupBox').innerHTML=
+    '<h2>耦合曲線</h2><div class="coup">'+lg+svg+
+    '</div><p class="note">橫軸為繞斜軸的旋轉角（−30° 至 +30°），縱軸固定為 ±14°，'+
+    '距下與距腿共用同一刻度，可直接比較兩者的耦合量級。'+
+    (id.indexOf('sub')===0
+      ? '調整上方的軸參數，三條線的斜率會一起改變。'
+      : '距腿關節的軸幾乎是純內外側走向（僅偏 8° 與 6°），因此耦合量本來就小：'+
+        '背屈 15° 只帶出約 1.9° 外翻與 2.3° 外展。把兩個滑桿拉到最大（20°／20°）也只增加約 3°。'+
+        '這是解剖事實，不是資料問題——請切到距下關節對照，同樣繞軸 15° 會產生 10.6° 內翻與 10.4° 內收。')+
+    '</p>';
+}
+
+/* ---- clip 切換 ---- */
+function fmtMeta(c){
+  var m=c.meta||{}, h='<b>'+c.label+'</b>';
+  if(m.cohort==='VC-stroke'){
+    if(m.subject) h+='<br>發病後 '+m.tps+' 天　病灶'+(m.lesion==='L'?'左':'右')+'側　'+
+      (m.type==='I'?'缺血性':'出血性')+'<br>FAC '+m.fac+'　Tinetti '+m.poma+'　TIS '+m.tis+
+      '　步速 '+m.speed+' m/s';
+    else h+='<br>n='+m.n+'　平均 '+m.age+' 歲　平均步速 '+m.speed+' m/s';
+    h+='<br><span style="color:var(--warn)">患側顯示於右腿</span>';
+  } else if(m.cohort==='PD'){
+    if(m.subject) h+='<br>罹病 '+m.dur+' 年　左旋多巴 '+m.ldopa+' mg/day　'+m.fog+
+      '<br>H&amp;Y '+(m.hy||'—')+'　UPDRS-III '+(m.updrs||'—')+'　mini-BESTest '+(m.mbest||'—');
+    else h+='<br>n='+m.n+'　平均 '+m.age+' 歲';
+    h+='<br>跨步長 '+m.stride+' m　步頻 '+m.cadence+' 步/分';
+  } else if(m.cohort==='HOA'){
+    var cn={D0:'無明顯異常',D1:'Trendelenburg',D3:'Duchenne',D2:'閃避型'}[m.cls]||m.cls;
+    h+='<br>'+m.age+' 歲'+(m.sex&&m.sex[0]==='M'?'男':'女')+'　患側'+(m.oaside==='R'?'右':'左')+
+       '　KL 第 '+m.kl+' 級　BMI '+m.bmi+
+       '<br>醫師判定：<b>'+cn+'</b>（依步態錄影）'+
+       '<br>軀幹左右傾 <b>'+m.thorax_obl+'°</b>　骨盆左右傾 <b>'+m.pelvis_obl+'°</b>'+
+       '<br><span style="opacity:.75">對照：健康組 n=80 軀幹 3.4±1.4°、骨盆 6.7±2.5°；'+
+       'D1 Trendelenburg n=22 軀幹 7.9±4.1°；D3 Duchenne n=11 軀幹 4.7±1.4°。'+
+       '骨盆擺幅在四組之間無法區辨（D0 5.3°、D1 6.2°、D2 4.1°、D3 5.4°），'+
+       '分得開的是軀幹。</span>'+
+       '<br><span style="color:var(--warn)">患側顯示於右腿</span>';
+  } else if(m.cohort==='VC-healthy'){
+    h+='<br>n='+m.n+'　'+(m.age_range?m.age_range[0]+'–'+m.age_range[1]+' 歲':'')+
+       '　平均 '+m.age+' 歲　平均步速 '+m.speed+' m/s';
+  } else if(m.n){
+    h+='<br>受試者 '+(m.subjects||[]).join('、')+'　平均 '+m.age+' 歲　'+(m.speed||'')+' m/s';
+  } else if(m.subject){
+    h+='<br>身高 '+m.height+' cm　體重 '+m.mass+' kg';
+  }
+  if(c.note) h+='<br><span style="opacity:.75">'+c.note+'</span>';
+  h+='<br><span style="opacity:.7">週期 '+(c.period||0).toFixed(2)+' s'+
+     (c.period_src?'（實測）':'<span style="color:var(--warn)">（未知，1× 不代表實際步速）</span>')+'　站立期 '+
+     (((c.stats||{})['右站立期佔比'])||(c.stance_r!=null?c.stance_r.toFixed(1):'—'))+'%'+
+     (c.stance_src?'<span style="opacity:.75">（'+c.stance_src+'）</span>':'')+'　髖偏移 '+
+     ((c.hip_offset||0)>=0?'+':'')+(c.hip_offset||0).toFixed(1)+'°</span>';
+  return h;
+}
+var REF=null;
+function computeRef(){
+  var bak=JSON.parse(JSON.stringify(off));
+  JOINTS.forEach(function(j){['sag','fro','tra'].forEach(function(k){off[j.id][k].a=0;off[j.id][k].b=0;});});
+  var r=new Array(101);
+  for(var i=0;i<=100;i++){ pose(i/100); r[i]=groundOffset(i/100); }
+  off=bak; REF=r;
+}
+function setClip(id){
+  var c=clipById(id); if(!c) return;
+  CLIP=c; G=c.data;
+  document.getElementById('clipMeta').innerHTML=fmtMeta(c);
+  GPROF=null; LPROF=null;
+  weakSide = (c.group||'').indexOf('中風')>=0;
+  applyVis(); applyWeak();
+  drawTimeline(); buildCharts(); buildCmpTable(); computeRef();
+}
+function buildCmpTable(){
+  var box=document.getElementById('cmpTable');
+  var o=cmpClip();
+  if(!o){ box.innerHTML='<p class="note">此 clip 未設定對照組。</p>'; return; }
+  var mx=function(v){return Math.max.apply(null,v);}, mn=function(v){return Math.min.apply(null,v);};
+  var rows=[
+   ['膝屈曲峰值', function(c){return mx(c.data.knee_angle_r.map(function(x){return -x;}));},1,'°'],
+   ['髖總擺幅',   function(c){var v=c.data.hip_flexion_r;return mx(v)-mn(v);},1,'°'],
+   ['踝總擺幅',   function(c){var v=c.data.ankle_angle_r;return mx(v)-mn(v);},1,'°'],
+   ['踝蹠屈峰值', function(c){return mn(c.data.ankle_angle_r);},1,'°'],
+   ['站立期佔比', function(c){return (c.stats||{})['右站立期佔比']||NaN;},1,'%'],
+   ['步態週期',   function(c){return c.period;},2,'s']
+  ];
+  var h='<table class="ev"><tr><td style="font-size:10.5px">指標</td>'+
+        '<td style="text-align:right;font-size:10.5px">目前</td>'+
+        '<td style="text-align:right;font-size:10.5px">對照</td>'+
+        '<td style="text-align:right;font-size:10.5px">差</td></tr>';
+  rows.forEach(function(r){
+    var a=r[1](CLIP), b=r[1](o);
+    if(isNaN(a)||isNaN(b)) return;
+    h+='<tr><td>'+r[0]+'</td><td style="text-align:right">'+a.toFixed(r[2])+r[3]+'</td>'+
+       '<td style="text-align:right">'+b.toFixed(r[2])+r[3]+'</td>'+
+       '<td style="text-align:right;color:var(--accent)">'+((b-a)>=0?'+':'')+(b-a).toFixed(r[2])+'</td></tr>';
+  });
+  var ms=CLIP.meta||{}, mo=o.meta||{};
+  if(ms.stride&&mo.stride) h+='<tr><td>跨步長</td><td style="text-align:right">'+ms.stride+
+    ' m</td><td style="text-align:right">'+mo.stride+' m</td><td style="text-align:right;color:var(--accent)">'+
+    ((mo.stride-ms.stride)>=0?'+':'')+(mo.stride-ms.stride).toFixed(2)+'</td></tr>';
+  if(ms.speed&&mo.speed) h+='<tr><td>步行速度</td><td style="text-align:right">'+ms.speed+
+    ' m/s</td><td style="text-align:right">'+mo.speed+' m/s</td><td style="text-align:right;color:var(--accent)">'+
+    ((mo.speed-ms.speed)>=0?'+':'')+(mo.speed-ms.speed).toFixed(2)+'</td></tr>';
+  h+='</table><p class="note">對照組為 <b>'+o.label+'</b>。'+(L3.disclaimer||'')+'</p>';
+  box.innerHTML=h;
+}
+
+/* ---- 足地接觸狀態與骨盆偏離 ---- */
+var TOL=0.012;
+function contactState(p){
+  if(!CLIP.stance_r) return null;   // 無事件資料，不判定
+  var sr=CLIP.stance_r, sl=CLIP.stance_l||sr;
+  var pl=(CLIP.phase_l!=null)?CLIP.phase_l:0.5;
+  var out=[];
+  [['r',(p*100)%100,sr],['l',((p+pl)*100)%100,sl]].forEach(function(c){
+    var sd=c[0], q=c[1], st=c[2];
+    if(q>=st){ out.push({side:sd,txt:'擺盪期',ok:true}); return; }
+    var h=probeY('heel_'+sd), f=probeY('fore_'+sd);
+    var hc=h<TOL, fc=f<TOL;
+    // heel_/fore_ 只取跟骨與蹠骨，不含趾骨。踮腳走（踝蹠屈）時真正的著地點在腳趾上，
+    // 這兩個探針都抓不到，會誤判成「未接觸」。改為再看該側所有骨頭的最低點。
+    var lo=lowest(sd==='r'?probeR:probeL), tc=lo<TOL;
+    var txt = hc&&fc ? '全足貼平' : (hc ? '僅腳跟著地' : (fc ? '僅前足著地' : (tc ? '僅腳趾著地' : '未接觸')));
+    // 站立期中段（15–45%）本來就該全足貼平；其餘時段單點接觸屬正常
+    var mid = q>st*0.25 && q<st*0.72;
+    // 踮腳走在站立期中段本來就不會全足貼平，不應標紅
+    var ok = (hc||fc||tc) && !(mid && !(hc&&fc) && !tc);
+    out.push({side:sd,txt:txt,ok:ok,h:h,f:f});
+  });
+  return out;
+}
+function pelvisDev(p){
+  if(!REF) return 0;
+  var i=Math.round(p*100)%101;
+  return (nodes.pelvis.position.y - PELV_Y) - REF[i];
+}
+
+/* ---- UI ---- */
+var playing=true,speed=0.5,phase=0,last=performance.now();
+var elPct=document.getElementById('hudPct'),elEv=document.getElementById('hudEvent'),
+    elT=document.getElementById('tPct'),
+    scrub=document.getElementById('scrub'),diag=document.getElementById('diag');
+document.getElementById('play').onclick=function(){playing=!playing;
+  this.textContent=playing?'❚❚':'▶';this.classList.toggle('on',playing);};
+scrub.addEventListener('input',function(){playing=false;
+  var b=document.getElementById('play');b.textContent='▶';b.classList.remove('on');
+  phase=+this.value/1000;});
+function grp(sel,fn){document.querySelectorAll(sel).forEach(function(b){
+  b.onclick=function(){document.querySelectorAll(sel).forEach(function(x){x.classList.remove('on');});
+    b.classList.add('on');fn(b);};});}
+grp('#viewBtns button',function(b){az=(+b.dataset.az)*D2R;pol=(b.dataset.pol?+b.dataset.pol:84)*D2R;});
+grp('#zoomBtns button',function(b){zoomMode=b.dataset.zoom;
+  rad=zoomMode==='foot'?0.45:(zoomMode==='leg'?1.6:3.5);});
+grp('#modeBtns button',function(b){mode=b.dataset.mode;});
+grp('[data-speed]',function(b){speed=+b.dataset.speed;});
+document.getElementById('resetBones').onclick=function(){meshes.forEach(function(m){
+  m.userData.dim=false;m.material.opacity=1;m.material.depthWrite=true;}); applyWeak();};
+var chOn=true;
+document.getElementById('gndToggle').onclick=function(){groundOn=!groundOn;
+  this.classList.toggle('on',groundOn);};
+document.getElementById('chToggle').onclick=function(){chOn=!chOn;
+  this.classList.toggle('on',chOn);
+  document.getElementById('charts').classList.toggle('off',!chOn);};
+document.getElementById('camReset').onclick=function(){
+  az=0; pol=84*D2R; rad=3.5; zoomMode='body'; target.set(0.09,0.95,0);
+  document.querySelectorAll('#zoomBtns button').forEach(function(x){x.classList.remove('on');});
+  document.querySelector('#zoomBtns button[data-zoom="body"]').classList.add('on');};
+var marksOn=false;
+document.getElementById('axHelp').onclick=function(){marksOn=!marksOn;
+  this.classList.toggle('on',marksOn); setMarks(marksOn);};
+
+var st=document.getElementById('segToggles');
+// 單一狀態表，所有可見性由 applyVis() 統一計算，避免互相覆蓋
+var VIS={head:true, thorax:true, lumbar:true, pelvis:true, right:true, left:true, toes:true};
+var SEGVIS={
+  head:      function(){return VIS.head;},
+  cervical:  function(){return VIS.head;},
+  thorax:    function(){return VIS.thorax;},
+  lumbar:    function(){return VIS.lumbar;},
+  pelvis:    function(){return VIS.pelvis;},
+  femur_r:   function(){return VIS.right;},
+  tibia_r:   function(){return VIS.right;},
+  talus_r:   function(){return VIS.right;},
+  foot_r:    function(){return VIS.right;},
+  toes_r:    function(){return VIS.right && VIS.toes;},
+  femur_l:   function(){return VIS.left;},
+  tibia_l:   function(){return VIS.left;},
+  talus_l:   function(){return VIS.left;},
+  foot_l:    function(){return VIS.left;},
+  toes_l:    function(){return VIS.left && VIS.toes;}
+};
+var weakSide=false;
+function applyWeak(){
+  ['femur_l','tibia_l','talus_l','foot_l','toes_l'].forEach(function(seg){
+    (bySeg[seg]||[]).forEach(function(m){
+      if(m.userData.dim) return;                 // 使用者手動透明的優先
+      m.material.opacity = weakSide ? 0.35 : 1;
+      m.material.depthWrite = !weakSide;
+    });
+  });
+}
+function applyVis(){
+  Object.keys(SEGVIS).forEach(function(seg){
+    var on=SEGVIS[seg]();
+    (bySeg[seg]||[]).forEach(function(m){ m.visible=on; });
+  });
+  applyWeak();
+}
+// 由上而下的解剖順序
+[['head','頭頸（顱骨與頸椎）'],
+ ['thorax','胸廓（胸椎、肋骨、胸骨）'],
+ ['lumbar','腰椎'],
+ ['pelvis','骨盆與薦骨'],
+ ['right','右下肢'],
+ ['left','左下肢'],
+ ['toes','趾骨（左右足，需該側下肢已顯示）']].forEach(function(c){
+  var l=document.createElement('label'); l.className='chk';
+  l.innerHTML='<input type="checkbox" checked>'+c[1];
+  l.querySelector('input').addEventListener('change',function(){
+    VIS[c[0]]=this.checked; applyVis();});
+  st.appendChild(l);
+});
+applyVis();
+
+var csel=document.getElementById('clipSel');
+(function(){var seen={},order=[];
+  CLIPS.forEach(function(c){var g=c.group||'其他'; if(!seen[g]){seen[g]=[];order.push(g);} seen[g].push(c);});
+  order.forEach(function(g){
+    var og=document.createElement('optgroup'); og.label=g;
+    seen[g].forEach(function(c){var o=document.createElement('option');o.value=c.id;o.textContent=c.label;og.appendChild(o);});
+    csel.appendChild(og);});})();
+csel.value=CLIP.id;
+csel.onchange=function(){phase=0;setClip(this.value);};
+document.getElementById('cmpChk').onchange=function(){cmpOn=this.checked;buildCharts();};
+setClip(CLIP.id);
+
+var sel=document.getElementById('jointSel');
+JOINTS.forEach(function(j){var o=document.createElement('option');o.value=j.id;o.textContent=j.label;sel.appendChild(o);});
+sel.value='ankle_r'; var curJ='ankle_r', cyc=false, sym=false;
+var MIR={hip_r:'hip_l',hip_l:'hip_r',knee_r:'knee_l',knee_l:'knee_r',
+         ankle_r:'ankle_l',ankle_l:'ankle_r',sub_r:'sub_l',sub_l:'sub_r',
+         mtp_r:'mtp_l',mtp_l:'mtp_r'};
+document.getElementById('symChk').onchange=function(){sym=this.checked;
+  if(sym){var m=MIR[curJ]; if(m) ['sag','fro','tra'].forEach(function(k){
+    off[m][k].a=off[curJ][k].a; off[m][k].b=off[curJ][k].b;});}};
+function setOff(id,ax,which,v){
+  off[id][ax][which]=v;
+  if(sym&&MIR[id]) off[MIR[id]][ax][which]=v;
+}
+document.getElementById('cycChk').onchange=function(){
+  cyc=this.checked;
+  if(!cyc) JOINTS.forEach(function(j){['sag','fro','tra'].forEach(function(k){off[j.id][k].b=off[j.id][k].a;});});
+  build();};
+sel.onchange=function(){curJ=sel.value;build();};
+function build(){
+  var j=JM[curJ], meta=JMETA[curJ]||{};
+  var html='<b>關節中心：'+(meta.provenance==='derived'?'推估值，非量測':'—')+'</b><br>'+
+    (meta.method||'')+(meta.note?'（'+meta.note+'）':'');
+  if(meta.axis_src) html+='<br><br><b>轉軸來源</b><br>'+meta.axis_src;
+  document.getElementById('prov').innerHTML=html;
+  var w=document.getElementById('sliders'); w.innerHTML='';
+  function pair(title,id,ax,neg,pos,min,max){
+    if(cyc){
+      slab(title+'　著地 0%／100%','− '+neg,pos+' +',min,max,off[id][ax].a,0.5,
+        function(v){setOff(id,ax,'a',v);});
+      slab(title+'　中點 50%','− '+neg,pos+' +',min,max,off[id][ax].b,0.5,
+        function(v){setOff(id,ax,'b',v);});
+    } else {
+      slab(title+'（全程固定）','− '+neg,pos+' +',min,max,off[id][ax].a,0.5,
+        function(v){setOff(id,ax,'a',v); setOff(id,ax,'b',v);});
+    }
+  }
+  function slab(title,neg,pos,min,max,val,step,cb){
+    var d=document.createElement('div');d.className='slab';
+    d.innerHTML='<div class="top"><span>'+title+'</span><span class="val"></span></div>'+
+      '<input type="range" min="'+min+'" max="'+max+'" step="'+step+'">'+
+      '<div class="ends"><span>'+neg+'</span><span>'+pos+'</span></div>';
+    var i=d.querySelector('input'),v=d.querySelector('.val');
+    i.value=val; v.textContent=(+i.value).toFixed(1)+'°';
+    i.addEventListener('input',function(){v.textContent=(+i.value).toFixed(1)+'°';cb(+i.value);});
+    w.appendChild(d); return d;
+  }
+  if(j.axis){
+    var a=j.ax[0];
+    pair('繞斜軸旋轉',j.id,'sag',a[1],a[2],-30,30);
+    var hd=document.createElement('h2');hd.textContent='轉軸參數';w.appendChild(hd);
+    if(j.axis==='sub'){
+      slab('傾角（相對水平面）','20.5°','68.5°',20.5,68.5,AXP.sub.incl,0.5,
+        function(v){AXP.sub.incl=v;rebuildAxes();drawCoupling(j.id,j.side);});
+      slab('偏角（相對足部長軸內偏）','4°','47°',4,47,AXP.sub.dev,0.5,
+        function(v){AXP.sub.dev=v;rebuildAxes();drawCoupling(j.id,j.side);});
+      var rs=document.createElement('div');rs.className='row';
+      [['Inman 1976 平均',42,23],['Gait2392 模型',37.2,8.7],['van den Bogert 1994',37.4,18]]
+        .forEach(function(p){var b=document.createElement('button');b.textContent=p[0];
+          b.onclick=function(){AXP.sub.incl=p[1];AXP.sub.dev=p[2];rebuildAxes();build();};
+          rs.appendChild(b);});
+      w.appendChild(rs);
+    }else{
+      slab('外側端下傾','0°','20°',0,20,AXP.ank.down,0.5,function(v){AXP.ank.down=v;rebuildAxes();drawCoupling(j.id,j.side);});
+      slab('外側端後偏','0°','20°',0,20,AXP.ank.post,0.5,function(v){AXP.ank.post=v;rebuildAxes();drawCoupling(j.id,j.side);});
+    }
+  } else {
+    j.ax.forEach(function(a){
+      var ax=a[0],pl=ax==='sag'?'矢狀面':(ax==='fro'?'額狀面':'水平面');
+      pair(pl,j.id,ax,a[1],a[2],-40,40);
+    });
+  }
+  if(curJ==='mtp_r'||curJ==='mtp_l'){
+    var hd0=document.createElement('h2'); hd0.textContent='蹠趾模型（文獻驅動）'; w.appendChild(hd0);
+    var lb0=document.createElement('label'); lb0.className='chk';
+    lb0.innerHTML='<input type="checkbox"'+(MTP.on?' checked':'')+'>啟用';
+    lb0.querySelector('input').addEventListener('change',function(){MTP.on=this.checked;build();});
+    w.appendChild(lb0);
+    if(MTP.on){
+      slab('趾離地背屈峰值','0°','70°',0,70,MTP.amp,1,function(v){MTP.amp=v;});
+      slab('開始上升時機','30%','75%',30,75,MTP.start,1,function(v){MTP.start=v;});
+      slab('著地時背屈','0°','15°',0,15,MTP.ic,0.5,function(v){MTP.ic=v;});
+      var rs0=document.createElement('div'); rs0.className='row';
+      [['動態實測 31.5°',31.5],['步態分析 38–40°',38],['教科書 45–60°',50],['被動上限 70°',70]]
+        .forEach(function(p){var b=document.createElement('button');b.textContent=p[0];
+          b.onclick=function(){MTP.amp=p[1];build();}; rs0.appendChild(b);});
+      w.appendChild(rs0);
+    }
+    var np0=document.createElement('p'); np0.className='note';
+    np0.innerHTML='<b>這是模型疊加，不是資料。</b>四個資料集皆未追蹤蹠趾關節——'+
+      'Fukuchi、Van Criekinge、Bertaux 與帕金森資料集都沒有這個欄位。'+
+      '原因是反光球動作捕捉解不出足內關節：趾骨過小、皮膚位移大，標準下肢標記組不在趾骨貼球。'+
+      '要量得用多節段足部模型，那是另一套實驗設計。<br><br>'+
+      '此處的曲線為：著地時小幅背屈 → 站立中期回到中立 → 推進期以升餘弦上升 → '+
+      '趾離地達峰值 → 擺盪期回到著地值。峰值時機對齊該側的實測趾離地百分比。<br><br>'+
+      '<b>文獻數值分歧近一倍：</b>Hetherington 等 1990 於趾離地當下實測，平均活動範圍 31.5°，'+
+      '最大背屈出現在地面反作用力峰值後 0.09 秒；JOSPT 2004 的步態分析測得第一蹠趾背屈峰值'+
+      '平均 38–40°；回顧文獻指出依足部模型不同平均範圍為 30–50°；教科書則稱正常步態需要 '+
+      '45–60°，被動背屈可達 40–100°。<br><br>'+
+      '預設採 38°（步態分析實測值）。四顆按鈕可切換上述來源，用以呈現分歧本身。';
+    w.appendChild(np0);
+  }
+  if(curJ==='knee_r'||curJ==='knee_l'){
+    var hd=document.createElement('h2'); hd.textContent='螺旋回鎖（模型疊加）'; w.appendChild(hd);
+    var lb=document.createElement('label'); lb.className='chk';
+    lb.innerHTML='<input type="checkbox"'+(SH.on?' checked':'')+'>啟用';
+    lb.querySelector('input').addEventListener('change',function(){SH.on=this.checked;build();});
+    w.appendChild(lb);
+    if(SH.on){
+      slab('脛骨外旋幅度','0°','20°',0,20,SH.amp,0.5,function(v){SH.amp=v;});
+      slab('起始屈曲角','5°','45°',5,45,SH.onset,1,function(v){SH.onset=v;});
+      var rs=document.createElement('div'); rs.className='row';
+      [['Hallén 1966 主動 7°',7,20],['Hallén 1966 上限 12°',12,20],['教科書 15°／末 20°',15,20]]
+        .forEach(function(p){var b=document.createElement('button');b.textContent=p[0];
+          b.onclick=function(){SH.amp=p[1];SH.onset=p[2];build();}; rs.appendChild(b);});
+      w.appendChild(rs);
+    }
+    var np=document.createElement('p'); np.className='note';
+    np.innerHTML='<b>這是模型疊加，不是資料。</b>三份資料集皆未提供可用的膝關節水平面角度。'+
+      '此處以「脛骨外旋 = 幅度 ×（起始屈曲角 − 當下屈曲角）／起始屈曲角」線性耦合，'+
+      '屈曲角大於起始值時歸零。<br><br>'+
+      'Hallén 與 Lindahl 1966（首個定量研究）測得膝由 160° 伸至 0° 時脛骨平均外旋 7–12°，'+
+      '主動伸直自 160° 起算平均 7°，伸直位被動旋轉範圍平均 10°；同一研究亦發現受試者可自主'+
+      '往任一方向旋轉。Blankevoort 等 1988 在輕負荷大體標本上同時做出正向與反向的螺旋回鎖。'+
+      'Piazza 與 Cavanagh 2000 指出此量測對屈曲軸定位誤差極度敏感，小幅度的內外旋可能只是運動學串擾。'+
+      '「末 20–30° 伸直伴隨約 15° 外旋」為教科書常用說法，非上述量測值。<br><br>'+
+      '因此預設關閉，幅度與起始角皆可調，用以呈現文獻分歧而非宣稱單一數值。';
+    w.appendChild(np);
+  }
+  if(j.axis) drawCoupling(j.id,j.side); else document.getElementById('coupBox').innerHTML='';
+}
+document.getElementById('resetJoint').onclick=function(){
+  ['sag','fro','tra'].forEach(function(k){off[curJ][k].a=0;off[curJ][k].b=0;});build();};
+document.getElementById('resetAll').onclick=function(){
+  JOINTS.forEach(function(j){['sag','fro','tra'].forEach(function(k){off[j.id][k].a=0;off[j.id][k].b=0;});});build();};
+build();
+var readout=document.getElementById('readout');
+
+/* ---- 尺寸：用 ResizeObserver 綁 stage，不依賴百分比高度 ---- */
+function fit(){
+  var w=stage.clientWidth||stage.getBoundingClientRect().width||800;
+  var h=stage.clientHeight||stage.getBoundingClientRect().height||600;
+  w=Math.max(1,Math.round(w)); h=Math.max(1,Math.round(h));
+  renderer.setSize(w,h,false);
+  camera.aspect=w/h; camera.updateProjectionMatrix();
+  return [w,h];
+}
+if(window.ResizeObserver){ new ResizeObserver(fit).observe(stage); }
+window.addEventListener('resize',fit);
+
+var wh=fit(); pose(0); placeCam(); renderer.render(scene,camera);
+(function(){
+  var box=new THREE.Box3().setFromObject(nodes.pelvis);
+  var sz=box.getSize(new THREE.Vector3()), ct=box.getCenter(new THREE.Vector3());
+  diag.textContent='mesh '+meshes.length+' · tri '+renderer.info.render.triangles
+    +' · canvas '+wh[0]+'×'+wh[1]
+    +' · bbox '+sz.x.toFixed(2)+'/'+sz.y.toFixed(2)+'/'+sz.z.toFixed(2)
+    +' @ '+ct.x.toFixed(2)+','+ct.y.toFixed(2)+','+ct.z.toFixed(2);
+  if(renderer.info.render.triangles===0) showErr('渲染了 0 個三角形。請按 d 鍵顯示診斷資訊，連同這行一起截圖回報。');
+})();
+
+window.addEventListener('keydown',function(e){
+  // 以實際計算後的樣式判斷，不能只看行內樣式——預設的隱藏寫在 CSS，
+  // 行內樣式初始為空字串，只看它的話第一次按鍵會沒反應。
+  if(e.key==='d'||e.key==='D'){var el=document.getElementById('diag');
+    var shown = getComputedStyle(el).display !== 'none';
+    el.style.display = shown ? 'none' : 'block';}});
+function tick(now){
+  var dt=Math.min((now-last)/1000,0.1); last=now;
+  if(playing){phase=(phase+dt*speed/CLIP.period)%1;scrub.value=Math.round(phase*1000);}
+  pose(phase); placeCam();
+  var txt=(phase*100).toFixed(1)+'%';
+  elPct.textContent=txt; elT.textContent=txt;
+  elEv.textContent=mode==='gait'?phaseName(phase):'靜止立位';
+
+  var j=JM[curJ],lv=live[curJ]||{},out='';
+  if(j.axis){
+    var deg=lv.axis||0, dc=decomp(AXIS[curJ],deg,j.side);
+    out='繞軸　'+(deg>=0?'+':'')+deg.toFixed(1)+'°<br>'+
+        '<span style="opacity:.55">分解到三平面</span><br>'+
+        '額狀　'+(dc[0]>=0?'+':'')+dc[0].toFixed(1)+'°　內翻正<br>'+
+        '水平　'+(dc[1]>=0?'+':'')+dc[1].toFixed(1)+'°　內收正<br>'+
+        '矢狀　'+(dc[2]>=0?'+':'')+dc[2].toFixed(1)+'°　蹠屈正<br>';
+  } else {
+    j.ax.forEach(function(a){var pl=a[0]==='sag'?'矢狀':(a[0]==='fro'?'額狀':'水平');
+      var v=(lv[a[0]]||0); out+=pl+'　'+(v>=0?'+':'')+v.toFixed(1)+'°<br>';});
+  }
+  readout.innerHTML=out;
+  (function(){
+    var el=document.getElementById('contact');
+    if(mode!=='gait'||!groundOn){ el.innerHTML=''; return; }
+    var cs=contactState(phase);
+    if(!cs){ el.innerHTML='<span style="opacity:.6">此 clip 無事件資料，未判定足地接觸狀態</span>'; return; }
+    var dev=pelvisDev(phase)*100;
+    var h=cs.map(function(c){
+      return '<span style="color:'+(c.ok?'#9fb3b3':'#ff8a6b')+'">'+
+        (c.side==='r'?'右':'左')+'足 '+c.txt+'</span>';}).join('　');
+    var bad=Math.abs(dev)>2.0;
+    h+='　<span style="color:'+(bad?'#ff8a6b':'#9fb3b3')+'">骨盆偏離 '+
+       (dev>=0?'+':'')+dev.toFixed(1)+' cm</span>';
+    var gap=ankleGap();
+    if(gap<0.08) h+='　<span style="color:#ff8a6b">兩踝距離 '+(gap*100).toFixed(1)+
+       ' cm（過近，可能來自缺少額狀面資料）</span>';
+    if(weakSide) h+='　<span style="color:#c98be0">左腿＝非患側，時間點為 50% 近似</span>';
+    el.innerHTML=h;
+  })();
+  updCharts(phase);
+  var cph=document.querySelector('.coup .cph');
+  if(cph&&JM[curJ].axis){var W=230,P=16,MX=30,cur=(live[curJ]&&live[curJ].axis)||0;
+    var xx=P+(cur+MX)/(2*MX)*(W-P*2); cph.setAttribute('x1',xx); cph.setAttribute('x2',xx);}
+  renderer.render(scene,camera);
+  requestAnimationFrame(tick);
+}
+requestAnimationFrame(tick);
+}catch(e){ showErr('INIT FAILED: '+(e&&e.stack?e.stack:e)); }
+})();
+</script>
+</body>
+</html>
