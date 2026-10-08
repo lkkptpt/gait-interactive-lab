@@ -2,7 +2,8 @@
 
 課堂用的 3D 步態教學工具。把四個公開研究資料集的實測關節角度，套在真實的骨骼網格上播放，可以轉視角、拉時間軸、把不同族群擺在一起比對。
 
-**單一 HTML 檔，離線可用，瀏覽器直接開。**
+**瀏覽器直接開，不需安裝。**首次開啟要下載約 3.5 MB 的骨骼網格（畫面會顯示載入進度），之後由瀏覽器快取，開啟即時。
+離線使用請把 `index.html` 與 `three.min.js` 放在同一個資料夾。
 
 👉 **[線上開啟](https://lkkptpt.github.io/gait-interactive-lab/)**
 
@@ -71,7 +72,7 @@ python3 build/build.py          # 產生 index.html
 改完模板之後，發佈前跑三道檢查：
 
 ```bash
-python3 build/check_build.py index.html    # 42 個函式定義是否齊全
+python3 build/check_build.py index.html    # 41 個函式定義是否齊全
 python3 build/check_cycles.py index.html   # 呼叫環是否都有阻斷旗標
 node --check <(抽出 <script> 內容)          # JS 語法
 ```

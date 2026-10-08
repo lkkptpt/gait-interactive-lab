@@ -38,6 +38,11 @@
 CC BY 4.0 允許衍生作品採用其他授權條款，因此將其與 BY-SA 的網格資料合併為
 `index.html` 並無衝突。
 
+### `three.min.js` → MIT（three.js 原作者）
+
+未修改的 three.js r128，檔頭保留原始 MIT 授權聲明。
+著作權屬 three.js authors，非本專案。
+
 ### `build/skeleton.json` → MIT
 
 關節中心為本專案由骨骼幾何推估而得（球面擬合、解剖標記點定位），
@@ -50,6 +55,7 @@ CC BY 4.0 允許衍生作品採用其他授權條款，因此將其與 BY-SA 的
 | `build/template.html` | MIT | 否 |
 | `build/*.py` | MIT | 否 |
 | `build/skeleton.json` | MIT | 否 |
+| `three.min.js` | MIT（three.js authors） | 否 |
 | `build/motion.json` | CC BY 4.0 | 否（須標示來源） |
 | `build/anatomy.json` | CC BY-SA 2.1 JP | **是** |
 | `index.html`（成品） | CC BY-SA 2.1 JP | **是** |

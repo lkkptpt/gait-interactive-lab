@@ -108,9 +108,26 @@ table.ev td:last-child{text-align:right;font-family:"IBM Plex Mono",monospace;co
   .panel{order:2;border:none;border-top:1px solid var(--line);overflow:visible}
   .panel--right{order:3;border-left:none}
 }
+#boot{position:fixed;inset:0;z-index:50;background:#0b1113;display:flex;
+  align-items:center;justify-content:center;transition:opacity .35s}
+#boot.gone{opacity:0;pointer-events:none}
+.boot-box{text-align:center;max-width:380px;padding:0 24px}
+.boot-title{color:var(--accent);font-size:15px;font-weight:600;letter-spacing:.04em}
+.boot-msg{color:#8aa0a2;font-size:12.5px;line-height:1.7;margin-top:10px}
+.boot-bar{height:2px;background:#1b2a2c;margin-top:18px;overflow:hidden;border-radius:2px}
+.boot-bar i{display:block;height:100%;width:40%;background:var(--accent);
+  animation:bootslide 1.1s ease-in-out infinite}
+@keyframes bootslide{0%{transform:translateX(-100%)}100%{transform:translateX(250%)}}
 </style>
 </head>
 <body>
+<div id="boot">
+  <div class="boot-box">
+    <div class="boot-title">步態互動實驗室</div>
+    <div class="boot-msg">正在載入骨骼網格（約 3.5 MB，第一次開啟較久，之後瀏覽器會快取）…</div>
+    <div class="boot-bar"><i></i></div>
+  </div>
+</div>
 <div class="app">
   <aside class="panel">
     <h1>步態互動實驗室</h1>
@@ -221,7 +238,8 @@ table.ev td:last-child{text-align:right;font-family:"IBM Plex Mono",monospace;co
 <script id="anatomy" type="application/json">__ANATOMY__</script>
 <script id="skeleton" type="application/json">__SKELETON__</script>
 <script id="motion"   type="application/json">__MOTION__</script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="three.min.js"></script>
+<script>if(!window.THREE)document.write('<scr'+'ipt src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"><\/scr'+'ipt>');</script>
 <script>
 function showErr(m){var e=document.getElementById('err');if(!e)return;
   e.style.display='block';e.textContent+=m+"\n";}
@@ -1271,7 +1289,10 @@ function tick(now){
   requestAnimationFrame(tick);
 }
 requestAnimationFrame(tick);
-}catch(e){ showErr('INIT FAILED: '+(e&&e.stack?e.stack:e)); }
+(function(){var b=document.getElementById('boot');
+  if(b){b.classList.add('gone'); setTimeout(function(){b.style.display='none';},400);}})();
+}catch(e){ var b=document.getElementById('boot'); if(b) b.style.display='none';
+  showErr('INIT FAILED: '+(e&&e.stack?e.stack:e)); }
 })();
 </script>
 </body>

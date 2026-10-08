@@ -68,7 +68,12 @@ PeerJ, 6, e4640.
 ## 外部程式庫
 
 **three.js r128** — [MIT License](https://github.com/mrdoob/three.js/blob/dev/LICENSE)
-由 cdnjs 載入，未包含在本 repo 內。離線使用時需自行下載並改寫 `<script src>`。
+
+> Copyright © 2010-2021 three.js authors — MIT License
+
+- 本 repo 內含未修改的 `three.min.js`（r128，檔頭保留原始 MIT 授權聲明）
+- `index.html` 優先載入同目錄的 `three.min.js`；若不存在（例如單獨下載 index.html），
+  自動退回 cdnjs 的 r128
 
 ---
 
