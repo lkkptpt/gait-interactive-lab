@@ -12,7 +12,10 @@
 
 - 授權：[CC BY-SA 2.1 Japan](https://creativecommons.org/licenses/by-sa/2.1/jp/)
 - 來源：<https://dbarchive.biosciencedbc.jp/en/bodyparts3d/desc.html>
-- 本專案的處理：座標轉換與數值量化，**未修改形狀**
+- 本專案的處理：座標轉換、數值量化，以及 **quadric decimation 減面**
+  （總面數 462,592 → 206,816）。減面比例依部位不同：下肢保留 75%、骨盆腰椎 65%、
+  頸椎 25%、胸廓與頭顱 18%，因為步態教學會放大檢視的是下肢。
+  **這是對原始網格的修改**，依 CC BY-SA 2.1 Japan 於此聲明；減面腳本見 `build/decimate.py`
 - ⚠️ 此授權含「相同方式分享」條款。`build/anatomy.json` 與內嵌它的 `index.html`
   必須以同一授權散布，詳見 `LICENSE-DATA.md`
 
