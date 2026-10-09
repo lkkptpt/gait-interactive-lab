@@ -35,8 +35,11 @@
 皆為 [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)。
 散布時須標示原作者與出處，完整引用見 `DATA-SOURCES.md`。
 
-CC BY 4.0 允許衍生作品採用其他授權條款，因此將其與 BY-SA 的網格資料合併為
-`index.html` 並無衝突。
+合併到 `index.html` 之所以沒有衝突，理由不是「BY 4.0 允許衍生作品換授權」，
+而是 Creative Commons 官方 FAQ 明載的單向相容性：
+*"Works licensed under CC BY may be incorporated into works that are licensed under CC BY-SA."*
+BY 可以併進 BY-SA 的作品，反向不行。因此成品整份以 BY-SA 2.1 JP 散布是正確方向。
+（<https://creativecommons.org/faq/>）
 
 ### `three.min.js` → MIT（three.js 原作者）
 

@@ -37,9 +37,13 @@ Scientific Data, 10, 852.
 
 ### 2. 帕金森氏症 ON／OFF 藥效（n=26）
 
-*A dataset of overground walking full-body kinematics and kinetics in individuals with Parkinson's disease.*
+Shida, T.K.F., Costa, T.M., de Oliveira, C.E.N., Treza, R.C., Hondo, S.M., Los Angeles, E.,
+Bernardo, C., de Oliveira, L.S., de Jesus Carvalho, M., Coelho, D.B. (2023).
+*A public data set of walking full-body kinematics and kinetics in individuals with Parkinson's disease.*
+Frontiers in Neuroscience, 17, 992585.
 
-- 資料：figshare article 14896881 <https://doi.org/10.6084/m9.figshare.14896881>
+- DOI：<https://doi.org/10.3389/fnins.2023.992585>
+- 資料存放：Coelho, D.B. — figshare <https://doi.org/10.6084/m9.figshare.14896881>
 - 授權：[CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)
 - 本工具使用：ON／OFF 組平均、凍結／非凍結組平均、2 名個案的 ON／OFF 對照
 - ⚠️ 本資料集未提供額狀面以外的完整通道，髖內收為唯一有額狀面資料的世代
@@ -51,7 +55,8 @@ Bertaux, A., Gueugnon, M., Moissenet, F. et al. (2022).
 Scientific Data, 9, 399.
 
 - DOI：<https://doi.org/10.1038/s41597-022-01483-3>
-- 授權：[CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)
+- 授權：[CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)（figshare 記錄載明）
+- 資料存放：Laroche, D. — figshare <https://doi.org/10.6084/m9.figshare.14420645>
 - 本工具使用：醫師依步態錄影判定為 Trendelenburg（4 例）與 Duchenne（3 例）的個案
 - 標記組：Plug-in Gait
 
@@ -86,6 +91,21 @@ PeerJ, 6, e4640.
 |---|---|---|
 | OpenSim `gait2354` 範例（subject01） | 不明 | OpenSim 的 Apache 2.0 僅涵蓋 GUI 與 API；官方明載「Models, examples and plugins retain their own custom licenses」，範例資料的散布條件無法確認 |
 | 腦性麻痺 3D 步態（figshare 4877432） | CC0 | 授權沒問題，但資料與剛體骨架模型自相矛盾——雙支撐期兩足距離變化達 18.5 cm，無法正確呈現，已移除 |
+
+---
+
+## 本工具對 L3 動作資料的改作
+
+依 CC BY 4.0 第 3(a)(1)(B) 條，須標示是否修改。本工具對四個資料集一律做了以下處理：
+
+- 時間正規化為每週期 100 點
+- 跨受試者逐點平均（組平均片段）
+- 單位與座標系轉換
+- 週期首尾線性去趨勢（make_cyclic）
+- 每個片段施加一個常數髖角度偏移（幾何閉合條件求得，數值顯示於介面）
+
+原作者與各資料集不對本工具的呈現與推論負責；資料依其授權「按現狀」提供，
+不附任何明示或默示的擔保。
 
 ---
 
