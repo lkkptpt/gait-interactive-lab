@@ -84,6 +84,24 @@ node --check <(抽出 <script> 內容)          # JS 語法
 
 ---
 
+## 怎麼用
+
+直接開上面的連結就能用，不需要安裝、不需要帳號。
+
+- **上課播放、投影、線上開畫面講解**：直接用，包含收費課程
+- **簡報或貼文放截圖**：旁邊附一行
+  `BodyParts3D, Copyright© The Database Center for Life Science licensed by CC Attribution-Share Alike 2.1 Japan`
+- **發檔案給別人**：可以，`index.html` 與 `three.min.js` 放在一起即可。
+  收到的人同樣享有 CC BY-SA 的權利，不能在上面附加「不得外流」這類限制條款
+
+---
+
+## 製作
+
+鄭宇劭（物理治療師／練健康總教練）。做給大家用的，歡迎拿去上課、改、再散布。
+
+---
+
 ## 授權
 
 程式碼 MIT；資料依各自來源，其中骨骼網格為 **CC BY-SA 2.1 Japan（相同方式分享）**，
