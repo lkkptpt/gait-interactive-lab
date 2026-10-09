@@ -32,6 +32,8 @@ h2{font-size:12px;font-weight:700;margin:20px 0 8px;padding-bottom:5px;border-bo
 h2:first-of-type{margin-top:14px}
 p.note{font-size:11.5px;color:var(--ink-2);line-height:1.55;margin:6px 0 0}
 details a,p.note a{color:var(--accent);text-decoration:underline;text-underline-offset:2px}
+details.why{margin-top:14px;border-top:1px solid var(--line);padding-top:12px}
+p.whytext{font-size:12.5px;line-height:2;color:var(--ink-2);margin:8px 0 0}
 details a:hover,p.note a:hover{text-decoration-thickness:2px}
 .row{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:8px}
 button{font:inherit;font-size:12px;color:var(--ink);background:var(--surface-2);
@@ -113,9 +115,13 @@ table.ev td:last-child{text-align:right;font-family:"IBM Plex Mono",monospace;co
 #boot{position:fixed;inset:0;z-index:50;background:#0F1A24;display:flex;
   align-items:center;justify-content:center;transition:opacity .35s}
 #boot.gone{opacity:0;pointer-events:none}
-.boot-box{text-align:center;max-width:380px;padding:0 24px}
+.boot-box{text-align:center;max-width:460px;padding:0 24px}
+.boot-wrap{display:inline-block;margin-top:18px;text-align:left}
+.boot-quote{color:#C9D6E2;font-size:14px;line-height:2}
+.boot-by{color:#7D8A96;font-size:12px;margin-top:10px;text-align:right}
+@media (max-width:480px){.boot-quote{font-size:13px;line-height:1.9}}
 .boot-title{color:var(--accent);font-size:15px;font-weight:600;letter-spacing:.04em}
-.boot-msg{color:#90A4B6;font-size:12.5px;line-height:1.7;margin-top:10px}
+.boot-msg{color:#627689;font-size:12px;line-height:1.7;margin-top:22px}
 .boot-bar{height:2px;background:#1D2C3A;margin-top:18px;overflow:hidden;border-radius:2px}
 .boot-bar i{display:block;height:100%;width:40%;background:var(--accent);
   animation:bootslide 1.1s ease-in-out infinite}
@@ -126,7 +132,11 @@ table.ev td:last-child{text-align:right;font-family:"IBM Plex Mono",monospace;co
 <div id="boot">
   <div class="boot-box">
     <div class="boot-title">步態互動實驗室</div>
-    <div class="boot-msg">正在準備骨架…<br>第一次開比較久，之後就快了</div>
+    <div class="boot-wrap">
+      <div class="boot-quote">我講了口沫橫飛，學生還是沒有畫面<br>最難的是讓學生感受動作與研究間的連結<br>所以就做了這個</div>
+      <div class="boot-by">— 鄭宇劭</div>
+    </div>
+    <div class="boot-msg">正在準備骨架…第一次開比較久，之後就快了</div>
     <div class="boot-bar"><i></i></div>
   </div>
 </div>
@@ -134,6 +144,11 @@ table.ev td:last-child{text-align:right;font-family:"IBM Plex Mono",monospace;co
   <aside class="panel">
     <h1>步態互動實驗室</h1>
     <p class="sub">v1.8.2 · 公開版：24 個片段<br>骨骼網格 BodyParts3D（CC BY-SA 2.1 JP）· 動作資料 四個 CC BY 4.0 研究資料集<br>兩者皆經本工具改作；作者、出處、授權連結與改作內容見下方「資料來源與授權」</p>
+
+    <details class="why">
+      <summary>為什麼做這個</summary>
+      <p class="whytext">大家好，我是鄭宇劭物理治療師<br>我做步態互動實驗室，是因為我在教學上一直有件事卡住<br>我講了口沫橫飛，學生還是沒有畫面<br>肌動學能用講的教會的部分，其實講一講就過去了<br>最難的是讓學生感受動作與研究間的連結<br>後來想到以前老師講的一句話，我們要培養像 X 光一樣的眼睛<br>意思是看著一個人走路，腦中要能浮現皮膚底下的骨頭在怎麼動<br>我認為在養成那種眼睛之前，得先大量反覆看<br>所以就做了這個</p>
+    </details>
 
     <h2>動作資料</h2>
     <select id="clipSel"></select>
