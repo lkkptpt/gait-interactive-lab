@@ -821,7 +821,7 @@ var SERIES_FOOT=[
 var SERIES=SERIES_BODY;
 var chartEls=[], cmpOn=true;
 function cmpClip(){
-  if(CLIP.foot_only) return null;
+  // 足部片段彼此可以疊（正常 vs 扁平 vs 高弓），但不能跟全身片段混
   if(!cmpOn) return null;
   var map=L3.compare_map||{};
   var id=map[CLIP.id];
@@ -834,6 +834,7 @@ function buildCharts(){
   SERIES.forEach(function(sr){
     var vals=[];
     sr.k.forEach(function(k){ (G[k]||[]).forEach(function(v){ vals.push(v*sr.sg); }); });
+    if(cc && cc.foot_only!==CLIP.foot_only) cc=null;   // 足部與全身片段不互比
     if(cc) sr.k.forEach(function(k){ (cc.data[k]||[]).forEach(function(v){ vals.push(v*sr.sg); }); });
     var lo=Math.min.apply(null,vals), hi=Math.max.apply(null,vals);
     var pad=(hi-lo)*0.12||1; lo-=pad; hi+=pad; sr.lo=lo; sr.hi=hi;
