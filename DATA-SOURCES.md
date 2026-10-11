@@ -92,6 +92,25 @@ PeerJ, 6, e4640.
 | OpenSim `gait2354` 範例（subject01） | 不明 | OpenSim 的 Apache 2.0 僅涵蓋 GUI 與 API；官方明載「Models, examples and plugins retain their own custom licenses」，範例資料的散布條件無法確認 |
 | 腦性麻痺 3D 步態（figshare 4877432） | CC0 | 授權沒問題，但資料與剛體骨架模型自相矛盾——雙支撐期兩足距離變化達 18.5 cm，無法正確呈現，已移除 |
 
+### 5. 足弓（正常足部姿勢，站立期，n=30）
+
+Sanchis-Sales, E., Sancho-Bru, J.L., Roda-Sales, A., Chiva-Miralles, M.J., García-Gomáriz, C. (2024).
+*Foot kinematics and kinetics data for different static foot posture collected using a multi-segment foot model.*
+Scientific Data, 11, 1307.
+
+- DOI：<https://doi.org/10.1038/s41597-024-04166-3>
+- 資料存放：Zenodo <https://doi.org/10.5281/zenodo.10838066>（記錄 10838067）
+- 授權：[CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)（Zenodo 記錄載明）
+- 標記組：Bruening 等 2012 的多節足部模型改編（脛、後足、中足、拇趾四節，20 個標記）
+- 本工具使用：70 人中依足部姿勢指數（Foot Posture Index, FPI）判定為正常的 30 人，
+  先在受試者內平均 5 次試驗，再跨受試者逐點平均
+- ⚠️ 三項限制，介面上皆有標示：
+  1. **只有站立期**，時間軸 0–100% 指的是站立期而非完整步態週期
+  2. **只有右腳**，且只有踝／中跗／第一蹠趾三個關節；其餘關節無資料，維持參考姿勢
+  3. **全部為健康成年男性**（27.3 ± 4.0 歲），非臨床族群、無女性資料，不可當常模
+- ⚠️ 零位為「各受試者自己的放鬆站姿」，不是解剖中立位
+- ⚠️ 資料集的踝水平面分量（R_ANK_AB）在本工具的單軸踝模型中無對應自由度，未顯示
+
 ---
 
 ## 本工具對 L3 動作資料的改作
@@ -103,6 +122,9 @@ PeerJ, 6, e4640.
 - 單位與座標系轉換
 - 週期首尾線性去趨勢（make_cyclic）
 - 每個片段施加一個常數髖角度偏移（幾何閉合條件求得，數值顯示於介面）
+
+足弓片段（arch_normal）不適用上述部分處理：它只有站立期，首尾本來就不相接
+（著地與離地是兩個不同瞬間），因此**未做首尾去趨勢**，也沒有髖角度偏移與貼地閉合。
 
 原作者與各資料集不對本工具的呈現與推論負責；資料依其授權「按現狀」提供，
 不附任何明示或默示的擔保。

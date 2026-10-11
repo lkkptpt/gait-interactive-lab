@@ -206,7 +206,7 @@ table.ev td:last-child{text-align:right;font-family:"IBM Plex Mono",monospace;co
     <canvas id="c"></canvas>
     <div id="err"></div>
     <div class="hud">
-      <div>步行周期 <b id="hudPct">0.0%</b></div>
+      <div><span id="hudPctLbl">步行周期</span> <b id="hudPct">0.0%</b></div>
       <div class="ev" id="hudEvent">—</div>
       <div id="contact" style="font-family:'Noto Sans TC',sans-serif;font-size:12px;line-height:1.6"></div>
       <div id="diag"></div>
@@ -333,19 +333,31 @@ L1.parts.forEach(function(p){
 /* ---- 貼地探測點：由各節段幾何的局部最低點取得 ---- */
 var probes=[];
 var probeR=[], probeL=[];
-['foot_r','foot_l','toes_r','toes_l'].forEach(function(seg){
+// 腳掌拆成後足／中足／拇趾之後，探測點的分組必須維持與拆之前相同，
+// 否則貼地閉合的結果會變，24 個既有片段的畫面就會跟著跑掉。
+// 作法：仍然只分「足部」與「趾骨」兩組，各組掛在錨點節段上，
+// 組內其他節段的骨頭先換算到錨點座標系再參與計算。
+function jOf(seg){ return Jc[HIER[seg][1]]; }
+function relLo(p, anchor){                  // 某塊骨頭的 lo 換算到錨點座標系
+  var a=jOf(anchor), b=jOf(p.s);
+  return [p.lo[0]+b[0]-a[0], p.lo[1]+b[1]-a[1], p.lo[2]+b[2]-a[2]];
+}
+[['foot_r',['foot_r','midfoot_r']],  ['toes_r',['hallux_r','toes_r']],
+ ['foot_l',['foot_l','midfoot_l']],  ['toes_l',['hallux_l','toes_l']]].forEach(function(grp){
+  var anchor=grp[0], segs=grp[1];
   var lo=Infinity, cx=0, cz=0, n=0;
   L1.parts.forEach(function(p){
-    if(p.s!==seg) return;
-    if(p.lo[1]<lo) lo=p.lo[1];
-    cx+=p.lo[0]+p.sp[0]/2; cz+=p.lo[2]+p.sp[2]/2; n++;
+    if(segs.indexOf(p.s)<0) return;
+    var q=relLo(p, anchor);
+    if(q[1]<lo) lo=q[1];
+    cx+=q[0]+p.sp[0]/2; cz+=q[2]+p.sp[2]/2; n++;
   });
   if(!n) return;
   [-0.35,0,0.35].forEach(function(f){
     var o=new THREE.Object3D();
     o.position.set(cx/n + f*0.06, lo, cz/n);
-    nodes[seg].add(o); probes.push(o);
-    (seg.slice(-1)==='r'?probeR:probeL).push(o);
+    nodes[anchor].add(o); probes.push(o);
+    (anchor.slice(-1)==='r'?probeR:probeL).push(o);
   });
 });
 // 腳跟與前足專用探測點（供接觸狀態判斷，不參與貼地計算）
@@ -353,7 +365,7 @@ var CP={};
 ['r','l'].forEach(function(sd){
   var heel=null, fore=[];
   L1.parts.forEach(function(p){
-    if(p.s!=='foot_'+sd) return;
+    if(p.s!=='foot_'+sd && p.s!=='midfoot_'+sd) return;
     if(p.n.indexOf('跟骨')>=0) heel=p;
     if(p.n.indexOf('蹠骨')>=0) fore.push(p);
   });
@@ -367,7 +379,8 @@ var CP={};
     var lx=fore.reduce(function(a,p){return a+p.lo[0]+p.sp[0]*0.85;},0)/fore.length;
     var lz=fore.reduce(function(a,p){return a+p.lo[2]+p.sp[2]/2;},0)/fore.length;
     var o2=new THREE.Object3D(); o2.position.set(lx,ly,lz);
-    nodes['foot_'+sd].add(o2); CP['fore_'+sd]=o2;
+    // 蹠骨的座標是中足座標系，所以掛在中足節點上（解剖上前足接觸點本來也該跟著前足動）
+    nodes['midfoot_'+sd].add(o2); CP['fore_'+sd]=o2;
   }
 });
 var _cw=new THREE.Vector3(), _aR=new THREE.Vector3(), _aL=new THREE.Vector3();
@@ -529,14 +542,22 @@ var JOINTS=[
  {id:'knee_r',seg:'tibia_r',label:'膝關節（右）',ax:[['sag','伸展','屈曲'],['fro','外翻','內翻'],['tra','外旋','內旋']]},
  {id:'ankle_r',seg:'talus_r',label:'距腿關節（右）',axis:'ank',side:'r',ax:[['sag','蹠屈','背屈']]},
  {id:'sub_r',seg:'foot_r',label:'距下關節（右）· 無資料',axis:'sub',side:'r',ax:[['sag','旋前（外翻）','旋後（內翻）']]},
- {id:'mtp_r',seg:'toes_r',label:'蹠趾關節（右）· 模型',ax:[['sag','伸展','屈曲']]},
+ {id:'midtarsal_r',seg:'midfoot_r',label:'中跗關節（右）· 足弓',ax:[['sag','蹠屈（足弓拉高）','背屈（足弓壓低）'],['fro','外翻','內翻'],['tra','內收','外展']]},
+ {id:'mtp1_r',seg:'hallux_r',label:'第一蹠趾關節（右）',ax:[['sag','蹠屈','背屈'],['fro','外翻','內翻'],['tra','內收','外展']]},
+ {id:'mtp_r',seg:'toes_r',label:'第2–5蹠趾關節（右）· 模型',ax:[['sag','伸展','屈曲']]},
  {id:'hip_l',mir:1,seg:'femur_l',label:'髖關節（左）',ax:[['sag','屈曲','伸展'],['fro','內收','外展'],['tra','內旋','外旋']]},
  {id:'knee_l',mir:1,seg:'tibia_l',label:'膝關節（左）',ax:[['sag','伸展','屈曲'],['fro','外翻','內翻'],['tra','外旋','內旋']]},
  {id:'ankle_l',mir:1,seg:'talus_l',label:'距腿關節（左）',axis:'ank',side:'l',ax:[['sag','蹠屈','背屈']]},
  {id:'sub_l',mir:1,seg:'foot_l',label:'距下關節（左）· 無資料',axis:'sub',side:'l',ax:[['sag','旋前（外翻）','旋後（內翻）']]},
- {id:'mtp_l',mir:1,seg:'toes_l',label:'蹠趾關節（左）· 模型',ax:[['sag','伸展','屈曲']]}
+ {id:'midtarsal_l',mir:1,seg:'midfoot_l',label:'中跗關節（左）· 足弓',ax:[['sag','蹠屈（足弓拉高）','背屈（足弓壓低）'],['fro','外翻','內翻'],['tra','內收','外展']]},
+ {id:'mtp1_l',mir:1,seg:'hallux_l',label:'第一蹠趾關節（左）',ax:[['sag','蹠屈','背屈'],['fro','外翻','內翻'],['tra','內收','外展']]},
+ {id:'mtp_l',mir:1,seg:'toes_l',label:'第2–5蹠趾關節（左）· 模型',ax:[['sag','伸展','屈曲']]}
 ];
 var JM={}; JOINTS.forEach(function(j){JM[j.id]=j;});
+// 資料集符號：背屈 +／內翻 +／外展 +。以下常數把它轉成本工具的旋轉方向，
+// 數值由無頭瀏覽器實測前足世界座標決定，不是推測的。
+var MT_SAG=1, MT_FRO=1, MT_TRA=1;
+var MP_SAG=1, MP_FRO=1, MP_TRA=1;
 var off={}; JOINTS.forEach(function(j){off[j.id]={sag:{a:0,b:0},fro:{a:0,b:0},tra:{a:0,b:0}};});
 // 0%/100% 共用 o.a，50% 為 o.b；升餘弦內插，兩端導數為零，首尾連續不跳變
 function offAt(id,ax,p){var o=off[id][ax];
@@ -613,11 +634,24 @@ function pose(p){
     var _sh = screwHome(_kf) * (s==='r' ? -1 : 1);   // 外旋
     setJ('knee_'+s, g?samp('knee_angle_'+s,p):0, 0, _sh, p);
     setAxisJ('ankle_'+s, g?samp('ankle_angle_'+s,p):0, p);
-    setAxisJ('sub_'+s, 0, p);
+    setAxisJ('sub_'+s, (g && G['sub_angle_'+s]) ? samp('sub_angle_'+s,p) : 0, p);
     var _st = (s==='r') ? (CLIP.stance_r||60) : (CLIP.stance_l||CLIP.stance_r||60);
     var _ph = (s==='r') ? 0 : ((CLIP.phase_l!=null)?CLIP.phase_l:0.5);
     var _q  = ((p+_ph)*100)%100;
     setJ('mtp_'+s, (g?samp('mtp_angle_'+s,p):0) + mtpModel(_q,_st), 0, 0, p);
+    // 中跗與第一蹠趾：只有提供該通道的片段會動，其餘片段維持 0（與改版前完全相同）
+    setJ('midtarsal_'+s, g?MT_SAG*samp('midtarsal_df_'+s,p):0,
+                         g?MT_FRO*samp('midtarsal_inv_'+s,p):0,
+                         g?MT_TRA*samp('midtarsal_ab_'+s,p):0, p);
+    // 拇趾：有實測資料就照資料走；沒有的片段則跟著其餘腳趾一起動，
+    // 這樣拆出拇趾之前與之後，既有片段的畫面完全一樣。
+    if(g && G['mtp1_df_'+s]){
+      setJ('mtp1_'+s, MP_SAG*samp('mtp1_df_'+s,p),
+                      MP_FRO*samp('mtp1_inv_'+s,p),
+                      MP_TRA*samp('mtp1_ab_'+s,p), p);
+    } else {
+      setJ('mtp1_'+s, (g?samp('mtp_angle_'+s,p):0) + mtpModel(_q,_st), 0, 0, p);
+    }
   });
   nodes.pelvis.position.y = PELV_Y;
   nodes.pelvis.position.z = PELV_Z;
@@ -773,13 +807,21 @@ function phaseName(p){var q=p*100, e=CLIP.events;
 /* ---- 角度曲線圖 ---- */
 var SVGNS='http://www.w3.org/2000/svg';
 var CW=200, CH=64, PADT=4, PADB=10;
-var SERIES=[
+var SERIES_BODY=[
  {t:'髖',  pos:'屈曲', neg:'伸展', k:['hip_flexion_r','hip_flexion_l'],  sg:1},
  {t:'膝',  pos:'屈曲', neg:'伸展', k:['knee_angle_r','knee_angle_l'],    sg:-1},
  {t:'踝',  pos:'背屈', neg:'蹠屈', k:['ankle_angle_r','ankle_angle_l'],  sg:1}
 ];
+// 足部專用片段（只有踝／中跗／第一蹠趾）換一組圖表，否則會去畫不存在的髖膝通道
+var SERIES_FOOT=[
+ {t:'踝',      pos:'背屈', neg:'蹠屈', k:['ankle_angle_r'],   sg:1},
+ {t:'中跗（足弓）', pos:'背屈．足弓壓低', neg:'蹠屈．足弓拉高', k:['midtarsal_df_r'], sg:1},
+ {t:'第一蹠趾',  pos:'背屈', neg:'蹠屈', k:['mtp1_df_r'],      sg:1}
+];
+var SERIES=SERIES_BODY;
 var chartEls=[], cmpOn=true;
 function cmpClip(){
+  if(CLIP.foot_only) return null;
   if(!cmpOn) return null;
   var map=L3.compare_map||{};
   var id=map[CLIP.id];
@@ -797,7 +839,8 @@ function buildCharts(){
     var pad=(hi-lo)*0.12||1; lo-=pad; hi+=pad; sr.lo=lo; sr.hi=hi;
     function Y(v){ return PADT+(hi-v)/(hi-lo)*(CH-PADT-PADB); }
     function X(i){ return i/100*CW; }
-    function path(arr){ var p=''; for(var i=0;i<=100;i++) p+=(i?'L':'M')+X(i).toFixed(2)+' '+Y(arr[i]*sr.sg).toFixed(2)+' '; return p; }
+    function path(arr){ if(!arr) return ''; var p='';
+      for(var i=0;i<=100;i++) p+=(i?'L':'M')+X(i).toFixed(2)+' '+Y(arr[i]*sr.sg).toFixed(2)+' '; return p; }
     var d=document.createElement('div'); d.className='chart';
     var svg='<svg viewBox="0 0 '+CW+' '+CH+'" preserveAspectRatio="none">';
     (CLIP.bands||[]).forEach(function(b){
@@ -809,6 +852,7 @@ function buildCharts(){
            '" stroke="#ffc46b" stroke-width="0.5" opacity="0.45"/>'; });
     if(cc) svg+='<path d="'+path(cc.data[sr.k[0]])+'" fill="none" stroke="#c98be0" stroke-width="1.2" opacity="0.85"/>';
     sr.k.forEach(function(k,idx){
+      if(!G[k]) return;
       svg+='<path d="'+path(G[k])+'" fill="none" stroke="'+(idx?'#7D8A96':'#8FB6D6')+
            '" stroke-width="'+(idx?1:1.5)+'" '+(idx?'stroke-dasharray="3 2"':'')+'/>';
     });
@@ -924,6 +968,18 @@ function computeRef(){
 function setClip(id){
   var c=clipById(id); if(!c) return;
   CLIP=c; G=c.data;
+  SERIES = c.foot_only ? SERIES_FOOT : SERIES_BODY;
+  // 足部專用片段沒有骨盆／髖／膝資料，貼地閉合無從算起，直接關掉；
+  // 時間軸也不是步態週期而是站立期，標籤要跟著換。
+  if(c.foot_only){
+    groundOn=false;
+    var gb=document.getElementById('gndToggle'); if(gb) gb.classList.remove('on');
+    zoomMode='foot'; rad=0.45;
+    document.querySelectorAll('#zoomBtns button').forEach(function(x){
+      x.classList.toggle('on', x.dataset.zoom==='foot'); });
+  }
+  var hl=document.getElementById('hudPctLbl');
+  if(hl) hl.textContent = c.stance_only ? '站立期' : '步行周期';
   document.getElementById('clipMeta').innerHTML=fmtMeta(c);
   GPROF=null; LPROF=null;
   weakSide = (c.group||'').indexOf('中風')>=0;
@@ -933,6 +989,8 @@ function setClip(id){
 function buildCmpTable(){
   var box=document.getElementById('cmpTable');
   var o=cmpClip();
+  if(CLIP.no_compare||CLIP.foot_only){
+    box.innerHTML='<p class="note">此片段只有足部三個關節，沒有髖膝資料，不做組間比較。</p>'; return; }
   if(!o){ box.innerHTML='<p class="note">此 clip 未設定對照組。</p>'; return; }
   var mx=function(v){return Math.max.apply(null,v);}, mn=function(v){return Math.min.apply(null,v);};
   var rows=[
@@ -1042,16 +1100,20 @@ var SEGVIS={
   tibia_r:   function(){return VIS.right;},
   talus_r:   function(){return VIS.right;},
   foot_r:    function(){return VIS.right;},
+  midfoot_r: function(){return VIS.right;},
+  hallux_r:  function(){return VIS.right && VIS.toes;},
   toes_r:    function(){return VIS.right && VIS.toes;},
   femur_l:   function(){return VIS.left;},
   tibia_l:   function(){return VIS.left;},
   talus_l:   function(){return VIS.left;},
   foot_l:    function(){return VIS.left;},
+  midfoot_l: function(){return VIS.left;},
+  hallux_l:  function(){return VIS.left && VIS.toes;},
   toes_l:    function(){return VIS.left && VIS.toes;}
 };
 var weakSide=false;
 function applyWeak(){
-  ['femur_l','tibia_l','talus_l','foot_l','toes_l'].forEach(function(seg){
+  ['femur_l','tibia_l','talus_l','foot_l','midfoot_l','hallux_l','toes_l'].forEach(function(seg){
     (bySeg[seg]||[]).forEach(function(m){
       if(m.userData.dim) return;                 // 使用者手動透明的優先
       m.material.opacity = weakSide ? 0.35 : 1;
@@ -1099,7 +1161,9 @@ JOINTS.forEach(function(j){var o=document.createElement('option');o.value=j.id;o
 sel.value='ankle_r'; var curJ='ankle_r', cyc=false, sym=false;
 var MIR={hip_r:'hip_l',hip_l:'hip_r',knee_r:'knee_l',knee_l:'knee_r',
          ankle_r:'ankle_l',ankle_l:'ankle_r',sub_r:'sub_l',sub_l:'sub_r',
-         mtp_r:'mtp_l',mtp_l:'mtp_r'};
+         mtp_r:'mtp_l',mtp_l:'mtp_r',
+         midtarsal_r:'midtarsal_l',midtarsal_l:'midtarsal_r',
+         mtp1_r:'mtp1_l',mtp1_l:'mtp1_r'};
 document.getElementById('symChk').onchange=function(){sym=this.checked;
   if(sym){var m=MIR[curJ]; if(m) ['sag','fro','tra'].forEach(function(k){
     off[m][k].a=off[curJ][k].a; off[m][k].b=off[curJ][k].b;});}};
