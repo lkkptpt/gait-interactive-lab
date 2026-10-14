@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>步態互動實驗室 v1.9.1</title>
+<title>步態互動實驗室 v1.10.0</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -143,7 +143,7 @@ table.ev td:last-child{text-align:right;font-family:"IBM Plex Mono",monospace;co
 <div class="app">
   <aside class="panel">
     <h1>步態互動實驗室</h1>
-    <p class="sub">v1.9.1 · 公開版：33 個片段<br>骨骼網格 BodyParts3D（CC BY-SA 2.1 JP）· 動作資料 五個 CC BY 4.0 研究資料集<br>兩者皆經本工具改作；作者、出處、授權連結與改作內容見下方「資料來源與授權」</p>
+    <p class="sub">v1.10.0 · 公開版：33 個片段<br>骨骼網格 BodyParts3D（CC BY-SA 2.1 JP）· 動作資料 五個 CC BY 4.0 研究資料集<br>兩者皆經本工具改作；作者、出處、授權連結與改作內容見下方「資料來源與授權」</p>
 
     <details class="why">
       <summary>為什麼做這個</summary>
@@ -184,6 +184,7 @@ table.ev td:last-child{text-align:right;font-family:"IBM Plex Mono",monospace;co
       <button id="axHelp">關節標記</button>
       <button id="chToggle" class="on">角度曲線</button>
       <button id="gndToggle" class="on">貼地</button>
+      <button id="archToggle">足弓</button>
     </div>
 
     <h2>與對照組比較</h2>
@@ -198,7 +199,7 @@ table.ev td:last-child{text-align:right;font-family:"IBM Plex Mono",monospace;co
       <p><b>製作</b>：鄭宇劭（物理治療師／練健康總教練）。程式碼採 MIT；本頁面因內嵌 BodyParts3D 的改作網格，整份以 CC BY-SA 2.1 Japan 散布——你可以自由使用、修改、再散布（含商業用途），散布修改版時須以相同授權釋出並保留下列標示。原始碼與建置腳本：<a href="https://github.com/lkkptpt/gait-interactive-lab" target="_blank" rel="noopener">github.com/lkkptpt/gait-interactive-lab</a></p>
       <p><b>骨骼（L1）</b>：BodyParts3D, Copyright© The Database Center for Life Science licensed by CC Attribution-Share Alike 2.1 Japan（<a href="https://creativecommons.org/licenses/by-sa/2.1/jp/" target="_blank" rel="noopener">授權條款</a> · <a href="https://dbarchive.biosciencedbc.jp/en/bodyparts3d/desc.html" target="_blank" rel="noopener">原始資料</a>）。<br><b>本工具對此網格的改作</b>：取 126 個部件，做座標轉換與 Uint16 數值量化，並以 quadric decimation 減面——總面數 462,592 → 206,816，各部位保留比例為下肢 75%、骨盆腰椎 65%、頸椎 25%、胸廓與頭顱 18%。這是對原始網格形狀的修改，不是原始資料。<br>此授權含「相同方式分享」，故本頁面（內嵌此改作網格）亦以 CC BY-SA 2.1 Japan 散布。</p>
       <p><b>骨架（L2）</b>：關節中心全部由骨骼幾何推估，非影像量測值。選擇關節時右側會顯示各自的推估方法。</p>
-      <p><b>動作（L3）</b>：五個公開研究資料集，全部為實測值，無任何手繪或模擬的動作。五者皆採 <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a>。各片段的受試者數、年齡、步速與臨床分類顯示於左側資訊列。</p><p class="note">1. Van Criekinge T, Saeys W, Truijen S, et al. (2023). A full-body motion capture gait dataset of 138 able-bodied adults across the life span and 50 stroke survivors. <i>Scientific Data</i> 10:852. <a href="https://doi.org/10.1038/s41597-023-02767-y" target="_blank" rel="noopener">doi:10.1038/s41597-023-02767-y</a><br>2. Shida TKF, Costa TM, de Oliveira CEN, et al. (2023). A public data set of walking full-body kinematics and kinetics in individuals with Parkinson’s disease. <i>Frontiers in Neuroscience</i> 17:992585. <a href="https://doi.org/10.3389/fnins.2023.992585" target="_blank" rel="noopener">doi:10.3389/fnins.2023.992585</a>；資料存放：Coelho DB, figshare <a href="https://doi.org/10.6084/m9.figshare.14896881" target="_blank" rel="noopener">10.6084/m9.figshare.14896881</a><br>3. Bertaux A, Gueugnon M, Moissenet F, Orliac B, Martz P, Maillefert JF, Ornetti P, Laroche D (2022). Gait analysis dataset of healthy volunteers and patients before and 6 months after total hip arthroplasty. <i>Scientific Data</i> 9:399. <a href="https://doi.org/10.1038/s41597-022-01483-3" target="_blank" rel="noopener">doi:10.1038/s41597-022-01483-3</a>；資料存放：Laroche D, figshare <a href="https://doi.org/10.6084/m9.figshare.14420645" target="_blank" rel="noopener">10.6084/m9.figshare.14420645</a><br>4. Fukuchi CA, Fukuchi RK, Duarte M (2018). A public dataset of overground and treadmill walking kinematics and kinetics in healthy individuals. <i>PeerJ</i> 6:e4640. <a href="https://doi.org/10.7717/peerj.4640" target="_blank" rel="noopener">doi:10.7717/peerj.4640</a>；資料存放：figshare <a href="https://doi.org/10.6084/m9.figshare.5722711" target="_blank" rel="noopener">10.6084/m9.figshare.5722711</a><br>5. Sanchis-Sales E, Sancho-Bru JL, Roda-Sales A, Chiva-Miralles MJ, García-Gomáriz C (2024). Foot kinematics and kinetics data for different static foot posture collected using a multi-segment foot model. <i>Scientific Data</i> 11:1307. <a href="https://doi.org/10.1038/s41597-024-04166-3" target="_blank" rel="noopener">doi:10.1038/s41597-024-04166-3</a>；資料存放：Zenodo <a href="https://doi.org/10.5281/zenodo.10838067" target="_blank" rel="noopener">10.5281/zenodo.10838067</a><br><b>本工具對這些資料的改作</b>：時間正規化為 100 點、跨受試者逐點平均、單位與座標系轉換、週期首尾線性去趨勢，並對每個片段施加一個常數髖角度偏移（見下方「髖角度偏移與貼地」）。<br>足弓片段（資料集 5）只有站立期，首尾本來就不相接，未做去趨勢，也沒有髖偏移。<br><b>推進期放大片段（「推進期放大（站立期 70–100%）」，共 3 段）</b>：取足弓片段站立期 70–100% 這一段，橫軸線性拉伸成 0–100%。這是重新取樣，數值未改動——三組足型的差異幾乎全部集中在這一段，放在完整片段裡只佔步態週期的 9%，看不出來。介面上標示的是原片段的站立期位置。<br><b>合成片段（「足弓（走路中・合成）」，共 3 段）</b>：身體取自資料集 1 的同一段走路，足部分別取自資料集 5 的正常／旋前／旋後三組，兩者來自不同受試者群，不是同一個人身上量到的。三段的身體完全相同，疊在一起時看到的差異只來自足部分組。身體的數值未改動；足部原本只有站立期，線性對應到週期的 0–61.4%，擺盪期無資料，以平滑過渡回到著地值（模型補值）。足部角度扣掉站立中期的平均作為零位，再加一個常數閉合修正（正常與旋前 1.5°、旋後 1.0°，取值方式與下方「髖角度偏移與貼地」同一類），因此擺幅是實測的，絕對角度不是。<br>原作者與各資料集不對本工具的呈現與推論負責；資料依其授權「按現狀」提供，不附任何明示或默示的擔保。</p><p><b>零位對齊</b>：各資料集的骨盆零位定義與 BodyParts3D 標本的站立姿勢不同，直接套用會產生假的軀幹前傾或側傾。骨盆與腰椎的自由度一律只取「相對該片段週期平均的變化量」，因此<b>擺幅是實測的，絕對角度不是</b>——不可用本工具判讀某人的骨盆前傾有幾度。下肢（髖膝踝距下蹠趾）零位為解剖中立位，各資料集定義一致，未做調整。</p><p><b>步態週期</b>：WBDS clip 的週期由測力板垂直力的自相關求得（取樣率 300 Hz，搜尋範圍 0.7–1.8 s，左右履帶取平均），範圍 0.947–1.070 s，步頻 112–127 步/分。步幅＝跑步機速度 × 週期。v0.7.0 以前此欄為程式預設值 1.1 s，播放速度不正確。</p><p><b>髖關節中心為何不用回歸式</b>：Harrington 等 2007 的回歸式是為皮膚標記步態分析設計的，在看不到骨頭時由骨盆尺寸推估股骨頭中心，經雙螢光透視驗證誤差 12–17 mm 且系統性偏外側。本工具有實際股骨網格，直接以球面擬合量測股骨頭（半徑 23.0／23.3 mm，左右差 0.3 mm），精度優於回歸式，故不採用。</p><p><b>髖角度偏移與貼地</b>：髖角度是相對骨盆量測的，各資料集與本標本的骨盆中立位不同，直接套用會使腿在著地時搆不到地。每個 clip 施加一個常數髖偏移，取值為「使站立期貼地高度變化最小」的幾何閉合條件（範圍 -22.5° 至 +12.5°，各 clip 數值顯示於左側）。修正後骨盆垂直起伏為 0.027–0.041 m，落在行走重心上下位移的生理範圍內。此偏移為常數，不影響擺幅、峰值間距與所有組間比較統計。模型高度由當下處於站立期的腳決定，擺盪腳不參與，可用「貼地」按鈕關閉。</p><p><b>限制</b>：骨頭以剛體旋轉，無關節面滑動、軟骨、韌帶、關節囊、肌肉。距下關節目前以正交軸近似，尚未採用 Inman 斜軸。原始 IK 未追蹤距下與蹠趾，只能手動操作。各片段的受試者數與族群標示於左側資訊列，個案片段為單一受試者，不可當作常模。</p>
+      <p><b>動作（L3）</b>：五個公開研究資料集，全部為實測值，無任何手繪或模擬的動作。五者皆採 <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a>。各片段的受試者數、年齡、步速與臨床分類顯示於左側資訊列。</p><p class="note">1. Van Criekinge T, Saeys W, Truijen S, et al. (2023). A full-body motion capture gait dataset of 138 able-bodied adults across the life span and 50 stroke survivors. <i>Scientific Data</i> 10:852. <a href="https://doi.org/10.1038/s41597-023-02767-y" target="_blank" rel="noopener">doi:10.1038/s41597-023-02767-y</a><br>2. Shida TKF, Costa TM, de Oliveira CEN, et al. (2023). A public data set of walking full-body kinematics and kinetics in individuals with Parkinson’s disease. <i>Frontiers in Neuroscience</i> 17:992585. <a href="https://doi.org/10.3389/fnins.2023.992585" target="_blank" rel="noopener">doi:10.3389/fnins.2023.992585</a>；資料存放：Coelho DB, figshare <a href="https://doi.org/10.6084/m9.figshare.14896881" target="_blank" rel="noopener">10.6084/m9.figshare.14896881</a><br>3. Bertaux A, Gueugnon M, Moissenet F, Orliac B, Martz P, Maillefert JF, Ornetti P, Laroche D (2022). Gait analysis dataset of healthy volunteers and patients before and 6 months after total hip arthroplasty. <i>Scientific Data</i> 9:399. <a href="https://doi.org/10.1038/s41597-022-01483-3" target="_blank" rel="noopener">doi:10.1038/s41597-022-01483-3</a>；資料存放：Laroche D, figshare <a href="https://doi.org/10.6084/m9.figshare.14420645" target="_blank" rel="noopener">10.6084/m9.figshare.14420645</a><br>4. Fukuchi CA, Fukuchi RK, Duarte M (2018). A public dataset of overground and treadmill walking kinematics and kinetics in healthy individuals. <i>PeerJ</i> 6:e4640. <a href="https://doi.org/10.7717/peerj.4640" target="_blank" rel="noopener">doi:10.7717/peerj.4640</a>；資料存放：figshare <a href="https://doi.org/10.6084/m9.figshare.5722711" target="_blank" rel="noopener">10.6084/m9.figshare.5722711</a><br>5. Sanchis-Sales E, Sancho-Bru JL, Roda-Sales A, Chiva-Miralles MJ, García-Gomáriz C (2024). Foot kinematics and kinetics data for different static foot posture collected using a multi-segment foot model. <i>Scientific Data</i> 11:1307. <a href="https://doi.org/10.1038/s41597-024-04166-3" target="_blank" rel="noopener">doi:10.1038/s41597-024-04166-3</a>；資料存放：Zenodo <a href="https://doi.org/10.5281/zenodo.10838067" target="_blank" rel="noopener">10.5281/zenodo.10838067</a><br><b>本工具對這些資料的改作</b>：時間正規化為 100 點、跨受試者逐點平均、單位與座標系轉換、週期首尾線性去趨勢，並對每個片段施加一個常數髖角度偏移（見下方「髖角度偏移與貼地」）。<br>足弓片段（資料集 5）只有站立期，首尾本來就不相接，未做去趨勢，也沒有髖偏移。<br><b>推進期放大片段（「推進期放大（站立期 70–100%）」，共 3 段）</b>：取足弓片段站立期 70–100% 這一段，橫軸線性拉伸成 0–100%。這是重新取樣，數值未改動——三組足型的差異幾乎全部集中在這一段，放在完整片段裡只佔步態週期的 9%，看不出來。介面上標示的是原片段的站立期位置。<br><b>合成片段（「足弓（走路中・合成）」，共 3 段）</b>：身體取自資料集 1 的同一段走路，足部分別取自資料集 5 的正常／旋前／旋後三組，兩者來自不同受試者群，不是同一個人身上量到的。三段的身體完全相同，疊在一起時看到的差異只來自足部分組。身體的數值未改動；足部原本只有站立期，線性對應到週期的 0–61.4%，擺盪期無資料，以平滑過渡回到著地值（模型補值）。足部角度扣掉站立中期的平均作為零位，再加一個常數閉合修正（正常與旋前 1.5°、旋後 1.0°，取值方式與下方「髖角度偏移與貼地」同一類），因此擺幅是實測的，絕對角度不是。<br>原作者與各資料集不對本工具的呈現與推論負責；資料依其授權「按現狀」提供，不附任何明示或默示的擔保。</p><p><b>零位對齊</b>：各資料集的骨盆零位定義與 BodyParts3D 標本的站立姿勢不同，直接套用會產生假的軀幹前傾或側傾。骨盆與腰椎的自由度一律只取「相對該片段週期平均的變化量」，因此<b>擺幅是實測的，絕對角度不是</b>——不可用本工具判讀某人的骨盆前傾有幾度。下肢（髖膝踝距下蹠趾）零位為解剖中立位，各資料集定義一致，未做調整。</p><p><b>步態週期</b>：WBDS clip 的週期由測力板垂直力的自相關求得（取樣率 300 Hz，搜尋範圍 0.7–1.8 s，左右履帶取平均），範圍 0.947–1.070 s，步頻 112–127 步/分。步幅＝跑步機速度 × 週期。v0.7.0 以前此欄為程式預設值 1.1 s，播放速度不正確。</p><p><b>髖關節中心為何不用回歸式</b>：Harrington 等 2007 的回歸式是為皮膚標記步態分析設計的，在看不到骨頭時由骨盆尺寸推估股骨頭中心，經雙螢光透視驗證誤差 12–17 mm 且系統性偏外側。本工具有實際股骨網格，直接以球面擬合量測股骨頭（半徑 23.0／23.3 mm，左右差 0.3 mm），精度優於回歸式，故不採用。</p><p><b>髖角度偏移與貼地</b>：髖角度是相對骨盆量測的，各資料集與本標本的骨盆中立位不同，直接套用會使腿在著地時搆不到地。每個 clip 施加一個常數髖偏移，取值為「使站立期貼地高度變化最小」的幾何閉合條件（範圍 -22.5° 至 +12.5°，各 clip 數值顯示於左側）。修正後骨盆垂直起伏為 0.027–0.041 m，落在行走重心上下位移的生理範圍內。此偏移為常數，不影響擺幅、峰值間距與所有組間比較統計。模型高度由當下處於站立期的腳決定，擺盪腳不參與，可用「貼地」按鈕關閉。</p><p><b>足弓怎麼來的</b>：介面上的「足弓」指示與足弓高度曲線，都是<b>由骨骼幾何與關節角度推算</b>的，不是資料集直接量到的數字。弓高定義為舟狀骨質心到「跟骨著地點–第一蹠趾關節中心」連線的垂直距離，用腳自己的兩個著地點當基線，所以整隻腳抬起來或轉動時數值不受影響。站立期的下降量為正常足 3.6 mm、旋前足 4.8 mm、旋後足 3.9 mm；文獻以皮膚標記實測走路時的舟狀骨下降為 5.9 ± 2.3 mm（<a href="https://doi.org/10.1186/s13047-018-0257-2" target="_blank" rel="noopener">Eichelberger 等 2018, J Foot Ankle Res 11:15</a>，n=42 足），三組都落在一個標準差內。<br><b>跗蹠關節是模型關節</b>：本工具把中足切成「舟骰楔」與「五根蹠骨」兩段，中間放一個跗蹠關節。資料集沒有這個關節的通道——Bruening 多節足部模型把舟骰楔與蹠骨視為同一塊剛體，舟楔與跗蹠的動作從未被量到。此關節<b>預設角度為 0，不吃任何資料</b>，只能用右側滑桿手動操作；切開它是為了讓足弓頂點能相對前足移動。實測文獻顯示距舟與舟楔的矢狀面貢獻相近（<a href="https://doi.org/10.1186/1471-2474-13-14" target="_blank" rel="noopener">Martin 等 2012</a>，單平面透視；<a href="https://doi.org/10.1016/j.gaitpost.2007.10.009" target="_blank" rel="noopener">Lundgren 等 2008</a>，骨釘），但本工具沒有把量到的角度分配過去——實測分配比例後發現對舟狀骨高度幾乎沒有影響（0 至 3 的比例只讓下降量由 3.6 變 3.3 mm），且會讓前足浮起來。</p><p><b>限制</b>：骨頭以剛體旋轉，無關節面滑動、軟骨、韌帶、關節囊、肌肉。距下關節目前以正交軸近似，尚未採用 Inman 斜軸。原始 IK 未追蹤距下與蹠趾，只能手動操作。各片段的受試者數與族群標示於左側資訊列，個案片段為單一受試者，不可當作常模。</p>
     </details>
   </aside>
 
@@ -209,6 +210,7 @@ table.ev td:last-child{text-align:right;font-family:"IBM Plex Mono",monospace;co
       <div><span id="hudPctLbl">步行周期</span> <b id="hudPct">0.0%</b></div>
       <div class="ev" id="hudEvent">—</div>
       <div id="contact" style="font-family:'Noto Sans TC',sans-serif;font-size:12px;line-height:1.6"></div>
+      <div id="archHud" style="font-family:'Noto Sans TC',sans-serif;font-size:12px;line-height:1.6"></div>
       <div id="diag"></div>
     </div>
     <div class="pickname" id="pickName"></div>
@@ -312,7 +314,7 @@ function setMarks(v){ Object.keys(nodes).forEach(function(s){
   nodes[s].children.forEach(function(ch){ if(ch.userData.isMark) ch.visible=v; }); }); }
 
 /* ---- L1：幾何 ---- */
-var meshes=[], bySeg={};
+var meshes=[], bySeg={}, NAVI={};
 L1.parts.forEach(function(p){
   var q=new Uint16Array(bin,p.vo,p.nv*3), pos=new Float32Array(p.nv*3);
   for(var i=0;i<p.nv;i++){
@@ -328,6 +330,15 @@ L1.parts.forEach(function(p){
     metalness:0.02,transparent:true,opacity:1,side:THREE.DoubleSide}));
   m.name=p.n; m.userData.dim=false; m.frustumCulled=false;
   nodes[p.s].add(m); meshes.push(m); (bySeg[p.s]=bySeg[p.s]||[]).push(m);
+  // 足弓連線要用到舟狀骨的位置，趁有頂點座標時先算好質心
+  if(p.n==='右舟狀骨'||p.n==='左舟狀骨'){
+    var sx=0,sy=0,sz=0;
+    for(var k=0;k<p.nv;k++){ sx+=pos[k*3]; sy+=pos[k*3+1]; sz+=pos[k*3+2]; }
+    var nv=new THREE.Object3D();
+    nv.position.set(sx/p.nv, sy/p.nv, sz/p.nv);
+    nodes[p.s].add(nv);
+    NAVI[p.n==='右舟狀骨'?'r':'l']=nv;
+  }
 });
 
 /* ---- 貼地探測點：由各節段幾何的局部最低點取得 ---- */
@@ -342,8 +353,8 @@ function relLo(p, anchor){                  // 某塊骨頭的 lo 換算到錨�
   var a=jOf(anchor), b=jOf(p.s);
   return [p.lo[0]+b[0]-a[0], p.lo[1]+b[1]-a[1], p.lo[2]+b[2]-a[2]];
 }
-[['foot_r',['foot_r','midfoot_r']],  ['toes_r',['hallux_r','toes_r']],
- ['foot_l',['foot_l','midfoot_l']],  ['toes_l',['hallux_l','toes_l']]].forEach(function(grp){
+[['foot_r',['foot_r','midfoot_r','meta_r']],  ['toes_r',['hallux_r','toes_r']],
+ ['foot_l',['foot_l','midfoot_l','meta_l']],  ['toes_l',['hallux_l','toes_l']]].forEach(function(grp){
   var anchor=grp[0], segs=grp[1];
   var lo=Infinity, cx=0, cz=0, n=0;
   L1.parts.forEach(function(p){
@@ -365,7 +376,7 @@ var CP={};
 ['r','l'].forEach(function(sd){
   var heel=null, fore=[];
   L1.parts.forEach(function(p){
-    if(p.s!=='foot_'+sd && p.s!=='midfoot_'+sd) return;
+    if(p.s!=='foot_'+sd && p.s!=='midfoot_'+sd && p.s!=='meta_'+sd) return;
     if(p.n.indexOf('跟骨')>=0) heel=p;
     if(p.n.indexOf('蹠骨')>=0) fore.push(p);
   });
@@ -379,10 +390,132 @@ var CP={};
     var lx=fore.reduce(function(a,p){return a+p.lo[0]+p.sp[0]*0.85;},0)/fore.length;
     var lz=fore.reduce(function(a,p){return a+p.lo[2]+p.sp[2]/2;},0)/fore.length;
     var o2=new THREE.Object3D(); o2.position.set(lx,ly,lz);
-    // 蹠骨的座標是中足座標系，所以掛在中足節點上（解剖上前足接觸點本來也該跟著前足動）
-    nodes['midfoot_'+sd].add(o2); CP['fore_'+sd]=o2;
+    // 蹠骨的座標是蹠骨節段座標系，所以掛在蹠骨節點上
+    nodes['meta_'+sd].add(o2); CP['fore_'+sd]=o2;
   }
 });
+/* ---- 內側縱弓的視覺指示 ----
+   足弓的變化只有幾毫米，在 3D 畫面上看不出來。這裡把它量出來畫成線與數字。
+   連線的三個點：腳跟著地點、舟狀骨質心、第一蹠趾關節中心（＝第一蹠骨頭）。
+   這些是由骨骼幾何與關節角度推算的，不是資料集直接量到的值。 */
+var archOn=false, archSide='r', ARCH={};
+var archGroup=new THREE.Group(); archGroup.visible=false; scene.add(archGroup);
+(function(){
+  function line(color, n, w){
+    var g=new THREE.BufferGeometry();
+    g.setAttribute('position', new THREE.BufferAttribute(new Float32Array(n*3),3));
+    var m=new THREE.LineBasicMaterial({color:color, linewidth:w||1,
+          transparent:true, opacity:0.95, depthTest:false});
+    var o=new THREE.Line(g,m); o.frustumCulled=false; o.renderOrder=10;
+    archGroup.add(o); return o;
+  }
+  ARCH.span = line(0xffc46b, 3);          // 跟 → 舟 → 蹠1
+  ARCH.ref  = line(0xffc46b, 2);          // 貼平時的高度，水平基準
+  ARCH.ref.material.opacity=0.42;
+  ARCH.drop = line(0xff8a6b, 2);          // 弓高本身
+  ARCH.ghost= line(0x8fa0b0, 3);          // 貼平時的足弓輪廓，當殘影比對
+  ARCH.ghost.material.opacity=0.55;
+  function ball(color, r, op){
+    var m=new THREE.Mesh(new THREE.SphereGeometry(r,12,10),
+          new THREE.MeshBasicMaterial({color:color, depthTest:false,
+            transparent:true, opacity:op==null?1:op}));
+    m.renderOrder=11; archGroup.add(m); return m;
+  }
+  // 球要夠小：弓高的變化只有 3–5 mm，球一大就把落差蓋掉了
+  ARCH.dot   = ball(0xffc46b, 0.0020);        // 目前的舟狀骨
+  ARCH.gdot  = ball(0x8fa0b0, 0.0018, 0.8);   // 貼平時的舟狀骨（殘影）
+  ARCH.eheel = ball(0xffc46b, 0.0016, 0.65);  // 基線兩端
+  ARCH.emt1  = ball(0xffc46b, 0.0016, 0.65);
+})();
+function setLine(obj, pts){
+  var a=obj.geometry.attributes.position;
+  for(var i=0;i<pts.length;i++){ a.setXYZ(i, pts[i].x, pts[i].y, pts[i].z); }
+  a.needsUpdate=true; obj.geometry.computeBoundingSphere();
+}
+var _nav=new THREE.Vector3(), _mt1=new THREE.Vector3(), _hl=new THREE.Vector3();
+var _up=new THREE.Vector3();
+// 以「跟骨著地點 → 第一蹠骨頭」為基線，配合跟骨自己的上方向，
+// 建立一個隨著腳一起轉的座標系。舟狀骨在這個座標系裡的位置，
+// 就是不受整隻腳位移與轉動影響的足弓形狀。
+function footFrame(pt){
+  var base=new THREE.Vector3().subVectors(pt.mt1, pt.heel);
+  var L=base.length(); if(L<1e-6) return null;
+  var u=base.clone().multiplyScalar(1/L);
+  _up.set(0,1,0).applyQuaternion(nodes['foot_'+archSide].getWorldQuaternion(new THREE.Quaternion()));
+  var n=_up.clone().addScaledVector(u, -_up.dot(u));
+  if(n.lengthSq()<1e-9) return null;
+  n.normalize();
+  var w=new THREE.Vector3().subVectors(pt.nav, pt.heel);
+  return {u:u, n:n, L:L, t:w.dot(u), h:w.dot(n), perp:pt.nav.distanceTo(
+    new THREE.Vector3().copy(pt.heel).addScaledVector(u, w.dot(u)))};
+}
+function archPoints(sd){
+  if(!NAVI[sd]||!CP['heel_'+sd]||!nodes['hallux_'+sd]) return null;
+  NAVI[sd].getWorldPosition(_nav);
+  CP['heel_'+sd].getWorldPosition(_hl);
+  nodes['hallux_'+sd].getWorldPosition(_mt1);   // 第一蹠趾關節中心＝第一蹠骨頭
+  return {nav:_nav, heel:_hl, mt1:_mt1};
+}
+// 基準：該片段中「足部貼平」的第一個瞬間，此時的舟狀骨高度
+var ARCH_REF=null;
+function computeArchRef(){
+  ARCH_REF=null;
+  var bak=JSON.parse(JSON.stringify(off));
+  JOINTS.forEach(function(j){['sag','fro','tra'].forEach(function(k){off[j.id][k].a=0;off[j.id][k].b=0;});});
+  for(var i=0;i<=100;i++){
+    var p=i/100; pose(p);
+    var o=groundOn?groundOffset(p):0;
+    nodes.pelvis.position.y=PELV_Y+o; nodes.pelvis.updateMatrixWorld(true);
+    var h=probeY('heel_'+archSide), f=probeY('fore_'+archSide);
+    if(h<TOL && f<TOL){
+      var pt=archPoints(archSide);
+      if(pt){
+        var F=footFrame(pt);
+        if(F) ARCH_REF={h:F.perp, t:F.t, hh:F.h, L:F.L, at:i};
+      }
+      break;
+    }
+  }
+  off=bak;
+}
+function updArch(){
+  archGroup.visible = archOn;
+  if(!archOn) return '';
+  var pt=archPoints(archSide); if(!pt) return '';
+  // 弓高定義為「舟狀骨到 跟–蹠1 連線的垂直距離」。
+  // 用腳自己的兩個著地點當基線，所以整隻腳抬起來、轉動時這個值都不受影響，
+  // 推進期也還讀得出來；如果改用離地高度，腳一抬數值就爆掉。
+  var F=footFrame(pt); if(!F) return '';
+  var h=F.perp;
+  var foot=new THREE.Vector3().copy(pt.heel).addScaledVector(F.u, F.t);  // 垂足
+  setLine(ARCH.span,[pt.heel, pt.nav, pt.mt1]);
+  setLine(ARCH.ref ,[pt.heel, pt.mt1]);                 // 基線：兩個著地點
+  setLine(ARCH.drop,[foot, pt.nav]);                    // 弓高本身
+  ARCH.ref.visible=true; ARCH.drop.visible=true;
+  ARCH.dot.position.copy(pt.nav);
+  // 殘影：把貼平那一刻的舟狀骨位置，用目前的足部座標系重建出來
+  if(ARCH_REF!=null && ARCH_REF.t!=null){
+    var gnav=new THREE.Vector3().copy(pt.heel)
+      .addScaledVector(F.u, ARCH_REF.t*(F.L/ARCH_REF.L))
+      .addScaledVector(F.n, ARCH_REF.hh);
+    setLine(ARCH.ghost,[pt.heel, gnav, pt.mt1]);
+    ARCH.ghost.visible=true;
+    ARCH.gdot.visible=true; ARCH.gdot.position.copy(gnav);
+  } else { ARCH.ghost.visible=false; ARCH.gdot.visible=false; }
+  ARCH.eheel.position.copy(pt.heel);
+  ARCH.emt1.position.copy(pt.mt1);
+  var v1=new THREE.Vector3().subVectors(pt.heel,pt.nav).normalize();
+  var v2=new THREE.Vector3().subVectors(pt.mt1 ,pt.nav).normalize();
+  var ang=Math.acos(Math.max(-1,Math.min(1,v1.dot(v2))))*180/Math.PI;
+  var txt='<span style="color:#ffc46b">足弓</span>　弓高 '+(h*1000).toFixed(1)+' mm';
+  if(ARCH_REF!=null){
+    var d=(h-ARCH_REF.h)*1000;
+    txt+='<span style="color:'+(d<-0.5?'#ff8a6b':'#90A4B6')+'">　'+
+         (d>=0?'+':'')+d.toFixed(1)+' mm</span><span style="opacity:.6">（相對貼平）</span>';
+  }
+  txt+='　弓角 '+ang.toFixed(1)+'°<span style="opacity:.6">　模型推算</span>';
+  return txt;
+}
 var _cw=new THREE.Vector3(), _aR=new THREE.Vector3(), _aL=new THREE.Vector3();
 function ankleGap(){
   nodes.talus_r.getWorldPosition(_aR); nodes.talus_l.getWorldPosition(_aL);
@@ -543,6 +676,7 @@ var JOINTS=[
  {id:'ankle_r',seg:'talus_r',label:'距腿關節（右）',axis:'ank',side:'r',ax:[['sag','蹠屈','背屈']]},
  {id:'sub_r',seg:'foot_r',label:'距下關節（右）· 無資料',axis:'sub',side:'r',ax:[['sag','旋前（外翻）','旋後（內翻）']]},
  {id:'midtarsal_r',seg:'midfoot_r',label:'中跗關節（右）· 足弓',ax:[['sag','蹠屈（足弓拉高）','背屈（足弓壓低）'],['fro','外翻','內翻'],['tra','內收','外展']]},
+ {id:'tmt_r',seg:'meta_r',label:'跗蹠關節（右）· 足弓 · 模型',ax:[['sag','蹠屈（足弓拉高）','背屈（足弓壓低）'],['fro','外翻','內翻'],['tra','內收','外展']]},
  {id:'mtp1_r',seg:'hallux_r',label:'第一蹠趾關節（右）',ax:[['sag','蹠屈','背屈'],['fro','外翻','內翻'],['tra','內收','外展']]},
  {id:'mtp_r',seg:'toes_r',label:'第2–5蹠趾關節（右）· 模型',ax:[['sag','伸展','屈曲']]},
  {id:'hip_l',mir:1,seg:'femur_l',label:'髖關節（左）',ax:[['sag','屈曲','伸展'],['fro','內收','外展'],['tra','內旋','外旋']]},
@@ -550,6 +684,7 @@ var JOINTS=[
  {id:'ankle_l',mir:1,seg:'talus_l',label:'距腿關節（左）',axis:'ank',side:'l',ax:[['sag','蹠屈','背屈']]},
  {id:'sub_l',mir:1,seg:'foot_l',label:'距下關節（左）· 無資料',axis:'sub',side:'l',ax:[['sag','旋前（外翻）','旋後（內翻）']]},
  {id:'midtarsal_l',mir:1,seg:'midfoot_l',label:'中跗關節（左）· 足弓',ax:[['sag','蹠屈（足弓拉高）','背屈（足弓壓低）'],['fro','外翻','內翻'],['tra','內收','外展']]},
+ {id:'tmt_l',mir:1,seg:'meta_l',label:'跗蹠關節（左）· 足弓 · 模型',ax:[['sag','蹠屈（足弓拉高）','背屈（足弓壓低）'],['fro','外翻','內翻'],['tra','內收','外展']]},
  {id:'mtp1_l',mir:1,seg:'hallux_l',label:'第一蹠趾關節（左）',ax:[['sag','蹠屈','背屈'],['fro','外翻','內翻'],['tra','內收','外展']]},
  {id:'mtp_l',mir:1,seg:'toes_l',label:'第2–5蹠趾關節（左）· 模型',ax:[['sag','伸展','屈曲']]}
 ];
@@ -557,6 +692,12 @@ var JM={}; JOINTS.forEach(function(j){JM[j.id]=j;});
 // 資料集符號：背屈 +／內翻 +／外展 +。以下常數把它轉成本工具的旋轉方向，
 // 數值由無頭瀏覽器實測前足世界座標決定，不是推測的。
 var MT_SAG=1, MT_FRO=1, MT_TRA=1;
+// 足弓分配模型：資料集量到的是「蹠骨相對跟骨」的角度 θ（Bruening 的前足 vs 後足，
+// 舟骰楔與蹠骨在他們的模型裡是同一塊剛體，所以舟楔與跗蹠的動作根本沒被量到）。
+// 本工具把中足切成舟骰楔／蹠骨兩段之後，θ 分配為：
+//     中跗角 = (1 - TMT_SHARE) * θ      跗蹠角 = TMT_SHARE * θ
+// 兩者相加恆等於 θ，總量不變——分配比例是模型，不是量測。
+var TMT_SHARE=0.0;
 var MP_SAG=1, MP_FRO=1, MP_TRA=1;
 var off={}; JOINTS.forEach(function(j){off[j.id]={sag:{a:0,b:0},fro:{a:0,b:0},tra:{a:0,b:0}};});
 // 0%/100% 共用 o.a，50% 為 o.b；升餘弦內插，兩端導數為零，首尾連續不跳變
@@ -640,9 +781,11 @@ function pose(p){
     var _q  = ((p+_ph)*100)%100;
     setJ('mtp_'+s, (g?samp('mtp_angle_'+s,p):0) + mtpModel(_q,_st), 0, 0, p);
     // 中跗與第一蹠趾：只有提供該通道的片段會動，其餘片段維持 0（與改版前完全相同）
-    setJ('midtarsal_'+s, g?MT_SAG*samp('midtarsal_df_'+s,p):0,
-                         g?MT_FRO*samp('midtarsal_inv_'+s,p):0,
-                         g?MT_TRA*samp('midtarsal_ab_'+s,p):0, p);
+    var _mtS = g?MT_SAG*samp('midtarsal_df_'+s,p):0;
+    var _mtF = g?MT_FRO*samp('midtarsal_inv_'+s,p):0;
+    var _mtT = g?MT_TRA*samp('midtarsal_ab_'+s,p):0;
+    setJ('midtarsal_'+s, (1-TMT_SHARE)*_mtS, (1-TMT_SHARE)*_mtF, (1-TMT_SHARE)*_mtT, p);
+    setJ('tmt_'+s,          TMT_SHARE *_mtS,    TMT_SHARE *_mtF,    TMT_SHARE *_mtT, p);
     // 拇趾：有實測資料就照資料走；沒有的片段則跟著其餘腳趾一起動，
     // 這樣拆出拇趾之前與之後，既有片段的畫面完全一樣。
     if(g && G['mtp1_df_'+s]){
@@ -818,6 +961,31 @@ var SERIES_FOOT=[
  {t:'中跗（足弓）', pos:'背屈．足弓壓低', neg:'蹠屈．足弓拉高', k:['midtarsal_df_r'], sg:1},
  {t:'第一蹠趾',  pos:'背屈', neg:'蹠屈', k:['mtp1_df_r'],      sg:1}
 ];
+// 足弓高度不是資料集的通道，是由骨骼幾何＋關節角度推算出來的。
+// 逐片段掃一次 101 點後快取，換片段才重算。
+var ARCH_CACHE={};
+function archSeries(clip){
+  if(!clip) return null;
+  if(ARCH_CACHE[clip.id]) return ARCH_CACHE[clip.id];
+  var sd = clip.side || 'r';
+  if(!clip.data || !clip.data['midtarsal_df_'+sd]) return null;
+  var bakClip=CLIP, bakG=G, bakSide=archSide;
+  var bakOff=JSON.parse(JSON.stringify(off));
+  CLIP=clip; G=clip.data; archSide=sd;
+  JOINTS.forEach(function(j){['sag','fro','tra'].forEach(function(k){off[j.id][k].a=0;off[j.id][k].b=0;});});
+  var out=new Array(101);
+  for(var i=0;i<=100;i++){
+    pose(i/100);
+    var pt=archPoints(sd), F=pt?footFrame(pt):null;
+    out[i]= F ? F.perp*1000 : 0;
+  }
+  CLIP=bakClip; G=bakG; archSide=bakSide; off=bakOff;
+  ARCH_CACHE[clip.id]=out;
+  return out;
+}
+var ARCH_SR={t:'足弓高度', pos:'高', neg:'塌', k:['__arch'], sg:1, unit:' mm', derived:true};
+// 足弓高度放在足部圖表的最後一張：它是推算值，不是資料集的通道
+SERIES_FOOT.push(ARCH_SR);
 var SERIES=SERIES_BODY;
 var chartEls=[], cmpOn=true;
 function cmpClip(){
@@ -832,10 +1000,18 @@ function buildCharts(){
   var host=document.getElementById('charts'); host.innerHTML=''; chartEls=[];
   var cc=cmpClip();
   SERIES.forEach(function(sr){
-    var vals=[];
-    sr.k.forEach(function(k){ (G[k]||[]).forEach(function(v){ vals.push(v*sr.sg); }); });
     if(cc && cc.foot_only!==CLIP.foot_only) cc=null;   // 足部與全身片段不互比
-    if(cc) sr.k.forEach(function(k){ (cc.data[k]||[]).forEach(function(v){ vals.push(v*sr.sg); }); });
+    var mine = sr.derived ? archSeries(CLIP) : null;
+    var other= sr.derived ? (cc?archSeries(cc):null) : null;
+    var vals=[];
+    if(sr.derived){
+      (mine||[]).forEach(function(v){ vals.push(v*sr.sg); });
+      (other||[]).forEach(function(v){ vals.push(v*sr.sg); });
+      if(!vals.length) return;
+    } else {
+      sr.k.forEach(function(k){ (G[k]||[]).forEach(function(v){ vals.push(v*sr.sg); }); });
+      if(cc) sr.k.forEach(function(k){ (cc.data[k]||[]).forEach(function(v){ vals.push(v*sr.sg); }); });
+    }
     var lo=Math.min.apply(null,vals), hi=Math.max.apply(null,vals);
     var pad=(hi-lo)*0.12||1; lo-=pad; hi+=pad; sr.lo=lo; sr.hi=hi;
     function Y(v){ return PADT+(hi-v)/(hi-lo)*(CH-PADT-PADB); }
@@ -851,17 +1027,24 @@ function buildCharts(){
     (CLIP.events||[]).forEach(function(e){
       svg+='<line x1="'+X(e.p)+'" y1="'+PADT+'" x2="'+X(e.p)+'" y2="'+(CH-PADB)+
            '" stroke="#ffc46b" stroke-width="0.5" opacity="0.45"/>'; });
-    if(cc) svg+='<path d="'+path(cc.data[sr.k[0]])+'" fill="none" stroke="#c98be0" stroke-width="1.2" opacity="0.85"/>';
-    sr.k.forEach(function(k,idx){
-      if(!G[k]) return;
-      svg+='<path d="'+path(G[k])+'" fill="none" stroke="'+(idx?'#7D8A96':'#8FB6D6')+
-           '" stroke-width="'+(idx?1:1.5)+'" '+(idx?'stroke-dasharray="3 2"':'')+'/>';
-    });
+    if(sr.derived){
+      if(other) svg+='<path d="'+path(other)+'" fill="none" stroke="#c98be0" stroke-width="1.2" opacity="0.85"/>';
+      if(mine)  svg+='<path d="'+path(mine)+'" fill="none" stroke="#8FB6D6" stroke-width="1.5"/>';
+    } else {
+      if(cc) svg+='<path d="'+path(cc.data[sr.k[0]])+'" fill="none" stroke="#c98be0" stroke-width="1.2" opacity="0.85"/>';
+      sr.k.forEach(function(k,idx){
+        if(!G[k]) return;
+        svg+='<path d="'+path(G[k])+'" fill="none" stroke="'+(idx?'#7D8A96':'#8FB6D6')+
+             '" stroke-width="'+(idx?1:1.5)+'" '+(idx?'stroke-dasharray="3 2"':'')+'/>';
+      });
+    }
     svg+='<line class="ph" x1="0" y1="0" x2="0" y2="'+(CH-PADB)+'" stroke="#fff" stroke-width="0.8" opacity="0.8"/>';
-    svg+='<text x="1" y="'+(CH-2)+'" font-size="6" fill="#627689">'+lo.toFixed(0)+'°</text>';
-    svg+='<text x="'+(CW-1)+'" y="'+(CH-2)+'" font-size="6" fill="#627689" text-anchor="end">'+hi.toFixed(0)+'°</text>';
+    var _u=sr.unit||'°';
+    svg+='<text x="1" y="'+(CH-2)+'" font-size="6" fill="#627689">'+lo.toFixed(0)+_u+'</text>';
+    svg+='<text x="'+(CW-1)+'" y="'+(CH-2)+'" font-size="6" fill="#627689" text-anchor="end">'+hi.toFixed(0)+_u+'</text>';
     svg+='</svg>';
     d.innerHTML='<div class="ct"><span>'+sr.t+'　'+sr.neg+' ↔ '+sr.pos+
+      (sr.derived?'<span style="opacity:.55">　模型推算</span>':'')+
       '</span><b class="rv">—</b></div>'+svg;
     host.appendChild(d);
     chartEls.push({sr:sr, ph:d.querySelector('.ph'), rv:d.querySelector('.rv')});
@@ -872,7 +1055,16 @@ function updCharts(p){
   var x=p*CW;
   chartEls.forEach(function(c){
     c.ph.setAttribute('x1',x); c.ph.setAttribute('x2',x);
-    var v=samp(c.sr.k[0],p)*c.sr.sg;
+    var v;
+    if(c.sr.derived){
+      var arr=ARCH_CACHE[CLIP.id];
+      if(!arr){ c.rv.textContent='—'; return; }
+      var x2=p*100, i=Math.floor(x2), f=x2-i;
+      v=(arr[i]+(arr[Math.min(i+1,100)]-arr[i])*f)*c.sr.sg;
+      c.rv.textContent=v.toFixed(1)+(c.sr.unit||'°');
+      return;
+    }
+    v=samp(c.sr.k[0],p)*c.sr.sg;
     c.rv.textContent=(v>=0?'+':'')+v.toFixed(1)+'°';
   });
 }
@@ -993,6 +1185,15 @@ function setClip(id){
   weakSide = (c.group||'').indexOf('中風')>=0;
   applyVis(); applyWeak();
   drawTimeline(); buildCharts(); buildCmpTable(); computeRef();
+  // 足弓片段預設把足弓指示打開——那正是這些片段要看的東西
+  archSide = c.side || 'r';
+  var _wantArch = !!(c.data && c.data['midtarsal_df_'+archSide]);
+  if(_wantArch!==archOn){
+    archOn=_wantArch;
+    var ab=document.getElementById('archToggle');
+    if(ab) ab.classList.toggle('on',archOn);
+  }
+  computeArchRef();
 }
 function buildCmpTable(){
   var box=document.getElementById('cmpTable');
@@ -1077,6 +1278,10 @@ function grp(sel,fn){document.querySelectorAll(sel).forEach(function(b){
   b.onclick=function(){document.querySelectorAll(sel).forEach(function(x){x.classList.remove('on');});
     b.classList.add('on');fn(b);};});}
 grp('#viewBtns button',function(b){az=(+b.dataset.az)*D2R;pol=(b.dataset.pol?+b.dataset.pol:84)*D2R;});
+document.getElementById('archToggle').onclick=function(){
+  archOn=!archOn; this.classList.toggle('on',archOn);
+  if(archOn) computeArchRef();
+};
 grp('#zoomBtns button',function(b){zoomMode=b.dataset.zoom;
   rad=zoomMode==='foot'?0.45:(zoomMode==='leg'?1.6:3.5);});
 grp('#modeBtns button',function(b){mode=b.dataset.mode;});
@@ -1111,6 +1316,7 @@ var SEGVIS={
   talus_r:   function(){return VIS.right;},
   foot_r:    function(){return VIS.right;},
   midfoot_r: function(){return VIS.right;},
+  meta_r:    function(){return VIS.right;},
   hallux_r:  function(){return VIS.right && VIS.toes;},
   toes_r:    function(){return VIS.right && VIS.toes;},
   femur_l:   function(){return VIS.left;},
@@ -1118,12 +1324,13 @@ var SEGVIS={
   talus_l:   function(){return VIS.left;},
   foot_l:    function(){return VIS.left;},
   midfoot_l: function(){return VIS.left;},
+  meta_l:    function(){return VIS.left;},
   hallux_l:  function(){return VIS.left && VIS.toes;},
   toes_l:    function(){return VIS.left && VIS.toes;}
 };
 var weakSide=false;
 function applyWeak(){
-  ['femur_l','tibia_l','talus_l','foot_l','midfoot_l','hallux_l','toes_l'].forEach(function(seg){
+  ['femur_l','tibia_l','talus_l','foot_l','midfoot_l','meta_l','hallux_l','toes_l'].forEach(function(seg){
     (bySeg[seg]||[]).forEach(function(m){
       if(m.userData.dim) return;                 // 使用者手動透明的優先
       m.material.opacity = weakSide ? 0.35 : 1;
@@ -1173,7 +1380,8 @@ var MIR={hip_r:'hip_l',hip_l:'hip_r',knee_r:'knee_l',knee_l:'knee_r',
          ankle_r:'ankle_l',ankle_l:'ankle_r',sub_r:'sub_l',sub_l:'sub_r',
          mtp_r:'mtp_l',mtp_l:'mtp_r',
          midtarsal_r:'midtarsal_l',midtarsal_l:'midtarsal_r',
-         mtp1_r:'mtp1_l',mtp1_l:'mtp1_r'};
+         mtp1_r:'mtp1_l',mtp1_l:'mtp1_r',
+         tmt_r:'tmt_l',tmt_l:'tmt_r'};
 document.getElementById('symChk').onchange=function(){sym=this.checked;
   if(sym){var m=MIR[curJ]; if(m) ['sag','fro','tra'].forEach(function(k){
     off[m][k].a=off[curJ][k].a; off[m][k].b=off[curJ][k].b;});}};
@@ -1190,6 +1398,8 @@ function build(){
   var j=JM[curJ], meta=JMETA[curJ]||{};
   var html='<b>關節中心：'+(meta.provenance==='derived'?'推估值，非量測':'—')+'</b><br>'+
     (meta.method||'')+(meta.note?'（'+meta.note+'）':'');
+  if(meta.model_note) html+='<br><br><b style="color:var(--warn)">模型關節</b><br>'+
+    '<span style="color:var(--warn)">'+meta.model_note+'</span>';
   if(meta.axis_src) html+='<br><br><b>轉軸來源</b><br>'+meta.axis_src;
   document.getElementById('prov').innerHTML=html;
   var w=document.getElementById('sliders'); w.innerHTML='';
@@ -1355,6 +1565,8 @@ function tick(now){
       var v=(lv[a[0]]||0); out+=pl+'　'+(v>=0?'+':'')+v.toFixed(1)+'°<br>';});
   }
   readout.innerHTML=out;
+  var _ah=document.getElementById('archHud');
+  if(_ah) _ah.innerHTML = (mode==='gait') ? updArch() : (archGroup.visible=false, '');
   (function(){
     var el=document.getElementById('contact');
     if(mode!=='gait'||!groundOn){ el.innerHTML=''; return; }
@@ -1365,8 +1577,10 @@ function tick(now){
       return '<span style="color:'+(c.ok?'#90A4B6':'#ff8a6b')+'">'+
         (c.side==='r'?'右':'左')+'足 '+c.txt+'</span>';}).join('　');
     var bad=Math.abs(dev)>2.0;
-    h+='　<span style="color:'+(bad?'#ff8a6b':'#90A4B6')+'">骨盆偏離 '+
-       (dev>=0?'+':'')+dev.toFixed(1)+' cm</span>';
+    // 顯示前先把會四捨五入成 0.0 的值夾成真正的 0，
+    // 否則浮點誤差會讓同一個狀態一下顯示 +0.0 一下 -0.0
+    var devS = Math.abs(dev)<0.05 ? '0.0' : (dev>0?'+':'')+dev.toFixed(1);
+    h+='　<span style="color:'+(bad?'#ff8a6b':'#90A4B6')+'">骨盆偏離 '+devS+' cm</span>';
     var gap=ankleGap();
     if(gap<0.08) h+='　<span style="color:#ff8a6b">兩踝距離 '+(gap*100).toFixed(1)+
        ' cm（過近，可能來自缺少額狀面資料）</span>';
