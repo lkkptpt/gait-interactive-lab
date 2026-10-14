@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>步態互動實驗室 v1.10.0</title>
+<title>步態互動實驗室 v1.10.1</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -143,7 +143,7 @@ table.ev td:last-child{text-align:right;font-family:"IBM Plex Mono",monospace;co
 <div class="app">
   <aside class="panel">
     <h1>步態互動實驗室</h1>
-    <p class="sub">v1.10.0 · 公開版：33 個片段<br>骨骼網格 BodyParts3D（CC BY-SA 2.1 JP）· 動作資料 五個 CC BY 4.0 研究資料集<br>兩者皆經本工具改作；作者、出處、授權連結與改作內容見下方「資料來源與授權」</p>
+    <p class="sub">v1.10.1 · 公開版：33 個片段<br>骨骼網格 BodyParts3D（CC BY-SA 2.1 JP）· 動作資料 五個 CC BY 4.0 研究資料集<br>兩者皆經本工具改作；作者、出處、授權連結與改作內容見下方「資料來源與授權」</p>
 
     <details class="why">
       <summary>為什麼做這個</summary>
@@ -399,22 +399,32 @@ var CP={};
    連線的三個點：腳跟著地點、舟狀骨質心、第一蹠趾關節中心（＝第一蹠骨頭）。
    這些是由骨骼幾何與關節角度推算的，不是資料集直接量到的值。 */
 var archOn=false, archSide='r', ARCH={};
+// 使用者自己按下的貼地偏好。只有腳的片段會暫時關掉貼地，
+// 切回全身片段時要回復成使用者的選擇，而不是硬性打開。
+var groundPref=true;
 var archGroup=new THREE.Group(); archGroup.visible=false; scene.add(archGroup);
+// WebGL 的 LineBasicMaterial.linewidth 在絕大多數瀏覽器永遠是 1 像素，
+// 設了也沒用。足弓的變化只有幾毫米，一像素的線根本看不到，
+// 所以這裡改用細圓柱體畫，才真的有粗細。
+var _ua=new THREE.Vector3(0,1,0), _ub=new THREE.Vector3(), _um=new THREE.Vector3();
+function tube(color, r, op){
+  var g=new THREE.CylinderGeometry(r, r, 1, 8, 1, true);
+  var m=new THREE.MeshBasicMaterial({color:color, depthTest:false,
+        transparent:true, opacity:op==null?0.95:op});
+  var o=new THREE.Mesh(g,m); o.frustumCulled=false; o.renderOrder=10;
+  archGroup.add(o); return o;
+}
+function setTube(o, a, b){
+  _ub.subVectors(b,a);
+  var L=_ub.length();
+  if(L<1e-6){ o.visible=false; return; }
+  o.visible=true;
+  _um.addVectors(a,b).multiplyScalar(0.5);
+  o.position.copy(_um);
+  o.scale.set(1,L,1);
+  o.quaternion.setFromUnitVectors(_ua, _ub.multiplyScalar(1/L));
+}
 (function(){
-  function line(color, n, w){
-    var g=new THREE.BufferGeometry();
-    g.setAttribute('position', new THREE.BufferAttribute(new Float32Array(n*3),3));
-    var m=new THREE.LineBasicMaterial({color:color, linewidth:w||1,
-          transparent:true, opacity:0.95, depthTest:false});
-    var o=new THREE.Line(g,m); o.frustumCulled=false; o.renderOrder=10;
-    archGroup.add(o); return o;
-  }
-  ARCH.span = line(0xffc46b, 3);          // 跟 → 舟 → 蹠1
-  ARCH.ref  = line(0xffc46b, 2);          // 貼平時的高度，水平基準
-  ARCH.ref.material.opacity=0.42;
-  ARCH.drop = line(0xff8a6b, 2);          // 弓高本身
-  ARCH.ghost= line(0x8fa0b0, 3);          // 貼平時的足弓輪廓，當殘影比對
-  ARCH.ghost.material.opacity=0.55;
   function ball(color, r, op){
     var m=new THREE.Mesh(new THREE.SphereGeometry(r,12,10),
           new THREE.MeshBasicMaterial({color:color, depthTest:false,
@@ -422,16 +432,17 @@ var archGroup=new THREE.Group(); archGroup.visible=false; scene.add(archGroup);
     m.renderOrder=11; archGroup.add(m); return m;
   }
   // 球要夠小：弓高的變化只有 3–5 mm，球一大就把落差蓋掉了
+  ARCH.span1= tube(0xffc46b, 0.0012);        // 跟 → 舟
+  ARCH.span2= tube(0xffc46b, 0.0012);        // 舟 → 蹠1
+  ARCH.ref  = tube(0xffc46b, 0.0008, 0.40);  // 基線：兩個著地點
+  ARCH.drop = tube(0xff8a6b, 0.0016);        // 弓高本身
+  ARCH.gh1  = tube(0x8fa0b0, 0.0009, 0.60);  // 貼平時的輪廓（殘影）
+  ARCH.gh2  = tube(0x8fa0b0, 0.0009, 0.60);
   ARCH.dot   = ball(0xffc46b, 0.0020);        // 目前的舟狀骨
   ARCH.gdot  = ball(0x8fa0b0, 0.0018, 0.8);   // 貼平時的舟狀骨（殘影）
   ARCH.eheel = ball(0xffc46b, 0.0016, 0.65);  // 基線兩端
   ARCH.emt1  = ball(0xffc46b, 0.0016, 0.65);
 })();
-function setLine(obj, pts){
-  var a=obj.geometry.attributes.position;
-  for(var i=0;i<pts.length;i++){ a.setXYZ(i, pts[i].x, pts[i].y, pts[i].z); }
-  a.needsUpdate=true; obj.geometry.computeBoundingSphere();
-}
 var _nav=new THREE.Vector3(), _mt1=new THREE.Vector3(), _hl=new THREE.Vector3();
 var _up=new THREE.Vector3();
 // 以「跟骨著地點 → 第一蹠骨頭」為基線，配合跟骨自己的上方向，
@@ -488,20 +499,20 @@ function updArch(){
   var F=footFrame(pt); if(!F) return '';
   var h=F.perp;
   var foot=new THREE.Vector3().copy(pt.heel).addScaledVector(F.u, F.t);  // 垂足
-  setLine(ARCH.span,[pt.heel, pt.nav, pt.mt1]);
-  setLine(ARCH.ref ,[pt.heel, pt.mt1]);                 // 基線：兩個著地點
-  setLine(ARCH.drop,[foot, pt.nav]);                    // 弓高本身
-  ARCH.ref.visible=true; ARCH.drop.visible=true;
+  setTube(ARCH.span1, pt.heel, pt.nav);
+  setTube(ARCH.span2, pt.nav,  pt.mt1);
+  setTube(ARCH.ref,   pt.heel, pt.mt1);                 // 基線：兩個著地點
+  setTube(ARCH.drop,  foot,    pt.nav);                 // 弓高本身
   ARCH.dot.position.copy(pt.nav);
   // 殘影：把貼平那一刻的舟狀骨位置，用目前的足部座標系重建出來
   if(ARCH_REF!=null && ARCH_REF.t!=null){
     var gnav=new THREE.Vector3().copy(pt.heel)
       .addScaledVector(F.u, ARCH_REF.t*(F.L/ARCH_REF.L))
       .addScaledVector(F.n, ARCH_REF.hh);
-    setLine(ARCH.ghost,[pt.heel, gnav, pt.mt1]);
-    ARCH.ghost.visible=true;
+    setTube(ARCH.gh1, pt.heel, gnav);
+    setTube(ARCH.gh2, gnav,  pt.mt1);
     ARCH.gdot.visible=true; ARCH.gdot.position.copy(gnav);
-  } else { ARCH.ghost.visible=false; ARCH.gdot.visible=false; }
+  } else { ARCH.gh1.visible=false; ARCH.gh2.visible=false; ARCH.gdot.visible=false; }
   ARCH.eheel.position.copy(pt.heel);
   ARCH.emt1.position.copy(pt.mt1);
   var v1=new THREE.Vector3().subVectors(pt.heel,pt.nav).normalize();
@@ -514,6 +525,8 @@ function updArch(){
          (d>=0?'+':'')+d.toFixed(1)+' mm</span><span style="opacity:.6">（相對貼平）</span>';
   }
   txt+='　弓角 '+ang.toFixed(1)+'°<span style="opacity:.6">　模型推算</span>';
+  if(!(G && G['midtarsal_df_'+archSide]))
+    txt+='<br><span style="color:var(--warn)">此片段沒有足部資料，足弓不會變化</span>';
   return txt;
 }
 var _cw=new THREE.Vector3(), _aR=new THREE.Vector3(), _aL=new THREE.Vector3();
@@ -902,7 +915,12 @@ function pick(e){
   var r=canvas.getBoundingClientRect();
   ndc.x=((e.clientX-r.left)/r.width)*2-1; ndc.y=-((e.clientY-r.top)/r.height)*2+1;
   ray.setFromCamera(ndc,camera);
-  var h=ray.intersectObjects(meshes,false); if(!h.length)return;
+  var h=ray.intersectObjects(meshes,false);
+  if(!h.length){                      // 點到空白處：暫停／繼續
+    var pb=document.getElementById('play');
+    if(pb) pb.click();
+    return;
+  }
   var m=h[0].object; m.userData.dim=!m.userData.dim;
   m.material.opacity=m.userData.dim?0.12:1; m.material.depthWrite=!m.userData.dim;
   pn.textContent=m.name+(m.userData.dim?'　已透明':'　已還原');
@@ -1171,12 +1189,18 @@ function setClip(id){
   SERIES = (c.foot_only || c.series==='foot') ? SERIES_FOOT : SERIES_BODY;
   // 足部專用片段沒有骨盆／髖／膝資料，貼地閉合無從算起，直接關掉；
   // 時間軸也不是步態週期而是站立期，標籤要跟著換。
+  // 只有腳的片段沒有骨盆與髖膝，貼地閉合無從算起，暫時關掉；
+  // 切回有全身資料的片段時必須打開回來，否則接觸狀態列會一直是空的。
+  var gb=document.getElementById('gndToggle');
   if(c.foot_only){
     groundOn=false;
-    var gb=document.getElementById('gndToggle'); if(gb) gb.classList.remove('on');
+    if(gb) gb.classList.remove('on');
     zoomMode='foot'; rad=0.45;
     document.querySelectorAll('#zoomBtns button').forEach(function(x){
       x.classList.toggle('on', x.dataset.zoom==='foot'); });
+  } else {
+    groundOn=groundPref;
+    if(gb) gb.classList.toggle('on',groundOn);
   }
   var hl=document.getElementById('hudPctLbl');
   if(hl) hl.textContent = c.pct_label || (c.stance_only ? '站立期' : '步行周期');
@@ -1187,11 +1211,12 @@ function setClip(id){
   drawTimeline(); buildCharts(); buildCmpTable(); computeRef();
   // 足弓片段預設把足弓指示打開——那正是這些片段要看的東西
   archSide = c.side || 'r';
-  var _wantArch = !!(c.data && c.data['midtarsal_df_'+archSide]);
-  if(_wantArch!==archOn){
-    archOn=_wantArch;
+  // 有足部資料的片段自動打開足弓指示；其餘片段保留使用者自己的設定，
+  // 按鈕任何片段都能按（足弓是由幾何算的，不需要資料也畫得出來）。
+  if(c.data && c.data['midtarsal_df_'+archSide] && !archOn){
+    archOn=true;
     var ab=document.getElementById('archToggle');
-    if(ab) ab.classList.toggle('on',archOn);
+    if(ab) ab.classList.add('on');
   }
   computeArchRef();
 }
@@ -1289,7 +1314,7 @@ grp('[data-speed]',function(b){speed=+b.dataset.speed;});
 document.getElementById('resetBones').onclick=function(){meshes.forEach(function(m){
   m.userData.dim=false;m.material.opacity=1;m.material.depthWrite=true;}); applyWeak();};
 var chOn=true;
-document.getElementById('gndToggle').onclick=function(){groundOn=!groundOn;
+document.getElementById('gndToggle').onclick=function(){groundOn=!groundOn; groundPref=groundOn;
   this.classList.toggle('on',groundOn);};
 document.getElementById('chToggle').onclick=function(){chOn=!chOn;
   this.classList.toggle('on',chOn);
