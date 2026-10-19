@@ -1,1 +1,465 @@
-{"version":"0.4.0","joints":{"hip_r":{"p":[0.09305,0.81999,0.08172],"provenance":"derived","method":"股骨近端內側頂點最小平方球面擬合","note":"擬合半徑 23.0 mm"},"knee_r":{"p":[0.07089,0.42088,0.07423],"provenance":"derived","method":"股骨遠端 40 mm 切片邊界中點","note":""},"ankle_r":{"p":[0.06639,0.06279,0.07611],"provenance":"derived","method":"距骨滑車頂端 12 mm 切片中心","note":"","axis":[-0.10351,-0.13917,0.98484],"dof":1,"params":{"外側端下傾":8,"外側端後偏":6},"range":{"外側端下傾":[0,20],"外側端後偏":[0,20]},"axis_src":"Inman 1976 大體標本；van den Bogert 等 1994 活體量測為下傾 7.0±5.4°、後偏 6.8±8.1°。"},"sub_r":{"p":[0.06698,0.04005,0.07374],"provenance":"derived","method":"距骨下緣中心","note":"","axis":[0.68407,0.66913,-0.29037],"dof":1,"params":{"傾角":42,"偏角":23},"range":{"傾角":[20.5,68.5],"偏角":[4,47]},"axis_src":"Inman 1976（46 具大體標本）平均值；Isman & Inman 1969 給的範圍為傾角 20.5–68.5°、偏角 4–47°。OpenSim Gait2392 採用 37.2°／8.7°。"},"mtp_r":{"p":[0.17234,0.00807,0.08845],"provenance":"derived","method":"五根蹠骨遠端邊緣","note":""},"hip_l":{"p":[0.0929,0.81954,-0.0807],"provenance":"derived","method":"股骨近端內側頂點最小平方球面擬合","note":"擬合半徑 23.3 mm"},"knee_l":{"p":[0.0709,0.42087,-0.07289],"provenance":"derived","method":"股骨遠端 40 mm 切片邊界中點","note":""},"ankle_l":{"p":[0.06648,0.06279,-0.07489],"provenance":"derived","method":"距骨滑車頂端 12 mm 切片中心","note":"","axis":[0.10351,0.13917,0.98484],"dof":1,"params":{"外側端下傾":8,"外側端後偏":6},"range":{"外側端下傾":[0,20],"外側端後偏":[0,20]},"axis_src":"Inman 1976 大體標本；van den Bogert 等 1994 活體量測為下傾 7.0±5.4°、後偏 6.8±8.1°。"},"sub_l":{"p":[0.06612,0.04005,-0.07236],"provenance":"derived","method":"距骨下緣中心","note":"","axis":[-0.68407,-0.66913,-0.29037],"dof":1,"params":{"傾角":42,"偏角":23},"range":{"傾角":[20.5,68.5],"偏角":[4,47]},"axis_src":"Inman 1976（46 具大體標本）平均值；Isman & Inman 1969 給的範圍為傾角 20.5–68.5°、偏角 4–47°。OpenSim Gait2392 採用 37.2°／8.7°。"},"mtp_l":{"p":[0.17239,0.00822,-0.08739],"provenance":"derived","method":"五根蹠骨遠端邊緣","note":""},"lumbar":{"p":[0.05836,0.932,0.0],"provenance":"derived","method":"薦骨上緣","note":""},"thorax":{"p":[0.07911,1.08447,0.0],"provenance":"derived","method":"L1 椎體上緣","note":"靜態，無動作資料"},"cervical":{"p":[0.06351,1.39415,0.0],"provenance":"derived","method":"T1 椎體上緣","note":"靜態，無動作資料"},"head":{"p":[0.08511,1.49058,0.0],"provenance":"derived","method":"寰椎上緣","note":"靜態，無動作資料"},"pelvis":{"p":[0.09298,0.81977,0.00051],"provenance":"derived","method":"左右髖關節中心連線中點","note":""},"midtarsal_r":{"p":[0.08187,0.03309,0.08289],"method":"由距骨與跟骨的前端面、舟狀骨與骰骨的後端面兩群點質心取中點推估（距舟＋跟骰關節面的合成中心）","provenance":"derived"},"mtp1_r":{"p":[0.16913,0.01006,0.07243],"method":"第一蹠骨遠端 15% 點雲的球面擬合中心","provenance":"derived"},"midtarsal_l":{"p":[0.08169,0.03357,-0.08435],"method":"由距骨與跟骨的前端面、舟狀骨與骰骨的後端面兩群點質心取中點推估（距舟＋跟骰關節面的合成中心）","provenance":"derived"},"mtp1_l":{"p":[0.16817,0.0102,-0.07134],"method":"第一蹠骨遠端 15% 點雲的球面擬合中心","provenance":"derived"},"tmt_r":{"p":[0.11296,0.03258,0.09137],"method":"三個楔狀骨與骰骨的遠端面、五根蹠骨的近端面，兩群點質心取中點","provenance":"derived","model_note":"資料集沒有這個關節的通道——Bruening 多節足部模型把舟狀骨、骰骨、楔狀骨與五根蹠骨視為同一塊剛體，所以舟楔與跗蹠的動作從來沒有被量到。本工具把它切開，是為了讓足弓頂點能相對前足移動；預設不吃任何資料（角度為 0），要看舟楔下陷長什麼樣子，用下方滑桿手動拉。"},"tmt_l":{"p":[0.11296,0.03285,-0.09146],"method":"三個楔狀骨與骰骨的遠端面、五根蹠骨的近端面，兩群點質心取中點","provenance":"derived","model_note":"資料集沒有這個關節的通道——Bruening 多節足部模型把舟狀骨、骰骨、楔狀骨與五根蹠骨視為同一塊剛體，所以舟楔與跗蹠的動作從來沒有被量到。本工具把它切開，是為了讓足弓頂點能相對前足移動；預設不吃任何資料（角度為 0），要看舟楔下陷長什麼樣子，用下方滑桿手動拉。"}},"hier":{"pelvis":[null,"pelvis"],"lumbar":["pelvis","lumbar"],"thorax":["lumbar","thorax"],"cervical":["thorax","cervical"],"head":["cervical","head"],"femur_r":["pelvis","hip_r"],"tibia_r":["femur_r","knee_r"],"talus_r":["tibia_r","ankle_r"],"foot_r":["talus_r","sub_r"],"toes_r":["meta_r","mtp_r"],"femur_l":["pelvis","hip_l"],"tibia_l":["femur_l","knee_l"],"talus_l":["tibia_l","ankle_l"],"foot_l":["talus_l","sub_l"],"toes_l":["meta_l","mtp_l"],"midfoot_r":["foot_r","midtarsal_r"],"hallux_r":["meta_r","mtp1_r"],"midfoot_l":["foot_l","midtarsal_l"],"hallux_l":["meta_l","mtp1_l"],"meta_r":["midfoot_r","tmt_r"],"meta_l":["midfoot_l","tmt_l"]}}
+{
+ "version": "0.4.0",
+ "joints": {
+  "hip_r": {
+   "p": [
+    0.09305,
+    0.81999,
+    0.08172
+   ],
+   "provenance": "derived",
+   "method": "股骨近端內側頂點最小平方球面擬合",
+   "note": "擬合半徑 23.0 mm"
+  },
+  "knee_r": {
+   "p": [
+    0.07089,
+    0.42088,
+    0.07423
+   ],
+   "provenance": "derived",
+   "method": "股骨遠端 40 mm 切片邊界中點",
+   "note": ""
+  },
+  "ankle_r": {
+   "p": [
+    0.06639,
+    0.06279,
+    0.07611
+   ],
+   "provenance": "derived",
+   "method": "距骨滑車頂端 12 mm 切片中心",
+   "note": "",
+   "axis": [
+    -0.10351,
+    -0.13917,
+    0.98484
+   ],
+   "dof": 1,
+   "params": {
+    "外側端下傾": 8,
+    "外側端後偏": 6
+   },
+   "range": {
+    "外側端下傾": [
+     0,
+     20
+    ],
+    "外側端後偏": [
+     0,
+     20
+    ]
+   },
+   "axis_src": "Inman 1976 大體標本；van den Bogert 等 1994 活體量測為下傾 7.0±5.4°、後偏 6.8±8.1°。"
+  },
+  "sub_r": {
+   "p": [
+    0.06698,
+    0.04005,
+    0.07374
+   ],
+   "provenance": "derived",
+   "method": "距骨下緣中心",
+   "note": "",
+   "axis": [
+    0.68407,
+    0.66913,
+    -0.29037
+   ],
+   "dof": 1,
+   "params": {
+    "傾角": 42,
+    "偏角": 23
+   },
+   "range": {
+    "傾角": [
+     20.5,
+     68.5
+    ],
+    "偏角": [
+     4,
+     47
+    ]
+   },
+   "axis_src": "Inman 1976（46 具大體標本）平均值；Isman & Inman 1969 給的範圍為傾角 20.5–68.5°、偏角 4–47°。OpenSim Gait2392 採用 37.2°／8.7°。"
+  },
+  "mtp_r": {
+   "p": [
+    0.17234,
+    0.00807,
+    0.08845
+   ],
+   "provenance": "derived",
+   "method": "五根蹠骨遠端邊緣",
+   "note": ""
+  },
+  "hip_l": {
+   "p": [
+    0.0929,
+    0.81954,
+    -0.0807
+   ],
+   "provenance": "derived",
+   "method": "股骨近端內側頂點最小平方球面擬合",
+   "note": "擬合半徑 23.3 mm"
+  },
+  "knee_l": {
+   "p": [
+    0.0709,
+    0.42087,
+    -0.07289
+   ],
+   "provenance": "derived",
+   "method": "股骨遠端 40 mm 切片邊界中點",
+   "note": ""
+  },
+  "ankle_l": {
+   "p": [
+    0.06648,
+    0.06279,
+    -0.07489
+   ],
+   "provenance": "derived",
+   "method": "距骨滑車頂端 12 mm 切片中心",
+   "note": "",
+   "axis": [
+    0.10351,
+    0.13917,
+    0.98484
+   ],
+   "dof": 1,
+   "params": {
+    "外側端下傾": 8,
+    "外側端後偏": 6
+   },
+   "range": {
+    "外側端下傾": [
+     0,
+     20
+    ],
+    "外側端後偏": [
+     0,
+     20
+    ]
+   },
+   "axis_src": "Inman 1976 大體標本；van den Bogert 等 1994 活體量測為下傾 7.0±5.4°、後偏 6.8±8.1°。"
+  },
+  "sub_l": {
+   "p": [
+    0.06612,
+    0.04005,
+    -0.07236
+   ],
+   "provenance": "derived",
+   "method": "距骨下緣中心",
+   "note": "",
+   "axis": [
+    -0.68407,
+    -0.66913,
+    -0.29037
+   ],
+   "dof": 1,
+   "params": {
+    "傾角": 42,
+    "偏角": 23
+   },
+   "range": {
+    "傾角": [
+     20.5,
+     68.5
+    ],
+    "偏角": [
+     4,
+     47
+    ]
+   },
+   "axis_src": "Inman 1976（46 具大體標本）平均值；Isman & Inman 1969 給的範圍為傾角 20.5–68.5°、偏角 4–47°。OpenSim Gait2392 採用 37.2°／8.7°。"
+  },
+  "mtp_l": {
+   "p": [
+    0.17239,
+    0.00822,
+    -0.08739
+   ],
+   "provenance": "derived",
+   "method": "五根蹠骨遠端邊緣",
+   "note": ""
+  },
+  "lumbar": {
+   "p": [
+    0.05836,
+    0.932,
+    0.0
+   ],
+   "provenance": "derived",
+   "method": "薦骨上緣",
+   "note": ""
+  },
+  "thorax": {
+   "p": [
+    0.07911,
+    1.08447,
+    0.0
+   ],
+   "provenance": "derived",
+   "method": "L1 椎體上緣",
+   "note": "靜態，無動作資料"
+  },
+  "cervical": {
+   "p": [
+    0.06351,
+    1.39415,
+    0.0
+   ],
+   "provenance": "derived",
+   "method": "T1 椎體上緣",
+   "note": "靜態，無動作資料"
+  },
+  "head": {
+   "p": [
+    0.08511,
+    1.49058,
+    0.0
+   ],
+   "provenance": "derived",
+   "method": "寰椎上緣",
+   "note": "靜態，無動作資料"
+  },
+  "pelvis": {
+   "p": [
+    0.09298,
+    0.81977,
+    0.00051
+   ],
+   "provenance": "derived",
+   "method": "左右髖關節中心連線中點",
+   "note": ""
+  },
+  "midtarsal_r": {
+   "p": [
+    0.08187,
+    0.03309,
+    0.08289
+   ],
+   "method": "由距骨與跟骨的前端面、舟狀骨與骰骨的後端面兩群點質心取中點推估（距舟＋跟骰關節面的合成中心）",
+   "provenance": "derived"
+  },
+  "mtp1_r": {
+   "p": [
+    0.16913,
+    0.01006,
+    0.07243
+   ],
+   "method": "第一蹠骨遠端 15% 點雲的球面擬合中心",
+   "provenance": "derived"
+  },
+  "midtarsal_l": {
+   "p": [
+    0.08169,
+    0.03357,
+    -0.08435
+   ],
+   "method": "由距骨與跟骨的前端面、舟狀骨與骰骨的後端面兩群點質心取中點推估（距舟＋跟骰關節面的合成中心）",
+   "provenance": "derived"
+  },
+  "mtp1_l": {
+   "p": [
+    0.16817,
+    0.0102,
+    -0.07134
+   ],
+   "method": "第一蹠骨遠端 15% 點雲的球面擬合中心",
+   "provenance": "derived"
+  },
+  "tmt_r": {
+   "p": [
+    0.11296,
+    0.03258,
+    0.09137
+   ],
+   "method": "三個楔狀骨與骰骨的遠端面、五根蹠骨的近端面，兩群點質心取中點",
+   "provenance": "derived",
+   "model_note": "資料集沒有這個關節的通道——Bruening 多節足部模型把舟狀骨、骰骨、楔狀骨與五根蹠骨視為同一塊剛體，所以舟楔與跗蹠的動作從來沒有被量到。本工具把它切開，是為了讓足弓頂點能相對前足移動；預設不吃任何資料（角度為 0），要看舟楔下陷長什麼樣子，用下方滑桿手動拉。"
+  },
+  "tmt_l": {
+   "p": [
+    0.11296,
+    0.03285,
+    -0.09146
+   ],
+   "method": "三個楔狀骨與骰骨的遠端面、五根蹠骨的近端面，兩群點質心取中點",
+   "provenance": "derived",
+   "model_note": "資料集沒有這個關節的通道——Bruening 多節足部模型把舟狀骨、骰骨、楔狀骨與五根蹠骨視為同一塊剛體，所以舟楔與跗蹠的動作從來沒有被量到。本工具把它切開，是為了讓足弓頂點能相對前足移動；預設不吃任何資料（角度為 0），要看舟楔下陷長什麼樣子，用下方滑桿手動拉。"
+  },
+  "shoulder_r": {
+   "p": [
+    0.07225,
+    1.32604,
+    0.16454
+   ],
+   "provenance": "derived",
+   "method": "肱骨頭最小平方球面擬合（最上端 40 mm、內側半邊的頂點）",
+   "note": "擬合半徑 22.3 mm，n=3326"
+  },
+  "elbow_r": {
+   "p": [
+    0.06606,
+    1.05081,
+    0.21082
+   ],
+   "provenance": "derived",
+   "method": "肱骨遠端 20 mm 切片質心",
+   "note": ""
+  },
+  "wrist_r": {
+   "p": [
+    0.1108,
+    0.82324,
+    0.25299
+   ],
+   "provenance": "derived",
+   "method": "橈骨與尺骨遠端 15 mm 切片質心",
+   "note": ""
+  },
+  "shoulder_l": {
+   "p": [
+    0.07224,
+    1.32593,
+    -0.16341
+   ],
+   "provenance": "derived",
+   "method": "肱骨頭最小平方球面擬合（最上端 40 mm、內側半邊的頂點）",
+   "note": "擬合半徑 22.5 mm，n=3327"
+  },
+  "elbow_l": {
+   "p": [
+    0.06572,
+    1.05073,
+    -0.20935
+   ],
+   "provenance": "derived",
+   "method": "肱骨遠端 20 mm 切片質心",
+   "note": ""
+  },
+  "wrist_l": {
+   "p": [
+    0.11105,
+    0.82316,
+    -0.25185
+   ],
+   "provenance": "derived",
+   "method": "橈骨與尺骨遠端 15 mm 切片質心",
+   "note": ""
+  }
+ },
+ "hier": {
+  "pelvis": [
+   null,
+   "pelvis"
+  ],
+  "lumbar": [
+   "pelvis",
+   "lumbar"
+  ],
+  "thorax": [
+   "lumbar",
+   "thorax"
+  ],
+  "cervical": [
+   "thorax",
+   "cervical"
+  ],
+  "head": [
+   "cervical",
+   "head"
+  ],
+  "femur_r": [
+   "pelvis",
+   "hip_r"
+  ],
+  "tibia_r": [
+   "femur_r",
+   "knee_r"
+  ],
+  "talus_r": [
+   "tibia_r",
+   "ankle_r"
+  ],
+  "foot_r": [
+   "talus_r",
+   "sub_r"
+  ],
+  "toes_r": [
+   "meta_r",
+   "mtp_r"
+  ],
+  "femur_l": [
+   "pelvis",
+   "hip_l"
+  ],
+  "tibia_l": [
+   "femur_l",
+   "knee_l"
+  ],
+  "talus_l": [
+   "tibia_l",
+   "ankle_l"
+  ],
+  "foot_l": [
+   "talus_l",
+   "sub_l"
+  ],
+  "toes_l": [
+   "meta_l",
+   "mtp_l"
+  ],
+  "midfoot_r": [
+   "foot_r",
+   "midtarsal_r"
+  ],
+  "hallux_r": [
+   "meta_r",
+   "mtp1_r"
+  ],
+  "midfoot_l": [
+   "foot_l",
+   "midtarsal_l"
+  ],
+  "hallux_l": [
+   "meta_l",
+   "mtp1_l"
+  ],
+  "meta_r": [
+   "midfoot_r",
+   "tmt_r"
+  ],
+  "meta_l": [
+   "midfoot_l",
+   "tmt_l"
+  ],
+  "humerus_r": [
+   "thorax",
+   "shoulder_r"
+  ],
+  "forearm_r": [
+   "humerus_r",
+   "elbow_r"
+  ],
+  "hand_r": [
+   "forearm_r",
+   "wrist_r"
+  ],
+  "humerus_l": [
+   "thorax",
+   "shoulder_l"
+  ],
+  "forearm_l": [
+   "humerus_l",
+   "elbow_l"
+  ],
+  "hand_l": [
+   "forearm_l",
+   "wrist_l"
+  ]
+ }
+}

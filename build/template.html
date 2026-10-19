@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>步態互動實驗室 v1.11.0</title>
+<title>步態互動實驗室 v1.12.0</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -151,7 +151,7 @@ table.ev td:last-child{text-align:right;font-family:"IBM Plex Mono",monospace;co
 <div class="app">
   <aside class="panel">
     <h1>步態互動實驗室</h1>
-    <p class="sub">v1.11.0 · 公開版：33 個片段<br>骨骼網格 BodyParts3D（CC BY-SA 2.1 JP）· 動作資料 五個 CC BY 4.0 研究資料集<br>兩者皆經本工具改作；作者、出處、授權連結與改作內容見下方「資料來源與授權」</p>
+    <p class="sub">v1.12.0 · 公開版：34 個片段<br>骨骼網格 BodyParts3D（CC BY-SA 2.1 JP）· 動作資料 五個 CC BY 4.0 研究資料集<br>兩者皆經本工具改作；作者、出處、授權連結與改作內容見下方「資料來源與授權」</p>
 
     <details class="why">
       <summary>為什麼做這個</summary>
@@ -208,7 +208,7 @@ table.ev td:last-child{text-align:right;font-family:"IBM Plex Mono",monospace;co
       <p><b>製作</b>：鄭宇劭（物理治療師／練健康總教練）。程式碼採 MIT；本頁面因內嵌 BodyParts3D 的改作網格，整份以 CC BY-SA 2.1 Japan 散布——你可以自由使用、修改、再散布（含商業用途），散布修改版時須以相同授權釋出並保留下列標示。原始碼與建置腳本：<a href="https://github.com/lkkptpt/gait-interactive-lab" target="_blank" rel="noopener">github.com/lkkptpt/gait-interactive-lab</a></p>
       <p><b>骨骼（L1）</b>：BodyParts3D, Copyright© The Database Center for Life Science licensed by CC Attribution-Share Alike 2.1 Japan（<a href="https://creativecommons.org/licenses/by-sa/2.1/jp/" target="_blank" rel="noopener">授權條款</a> · <a href="https://dbarchive.biosciencedbc.jp/en/bodyparts3d/desc.html" target="_blank" rel="noopener">原始資料</a>）。<br><b>本工具對此網格的改作</b>：取 126 個部件，做座標轉換與 Uint16 數值量化，並以 quadric decimation 減面——總面數 462,592 → 206,816，各部位保留比例為下肢 75%、骨盆腰椎 65%、頸椎 25%、胸廓與頭顱 18%。這是對原始網格形狀的修改，不是原始資料。<br>此授權含「相同方式分享」，故本頁面（內嵌此改作網格）亦以 CC BY-SA 2.1 Japan 散布。</p>
       <p><b>骨架（L2）</b>：關節中心全部由骨骼幾何推估，非影像量測值。選擇關節時右側會顯示各自的推估方法。</p>
-      <p><b>動作（L3）</b>：五個公開研究資料集，全部為實測值，無任何手繪或模擬的動作。五者皆採 <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a>。各片段的受試者數、年齡、步速與臨床分類顯示於左側資訊列。</p><p class="note">1. Van Criekinge T, Saeys W, Truijen S, et al. (2023). A full-body motion capture gait dataset of 138 able-bodied adults across the life span and 50 stroke survivors. <i>Scientific Data</i> 10:852. <a href="https://doi.org/10.1038/s41597-023-02767-y" target="_blank" rel="noopener">doi:10.1038/s41597-023-02767-y</a><br>2. Shida TKF, Costa TM, de Oliveira CEN, et al. (2023). A public data set of walking full-body kinematics and kinetics in individuals with Parkinson’s disease. <i>Frontiers in Neuroscience</i> 17:992585. <a href="https://doi.org/10.3389/fnins.2023.992585" target="_blank" rel="noopener">doi:10.3389/fnins.2023.992585</a>；資料存放：Coelho DB, figshare <a href="https://doi.org/10.6084/m9.figshare.14896881" target="_blank" rel="noopener">10.6084/m9.figshare.14896881</a><br>3. Bertaux A, Gueugnon M, Moissenet F, Orliac B, Martz P, Maillefert JF, Ornetti P, Laroche D (2022). Gait analysis dataset of healthy volunteers and patients before and 6 months after total hip arthroplasty. <i>Scientific Data</i> 9:399. <a href="https://doi.org/10.1038/s41597-022-01483-3" target="_blank" rel="noopener">doi:10.1038/s41597-022-01483-3</a>；資料存放：Laroche D, figshare <a href="https://doi.org/10.6084/m9.figshare.14420645" target="_blank" rel="noopener">10.6084/m9.figshare.14420645</a><br>4. Fukuchi CA, Fukuchi RK, Duarte M (2018). A public dataset of overground and treadmill walking kinematics and kinetics in healthy individuals. <i>PeerJ</i> 6:e4640. <a href="https://doi.org/10.7717/peerj.4640" target="_blank" rel="noopener">doi:10.7717/peerj.4640</a>；資料存放：figshare <a href="https://doi.org/10.6084/m9.figshare.5722711" target="_blank" rel="noopener">10.6084/m9.figshare.5722711</a><br>5. Sanchis-Sales E, Sancho-Bru JL, Roda-Sales A, Chiva-Miralles MJ, García-Gomáriz C (2024). Foot kinematics and kinetics data for different static foot posture collected using a multi-segment foot model. <i>Scientific Data</i> 11:1307. <a href="https://doi.org/10.1038/s41597-024-04166-3" target="_blank" rel="noopener">doi:10.1038/s41597-024-04166-3</a>；資料存放：Zenodo <a href="https://doi.org/10.5281/zenodo.10838067" target="_blank" rel="noopener">10.5281/zenodo.10838067</a><br><b>本工具對這些資料的改作</b>：時間正規化為 100 點、跨受試者逐點平均、單位與座標系轉換、週期首尾線性去趨勢，並對每個片段施加一個常數髖角度偏移（見下方「髖角度偏移與貼地」）。<br>足弓片段（資料集 5）只有站立期，首尾本來就不相接，未做去趨勢，也沒有髖偏移。<br><b>推進期放大片段（「推進期放大（站立期 70–100%）」，共 3 段）</b>：取足弓片段站立期 70–100% 這一段，橫軸線性拉伸成 0–100%。這是重新取樣，數值未改動——三組足型的差異幾乎全部集中在這一段，放在完整片段裡只佔步態週期的 9%，看不出來。介面上標示的是原片段的站立期位置。<br><b>合成片段（「足弓（走路中・合成）」，共 3 段）</b>：身體取自資料集 1 的同一段走路，足部分別取自資料集 5 的正常／旋前／旋後三組，兩者來自不同受試者群，不是同一個人身上量到的。三段的身體完全相同，疊在一起時看到的差異只來自足部分組。身體的數值未改動；足部原本只有站立期，線性對應到週期的 0–61.4%，擺盪期無資料，以平滑過渡回到著地值（模型補值）。足部角度扣掉站立中期的平均作為零位，再加一個常數閉合修正（正常與旋前 1.5°、旋後 1.0°，取值方式與下方「髖角度偏移與貼地」同一類），因此擺幅是實測的，絕對角度不是。<br>原作者與各資料集不對本工具的呈現與推論負責；資料依其授權「按現狀」提供，不附任何明示或默示的擔保。</p><p><b>零位對齊</b>：各資料集的骨盆零位定義與 BodyParts3D 標本的站立姿勢不同，直接套用會產生假的軀幹前傾或側傾。骨盆與腰椎的自由度一律只取「相對該片段週期平均的變化量」，因此<b>擺幅是實測的，絕對角度不是</b>——不可用本工具判讀某人的骨盆前傾有幾度。下肢（髖膝踝距下蹠趾）零位為解剖中立位，各資料集定義一致，未做調整。</p><p><b>步態週期</b>：WBDS clip 的週期由測力板垂直力的自相關求得（取樣率 300 Hz，搜尋範圍 0.7–1.8 s，左右履帶取平均），範圍 0.947–1.070 s，步頻 112–127 步/分。步幅＝跑步機速度 × 週期。v0.7.0 以前此欄為程式預設值 1.1 s，播放速度不正確。</p><p><b>髖關節中心為何不用回歸式</b>：Harrington 等 2007 的回歸式是為皮膚標記步態分析設計的，在看不到骨頭時由骨盆尺寸推估股骨頭中心，經雙螢光透視驗證誤差 12–17 mm 且系統性偏外側。本工具有實際股骨網格，直接以球面擬合量測股骨頭（半徑 23.0／23.3 mm，左右差 0.3 mm），精度優於回歸式，故不採用。</p><p><b>髖角度偏移與貼地</b>：髖角度是相對骨盆量測的，各資料集與本標本的骨盆中立位不同，直接套用會使腿在著地時搆不到地。每個 clip 施加一個常數髖偏移，取值為「使站立期貼地高度變化最小」的幾何閉合條件（範圍 -22.5° 至 +12.5°，各 clip 數值顯示於左側）。修正後骨盆垂直起伏為 0.027–0.041 m，落在行走重心上下位移的生理範圍內。此偏移為常數，不影響擺幅、峰值間距與所有組間比較統計。模型高度由當下處於站立期的腳決定，擺盪腳不參與，可用「貼地」按鈕關閉。</p><p><b>足弓指示是什麼、不是什麼</b>：介面上的「足弓」三角形與弓高曲線，都是<b>由骨骼幾何與關節角度推算</b>的，不是資料集直接量到的數字。弓高定義為舟狀骨質心到「跟骨著地點–第一蹠趾關節中心」連線的垂直距離。<br><b style="color:var(--warn)">重要：本模型無法呈現「足弓頂點下沉」。</b>把所有位置換算到跟骨自己的座標系之後實測（旋前足片段，站立期）：舟狀骨相對跟骨只移動 x 2.9／y 2.2／z 1.4 mm，而且垂直方向是<b>往上</b>；同期間第一蹠骨頭相對跟骨上升 <b>15.3 mm</b>，跟–蹠1 距離增加 5.1 mm。也就是說，弓高那 5 mm 的變化幾乎全部來自<b>前足抬起</b>，不是舟狀骨下沉。<br>原因在資料本身：這份資料集量到的是「前足（含舟骰楔與五根蹠骨）相對後足」的單一角度，舟楔與跗蹠的動作從未被量到（見下方「跗蹠關節」）。真人足弓下沉同時需要距骨下降與舟楔、跗蹠的貢獻，這些自由度在資料裡都不存在，模型也就做不出來。<br>因此這個指示該怎麼用：它顯示的是<b>前足相對後足的張開程度</b>，以及這個張開在推進期有沒有收回來——正常足在離地時弓高回到貼平以上（+2.8 mm），旋前足回不去（−0.8 mm），這個組間差異是實測資料本身的。不要用它來講「舟狀骨掉了幾公釐」。<br>要示範舟狀骨下沉長什麼樣子，用右側的跗蹠關節滑桿手動操作（那是模型，不是資料）。</p></p><p><b>限制</b>：骨頭以剛體旋轉，無關節面滑動、軟骨、韌帶、關節囊、肌肉。距下關節目前以正交軸近似，尚未採用 Inman 斜軸。原始 IK 未追蹤距下與蹠趾，只能手動操作。各片段的受試者數與族群標示於左側資訊列，個案片段為單一受試者，不可當作常模。</p>
+      <p><b>動作（L3）</b>：五個公開研究資料集，全部為實測值，無任何手繪或模擬的動作。五者皆採 <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a>。各片段的受試者數、年齡、步速與臨床分類顯示於左側資訊列。</p><p class="note">1. Van Criekinge T, Saeys W, Truijen S, et al. (2023). A full-body motion capture gait dataset of 138 able-bodied adults across the life span and 50 stroke survivors. <i>Scientific Data</i> 10:852. <a href="https://doi.org/10.1038/s41597-023-02767-y" target="_blank" rel="noopener">doi:10.1038/s41597-023-02767-y</a><br>2. Shida TKF, Costa TM, de Oliveira CEN, et al. (2023). A public data set of walking full-body kinematics and kinetics in individuals with Parkinson’s disease. <i>Frontiers in Neuroscience</i> 17:992585. <a href="https://doi.org/10.3389/fnins.2023.992585" target="_blank" rel="noopener">doi:10.3389/fnins.2023.992585</a>；資料存放：Coelho DB, figshare <a href="https://doi.org/10.6084/m9.figshare.14896881" target="_blank" rel="noopener">10.6084/m9.figshare.14896881</a><br>3. Bertaux A, Gueugnon M, Moissenet F, Orliac B, Martz P, Maillefert JF, Ornetti P, Laroche D (2022). Gait analysis dataset of healthy volunteers and patients before and 6 months after total hip arthroplasty. <i>Scientific Data</i> 9:399. <a href="https://doi.org/10.1038/s41597-022-01483-3" target="_blank" rel="noopener">doi:10.1038/s41597-022-01483-3</a>；資料存放：Laroche D, figshare <a href="https://doi.org/10.6084/m9.figshare.14420645" target="_blank" rel="noopener">10.6084/m9.figshare.14420645</a><br>4. Fukuchi CA, Fukuchi RK, Duarte M (2018). A public dataset of overground and treadmill walking kinematics and kinetics in healthy individuals. <i>PeerJ</i> 6:e4640. <a href="https://doi.org/10.7717/peerj.4640" target="_blank" rel="noopener">doi:10.7717/peerj.4640</a>；資料存放：figshare <a href="https://doi.org/10.6084/m9.figshare.5722711" target="_blank" rel="noopener">10.6084/m9.figshare.5722711</a><br>5. Sanchis-Sales E, Sancho-Bru JL, Roda-Sales A, Chiva-Miralles MJ, García-Gomáriz C (2024). Foot kinematics and kinetics data for different static foot posture collected using a multi-segment foot model. <i>Scientific Data</i> 11:1307. <a href="https://doi.org/10.1038/s41597-024-04166-3" target="_blank" rel="noopener">doi:10.1038/s41597-024-04166-3</a>；資料存放：Zenodo <a href="https://doi.org/10.5281/zenodo.10838067" target="_blank" rel="noopener">10.5281/zenodo.10838067</a><br><b>本工具對這些資料的改作</b>：時間正規化為 100 點、跨受試者逐點平均、單位與座標系轉換、週期首尾線性去趨勢，並對每個片段施加一個常數髖角度偏移（見下方「髖角度偏移與貼地」）。<br>足弓片段（資料集 5）只有站立期，首尾本來就不相接，未做去趨勢，也沒有髖偏移。<br><b>推進期放大片段（「推進期放大（站立期 70–100%）」，共 3 段）</b>：取足弓片段站立期 70–100% 這一段，橫軸線性拉伸成 0–100%。這是重新取樣，數值未改動——三組足型的差異幾乎全部集中在這一段，放在完整片段裡只佔步態週期的 9%，看不出來。介面上標示的是原片段的站立期位置。<br><b>合成片段（「足弓（走路中・合成）」，共 3 段）</b>：身體取自資料集 1 的同一段走路，足部分別取自資料集 5 的正常／旋前／旋後三組，兩者來自不同受試者群，不是同一個人身上量到的。三段的身體完全相同，疊在一起時看到的差異只來自足部分組。身體的數值未改動；足部原本只有站立期，線性對應到週期的 0–61.4%，擺盪期無資料，以平滑過渡回到著地值（模型補值）。足部角度扣掉站立中期的平均作為零位，再加一個常數閉合修正（正常與旋前 1.5°、旋後 1.0°，取值方式與下方「髖角度偏移與貼地」同一類），因此擺幅是實測的，絕對角度不是。<br>原作者與各資料集不對本工具的呈現與推論負責；資料依其授權「按現狀」提供，不附任何明示或默示的擔保。</p><p><b>上肢（v1.12.0 新增）</b>：鎖骨、肩胛骨、肱骨、橈骨、尺骨、8 塊腕骨、5 根掌骨、14 節指骨，左右共 64 塊，與其餘骨頭同為 BodyParts3D 同一副標本（取自 GitHub 鏡像 Kevin-Mattheus-Moerman/BodyParts3D 的 STL，座標轉換後與既有骨頭的包圍盒誤差 &lt;0.1 mm）。肩關節中心為肱骨頭球面擬合（半徑 22.3／22.5 mm），肘為肱骨遠端 20 mm 切片質心，腕為橈尺骨遠端 15 mm 切片質心，皆為推估。鎖骨與肩胛骨併入胸廓，沒有肩帶的動作資料；前臂旋前旋後沒有拆出來。<br><b>手臂的動作資料逐片段不同，介面左上角與片段資訊都有標示：</b><br>・<b>實測</b>：Bertaux 2022 健康對照組平均（新片段 hea_mean，n=80）與 7 位髖關節炎受試者（同一資料集）；Shida 2023 帕金森資料集的全部片段（雙側肩、肘；該資料集無腕）。這些片段的手臂與下肢是同一批人同一次量到的。<br>・<b>借用</b>：Van Criekinge 健康組（年輕／中年／高齡）、Fukuchi 兩段平均、足弓合成三段——這些資料集的公開版本沒有手臂資料，畫面上的手臂借用 Bertaux 健康對照組 80 人平均，手臂與下肢不是同一批人，只示意正常擺臂的相位與幅度，不可拿來比較族群差異。<br>・<b>無</b>：中風四段。偏癱的手臂不該套用健康人的擺動，所以手臂垂直靜止。<br>零位：肩屈曲與肘屈曲取資料絕對值，並扣除標本靜態姿勢（前臂原本屈 12.4°）使畫面角度＝資料值；肩的額狀面與水平面、腕的矢狀面只取週期內變化量（Plug-in Gait 的這些角度受試者間靜態偏移達 ±8–20°），再以幾何條件讓腕垂在肩正下方——<b>擺幅是實測的，絕對角度不是</b>。相位：Bertaux 的左右檔在同一時間軸上（右肩在右足著地後約 5% 最伸展、左肩在 0% 最屈曲，與對側手腳同步一致），直接使用；Shida 的每一側以該側著地為 0%，左側平移 50%（與該資料集下肢相同）。</p><p><b>零位對齊</b>：各資料集的骨盆零位定義與 BodyParts3D 標本的站立姿勢不同，直接套用會產生假的軀幹前傾或側傾。骨盆與腰椎的自由度一律只取「相對該片段週期平均的變化量」，因此<b>擺幅是實測的，絕對角度不是</b>——不可用本工具判讀某人的骨盆前傾有幾度。下肢（髖膝踝距下蹠趾）零位為解剖中立位，各資料集定義一致，未做調整。</p><p><b>步態週期</b>：WBDS clip 的週期由測力板垂直力的自相關求得（取樣率 300 Hz，搜尋範圍 0.7–1.8 s，左右履帶取平均），範圍 0.947–1.070 s，步頻 112–127 步/分。步幅＝跑步機速度 × 週期。v0.7.0 以前此欄為程式預設值 1.1 s，播放速度不正確。</p><p><b>髖關節中心為何不用回歸式</b>：Harrington 等 2007 的回歸式是為皮膚標記步態分析設計的，在看不到骨頭時由骨盆尺寸推估股骨頭中心，經雙螢光透視驗證誤差 12–17 mm 且系統性偏外側。本工具有實際股骨網格，直接以球面擬合量測股骨頭（半徑 23.0／23.3 mm，左右差 0.3 mm），精度優於回歸式，故不採用。</p><p><b>髖角度偏移與貼地</b>：髖角度是相對骨盆量測的，各資料集與本標本的骨盆中立位不同，直接套用會使腿在著地時搆不到地。每個 clip 施加一個常數髖偏移，取值為「使站立期貼地高度變化最小」的幾何閉合條件（範圍 -22.5° 至 +12.5°，各 clip 數值顯示於左側）。修正後骨盆垂直起伏為 0.027–0.041 m，落在行走重心上下位移的生理範圍內。此偏移為常數，不影響擺幅、峰值間距與所有組間比較統計。模型高度由當下處於站立期的腳決定，擺盪腳不參與，可用「貼地」按鈕關閉。</p><p><b>足弓指示是什麼、不是什麼</b>：介面上的「足弓」三角形與弓高曲線，都是<b>由骨骼幾何與關節角度推算</b>的，不是資料集直接量到的數字。弓高定義為舟狀骨質心到「跟骨著地點–第一蹠趾關節中心」連線的垂直距離。<br><b style="color:var(--warn)">重要：本模型無法呈現「足弓頂點下沉」。</b>把所有位置換算到跟骨自己的座標系之後實測（旋前足片段，站立期）：舟狀骨相對跟骨只移動 x 2.9／y 2.2／z 1.4 mm，而且垂直方向是<b>往上</b>；同期間第一蹠骨頭相對跟骨上升 <b>15.3 mm</b>，跟–蹠1 距離增加 5.1 mm。也就是說，弓高那 5 mm 的變化幾乎全部來自<b>前足抬起</b>，不是舟狀骨下沉。<br>原因在資料本身：這份資料集量到的是「前足（含舟骰楔與五根蹠骨）相對後足」的單一角度，舟楔與跗蹠的動作從未被量到（見下方「跗蹠關節」）。真人足弓下沉同時需要距骨下降與舟楔、跗蹠的貢獻，這些自由度在資料裡都不存在，模型也就做不出來。<br>因此這個指示該怎麼用：它顯示的是<b>前足相對後足的張開程度</b>，以及這個張開在推進期有沒有收回來——正常足在離地時弓高回到貼平以上（+2.8 mm），旋前足回不去（−0.8 mm），這個組間差異是實測資料本身的。不要用它來講「舟狀骨掉了幾公釐」。<br>要示範舟狀骨下沉長什麼樣子，用右側的跗蹠關節滑桿手動操作（那是模型，不是資料）。</p></p><p><b>限制</b>：骨頭以剛體旋轉，無關節面滑動、軟骨、韌帶、關節囊、肌肉。距腿與距下關節皆繞 Inman 1976 的斜軸旋轉（參數可在關節面板調整），但距下關節只有足弓片段有實測資料（Sanchis-Sales 的後足相對小腿角），其餘片段的距下與蹠趾未被原始資料追蹤，只能手動操作。各資料集的踝關節額狀面與水平面角度（Plug-in Gait 的 Y／Z）未採用：這兩個角度的量測信度低、各實驗室定義不一，本工具不拿它們驅動距下關節。各片段的受試者數與族群標示於左側資訊列，個案片段為單一受試者，不可當作常模。</p>
     </details>
   </aside>
 
@@ -220,6 +220,7 @@ table.ev td:last-child{text-align:right;font-family:"IBM Plex Mono",monospace;co
       <div class="ev" id="hudEvent">—</div>
       <div id="contact" style="font-family:'Noto Sans TC',sans-serif;font-size:12px;line-height:1.6"></div>
       <div id="archHud" style="font-family:'Noto Sans TC',sans-serif;font-size:12px;line-height:1.6"></div>
+      <div id="armHud" style="font-family:'Noto Sans TC',sans-serif;font-size:12px;line-height:1.6"></div>
       <div id="diag"></div>
     </div>
     <div class="pickname" id="pickName"></div>
@@ -714,7 +715,7 @@ var JOINTS=[
  {id:'hip_r',seg:'femur_r',label:'髖關節（右）',ax:[['sag','屈曲','伸展'],['fro','內收','外展'],['tra','內旋','外旋']]},
  {id:'knee_r',seg:'tibia_r',label:'膝關節（右）',ax:[['sag','伸展','屈曲'],['fro','外翻','內翻'],['tra','外旋','內旋']]},
  {id:'ankle_r',seg:'talus_r',label:'距腿關節（右）',axis:'ank',side:'r',ax:[['sag','蹠屈','背屈']]},
- {id:'sub_r',seg:'foot_r',label:'距下關節（右）· 無資料',axis:'sub',side:'r',ax:[['sag','旋前（外翻）','旋後（內翻）']]},
+ {id:'sub_r',seg:'foot_r',label:'距下關節（右）· 僅足弓片段有資料',axis:'sub',side:'r',ax:[['sag','旋前（外翻）','旋後（內翻）']]},
  {id:'midtarsal_r',seg:'midfoot_r',label:'中跗關節（右）· 前足相對後足',ax:[['sag','蹠屈（前足壓下）','背屈（前足抬起）'],['fro','外翻','內翻'],['tra','內收','外展']]},
  {id:'tmt_r',seg:'meta_r',label:'跗蹠關節（右）· 足弓 · 模型',ax:[['sag','蹠屈（足弓拉高）','背屈（足弓壓低）'],['fro','外翻','內翻'],['tra','內收','外展']]},
  {id:'mtp1_r',seg:'hallux_r',label:'第一蹠趾關節（右）',ax:[['sag','蹠屈','背屈'],['fro','外翻','內翻'],['tra','內收','外展']]},
@@ -722,11 +723,17 @@ var JOINTS=[
  {id:'hip_l',mir:1,seg:'femur_l',label:'髖關節（左）',ax:[['sag','屈曲','伸展'],['fro','內收','外展'],['tra','內旋','外旋']]},
  {id:'knee_l',mir:1,seg:'tibia_l',label:'膝關節（左）',ax:[['sag','伸展','屈曲'],['fro','外翻','內翻'],['tra','外旋','內旋']]},
  {id:'ankle_l',mir:1,seg:'talus_l',label:'距腿關節（左）',axis:'ank',side:'l',ax:[['sag','蹠屈','背屈']]},
- {id:'sub_l',mir:1,seg:'foot_l',label:'距下關節（左）· 無資料',axis:'sub',side:'l',ax:[['sag','旋前（外翻）','旋後（內翻）']]},
+ {id:'sub_l',mir:1,seg:'foot_l',label:'距下關節（左）· 僅足弓片段有資料',axis:'sub',side:'l',ax:[['sag','旋前（外翻）','旋後（內翻）']]},
  {id:'midtarsal_l',mir:1,seg:'midfoot_l',label:'中跗關節（左）· 前足相對後足',ax:[['sag','蹠屈（前足壓下）','背屈（前足抬起）'],['fro','外翻','內翻'],['tra','內收','外展']]},
  {id:'tmt_l',mir:1,seg:'meta_l',label:'跗蹠關節（左）· 足弓 · 模型',ax:[['sag','蹠屈（足弓拉高）','背屈（足弓壓低）'],['fro','外翻','內翻'],['tra','內收','外展']]},
  {id:'mtp1_l',mir:1,seg:'hallux_l',label:'第一蹠趾關節（左）',ax:[['sag','蹠屈','背屈'],['fro','外翻','內翻'],['tra','內收','外展']]},
- {id:'mtp_l',mir:1,seg:'toes_l',label:'第2–5蹠趾關節（左）· 模型',ax:[['sag','伸展','屈曲']]}
+ {id:'mtp_l',mir:1,seg:'toes_l',label:'第2–5蹠趾關節（左）· 模型',ax:[['sag','伸展','屈曲']]},
+ {id:'shoulder_r',seg:'humerus_r',label:'肩關節（右）',ax:[['sag','屈曲','伸展'],['fro','內收','外展'],['tra','內旋','外旋']]},
+ {id:'elbow_r',seg:'forearm_r',label:'肘關節（右）',ax:[['sag','屈曲','伸展']]},
+ {id:'wrist_r',seg:'hand_r',label:'腕關節（右）',ax:[['sag','屈曲','伸展'],['fro','尺偏','橈偏']]},
+ {id:'shoulder_l',mir:1,seg:'humerus_l',label:'肩關節（左）',ax:[['sag','屈曲','伸展'],['fro','內收','外展'],['tra','內旋','外旋']]},
+ {id:'elbow_l',mir:1,seg:'forearm_l',label:'肘關節（左）',ax:[['sag','屈曲','伸展']]},
+ {id:'wrist_l',mir:1,seg:'hand_l',label:'腕關節（左）',ax:[['sag','屈曲','伸展'],['fro','尺偏','橈偏']]}
 ];
 var JM={}; JOINTS.forEach(function(j){JM[j.id]=j;});
 // 資料集符號：背屈 +／內翻 +／外展 +。以下常數把它轉成本工具的旋轉方向，
@@ -791,6 +798,20 @@ function screwHome(flexDeg){
   return SH.amp*Math.max(0,Math.min(1,t));   // 0° 屈曲時最大，達 onset 後歸零
 }
 
+/* 手臂的靜態姿勢對齊：由關節中心的幾何算出來，不是量測、也不是手調。
+   restFlex：標本肱骨相對鉛垂線的矢狀偏角；restElbow：標本前臂相對肱骨的屈曲角；
+   restAdd：要讓腕垂在肩正下方，肱骨需要內收幾度（PiG 額狀面絕對值不可信，只取變化量，
+   所以靜態姿勢由幾何決定）。畫面上的肩屈曲、肘屈曲角 = 資料值。 */
+var ARM_REST={};
+['r','l'].forEach(function(s){
+  var sh=Jc['shoulder_'+s], el=Jc['elbow_'+s], wr=Jc['wrist_'+s];
+  if(!sh||!el||!wr){ ARM_REST[s]={flex:0,elbow:0,add:0}; return; }
+  var a1=Math.atan2(el[0]-sh[0], sh[1]-el[1])/D2R;      // 肱骨：肘在肩前方為正
+  var a2=Math.atan2(wr[0]-el[0], el[1]-wr[1])/D2R;      // 前臂：腕在肘前方為正
+  var ad=Math.atan2(Math.abs(wr[2]-sh[2]), sh[1]-wr[1])/D2R;
+  ARM_REST[s]={flex:a1, elbow:a2-a1, add:ad};
+});
+function hasArm(){ return !!(G && G['shoulder_flexion_r']); }
 var mode='gait',live={};
 var qz=new THREE.Quaternion(),qx=new THREE.Quaternion(),qy=new THREE.Quaternion();
 var AZ=new THREE.Vector3(0,0,1),AX=new THREE.Vector3(1,0,0),AY=new THREE.Vector3(0,1,0);
@@ -835,6 +856,14 @@ function pose(p){
     } else {
       setJ('mtp1_'+s, (g?samp('mtp_angle_'+s,p):0) + mtpModel(_q,_st), 0, 0, p);
     }
+    // 手臂：有通道的片段照資料走；沒有的片段 samp 回 0，手臂垂直靜止、肘伸直。
+    // 三個 ARM_REST 常數是標本姿勢與資料零位之間的幾何差，見上方說明。
+    var R=ARM_REST[s];
+    setJ('shoulder_'+s, (g?samp('shoulder_flexion_'+s,p):0) - R.flex,
+                        k*((g?samp('shoulder_adduction_'+s,p):0) + R.add),
+                        k*(g?samp('shoulder_rotation_'+s,p):0), p);
+    setJ('elbow_'+s, (g?samp('elbow_flexion_'+s,p):0) - R.elbow, 0, 0, p);
+    setJ('wrist_'+s, g?samp('wrist_flexion_'+s,p):0, 0, 0, p);
   });
   nodes.pelvis.position.y = PELV_Y;
   nodes.pelvis.position.z = PELV_Z;
@@ -1018,7 +1047,10 @@ var CW=200, CH=64, PADT=4, PADB=10;
 var SERIES_BODY=[
  {t:'髖',  pos:'屈曲', neg:'伸展', k:['hip_flexion_r','hip_flexion_l'],  sg:1},
  {t:'膝',  pos:'屈曲', neg:'伸展', k:['knee_angle_r','knee_angle_l'],    sg:-1},
- {t:'踝',  pos:'背屈', neg:'蹠屈', k:['ankle_angle_r','ankle_angle_l'],  sg:1}
+ {t:'踝',  pos:'背屈', neg:'蹠屈', k:['ankle_angle_r','ankle_angle_l'],  sg:1},
+ // 肩／肘只在片段有手臂通道時才畫（opt）
+ {t:'肩',  pos:'屈曲', neg:'伸展', k:['shoulder_flexion_r','shoulder_flexion_l'], sg:1, opt:true},
+ {t:'肘',  pos:'屈曲', neg:'伸展', k:['elbow_flexion_r','elbow_flexion_l'], sg:1, opt:true}
 ];
 // 足部專用片段（只有踝／中跗／第一蹠趾）換一組圖表，否則會去畫不存在的髖膝通道
 var SERIES_FOOT=[
@@ -1065,6 +1097,7 @@ function buildCharts(){
   var host=document.getElementById('charts'); host.innerHTML=''; chartEls=[];
   var cc=cmpClip();
   SERIES.forEach(function(sr){
+    if(sr.opt && !G[sr.k[0]]) return;                  // 沒有這個通道就不畫
     if(cc && cc.foot_only!==CLIP.foot_only) cc=null;   // 足部與全身片段不互比
     var mine = sr.derived ? archSeries(CLIP) : null;
     var other= sr.derived ? (cc?archSeries(cc):null) : null;
@@ -1205,6 +1238,8 @@ function fmtMeta(c){
   } else if(m.cohort==='composite'){
     h+='<br>身體 '+m.body+'<br>足部 '+m.foot+
        '<br><span style="color:var(--warn)">'+m.warn+'</span>';
+  } else if(m.cohort==='HEA'){
+    h+='<br>n='+m.n+'　健康對照組（Bertaux 2022）　下肢與手臂同源';
   } else if(m.cohort==='VC-healthy'){
     h+='<br>n='+m.n+'　'+(m.age_range?m.age_range[0]+'–'+m.age_range[1]+' 歲':'')+
        '　平均 '+m.age+' 歲　平均步速 '+m.speed+' m/s';
@@ -1214,6 +1249,7 @@ function fmtMeta(c){
     h+='<br>身高 '+m.height+' cm　體重 '+m.mass+' kg';
   }
   if(c.note) h+='<br><span style="opacity:.75">'+c.note+'</span>';
+  if(c.arm&&!c.foot_only) h+='<br><span style="'+(c.arm.src==='own'?'opacity:.75':'color:var(--warn)')+'">'+c.arm.note+'</span>';
   h+='<br><span style="opacity:.7">週期 '+(c.period||0).toFixed(2)+' s'+
      (c.period_src?'（實測）':'<span style="color:var(--warn)">（未知，1× 不代表實際步速）</span>')+'　站立期 '+
      (((c.stats||{})['右站立期佔比'])||(c.stance_r!=null?c.stance_r.toFixed(1):'—'))+'%'+
@@ -1258,6 +1294,15 @@ function setClip(id){
   }
   var hl=document.getElementById('hudPctLbl');
   if(hl) hl.textContent = c.pct_label || (c.stance_only ? '站立期' : '步行周期');
+  // 手臂資料來源：實測／借用／無。借用與無資料一律用警示色，不讓人誤以為是量到的。
+  var ah=document.getElementById('armHud');
+  if(ah){
+    var a=c.arm;
+    if(c.foot_only||!a) ah.innerHTML='';
+    else if(a.src==='own') ah.innerHTML='<span style="color:#90A4B6">手臂　實測</span>';
+    else if(a.src==='borrowed') ah.innerHTML='<span style="color:var(--warn)">手臂　借用健康組平均（本片段無手臂資料）</span>';
+    else ah.innerHTML='<span style="color:var(--warn)">手臂　無資料，靜止</span>';
+  }
   document.getElementById('clipMeta').innerHTML=fmtMeta(c);
   GPROF=null; LPROF=null;
   weakSide = (c.group||'').indexOf('中風')>=0;
@@ -1288,6 +1333,8 @@ function buildCmpTable(){
    ['髖總擺幅',   function(c){var v=c.data.hip_flexion_r;return mx(v)-mn(v);},1,'°'],
    ['踝總擺幅',   function(c){var v=c.data.ankle_angle_r;return mx(v)-mn(v);},1,'°'],
    ['踝蹠屈峰值', function(c){return mn(c.data.ankle_angle_r);},1,'°'],
+   ['肩擺幅（右）', function(c){var v=c.data.shoulder_flexion_r; if(!v||(c.arm||{}).src!=='own') return NaN; return mx(v)-mn(v);},1,'°'],
+   ['肘擺幅（右）', function(c){var v=c.data.elbow_flexion_r;    if(!v||(c.arm||{}).src!=='own') return NaN; return mx(v)-mn(v);},1,'°'],
    ['站立期佔比', function(c){return (c.stats||{})['右站立期佔比']||NaN;},1,'%'],
    ['步態週期',   function(c){return c.period;},2,'s']
   ];
@@ -1392,10 +1439,16 @@ document.getElementById('axHelp').onclick=function(){marksOn=!marksOn;
 
 var st=document.getElementById('segToggles');
 // 單一狀態表，所有可見性由 applyVis() 統一計算，避免互相覆蓋
-var VIS={head:true, thorax:true, lumbar:true, pelvis:true, right:true, left:true, toes:true};
+var VIS={head:true, thorax:true, lumbar:true, pelvis:true, right:true, left:true, toes:true, arms:true};
 var SEGVIS={
   head:      function(){return VIS.head;},
   cervical:  function(){return VIS.head;},
+  humerus_r: function(){return VIS.arms;},
+  forearm_r: function(){return VIS.arms;},
+  hand_r:    function(){return VIS.arms;},
+  humerus_l: function(){return VIS.arms;},
+  forearm_l: function(){return VIS.arms;},
+  hand_l:    function(){return VIS.arms;},
   thorax:    function(){return VIS.thorax;},
   lumbar:    function(){return VIS.lumbar;},
   pelvis:    function(){return VIS.pelvis;},
@@ -1435,7 +1488,8 @@ function applyVis(){
 }
 // 由上而下的解剖順序
 [['head','頭頸（顱骨與頸椎）'],
- ['thorax','胸廓（胸椎、肋骨、胸骨）'],
+ ['thorax','胸廓（胸椎、肋骨、胸骨、鎖骨、肩胛骨）'],
+ ['arms','上肢（肱骨、前臂、手）'],
  ['lumbar','腰椎'],
  ['pelvis','骨盆與薦骨'],
  ['right','右下肢'],
@@ -1469,7 +1523,9 @@ var MIR={hip_r:'hip_l',hip_l:'hip_r',knee_r:'knee_l',knee_l:'knee_r',
          mtp_r:'mtp_l',mtp_l:'mtp_r',
          midtarsal_r:'midtarsal_l',midtarsal_l:'midtarsal_r',
          mtp1_r:'mtp1_l',mtp1_l:'mtp1_r',
-         tmt_r:'tmt_l',tmt_l:'tmt_r'};
+         tmt_r:'tmt_l',tmt_l:'tmt_r',
+         shoulder_r:'shoulder_l',shoulder_l:'shoulder_r',elbow_r:'elbow_l',elbow_l:'elbow_r',
+         wrist_r:'wrist_l',wrist_l:'wrist_r'};
 document.getElementById('symChk').onchange=function(){sym=this.checked;
   if(sym){var m=MIR[curJ]; if(m) ['sag','fro','tra'].forEach(function(k){
     off[m][k].a=off[curJ][k].a; off[m][k].b=off[curJ][k].b;});}};
@@ -1489,6 +1545,14 @@ function build(){
   if(meta.model_note) html+='<br><br><b style="color:var(--warn)">模型關節</b><br>'+
     '<span style="color:var(--warn)">'+meta.model_note+'</span>';
   if(meta.axis_src) html+='<br><br><b>轉軸來源</b><br>'+meta.axis_src;
+  if(/^(shoulder|elbow|wrist)_/.test(curJ)){
+    var sd=curJ.slice(-1), R=ARM_REST[sd]||{};
+    html+='<br><br><b>靜態姿勢對齊（幾何，非量測）</b><br>'+
+      '標本前臂原本屈 '+(R.elbow||0).toFixed(1)+'°、肱骨矢狀偏 '+(R.flex||0).toFixed(1)+'°，已扣除，'+
+      '畫面上的肩屈曲與肘屈曲角＝資料值。肱骨另加內收 '+(R.add||0).toFixed(1)+'° 讓腕垂在肩正下方'+
+      '（額狀面與水平面只取週期內變化量，絕對角度不是量測的）。'+
+      (hasArm()?'':'<br><span style="color:var(--warn)">此片段沒有手臂資料，手臂維持靜止。</span>');
+  }
   document.getElementById('prov').innerHTML=html;
   var w=document.getElementById('sliders'); w.innerHTML='';
   function pair(title,id,ax,neg,pos,min,max){
