@@ -8,22 +8,22 @@
 
 **BodyParts3D**（190 個骨骼部件：原 126 塊 ＋ v1.12.0 加入的上肢 64 塊）
 
-> BodyParts3D, Copyright© The Database Center for Life Science licensed by CC Attribution-Share Alike 2.1 Japan
+> BodyParts3D, © The Database Center for Life Science licensed under CC Attribution 4.0 International
 
-- 授權：[CC BY-SA 2.1 Japan](https://creativecommons.org/licenses/by-sa/2.1/jp/)
+- 授權：[CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)（[資料庫授權頁](https://dbarchive.biosciencedbc.jp/en/bodyparts3d/lic.html)，2025-02-27 更新；原為 CC BY-SA 2.1 Japan，v1.12.3 起依現行授權標示）
 - 來源：<https://dbarchive.biosciencedbc.jp/en/bodyparts3d/desc.html>
 - 本專案的處理：座標轉換、數值量化，以及 **quadric decimation 減面**
   （總面數 462,592 → 206,816）。減面比例依部位不同：下肢保留 75%、骨盆腰椎 65%、
   頸椎 25%、胸廓與頭顱 18%，因為步態教學會放大檢視的是下肢。
-  **這是對原始網格的修改**，依 CC BY-SA 2.1 Japan 於此聲明；減面腳本見 `build/decimate.py`
+  **這是對原始網格的修改**，依 CC BY 4.0 第 3(a)(1)(B) 條於此聲明；減面腳本見 `build/decimate.py`
 - 上肢 64 塊（鎖骨、肩胛骨、肱骨、橈骨、尺骨、8 腕骨、5 掌骨、14 指骨 × 左右）於 v1.12.0 加入，
   同一副標本，取自 GitHub 鏡像 [Kevin-Mattheus-Moerman/BodyParts3D](https://github.com/Kevin-Mattheus-Moerman/BodyParts3D)
   的 STL（原站台從建置環境連不到）。座標轉換 模型(x,y,z)＝原始(−Y,Z,−X)/1000，由既有右股骨、左股骨、
   右脛骨、薦骨、右跟骨五塊骨頭的包圍盒交叉驗證，誤差 <0.1 mm。另行減面：肱骨／橈骨／尺骨保留 35%、
   鎖骨 20%、肩胛骨 6%、手部小骨頭下限 220 面（上肢原始 363,058 面 → 54,434 面）。腳本見 `build/build_arms.py`。
   肩關節中心為肱骨頭球面擬合（半徑 22.3／22.5 mm）、肘為肱骨遠端 20 mm 切片質心、腕為橈尺骨遠端 15 mm 切片質心，皆為推估（provenance = derived）。
-- ⚠️ 此授權含「相同方式分享」條款。`build/anatomy.json` 與內嵌它的 `index.html`
-  必須以同一授權散布，詳見 `LICENSE-DATA.md`
+- 上肢取自的 GitHub 鏡像（BodyParts3D 3.0）其 README 仍寫 CC BY-SA 2.1 Japan，那是鏡像當年的授權標示；
+  資料庫授權方現行授權為 CC BY 4.0，本專案依現行授權使用。詳見 `LICENSE-DATA.md`
 
 ---
 

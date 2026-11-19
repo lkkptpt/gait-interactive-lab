@@ -103,9 +103,9 @@ node --check <(抽出 <script> 內容)          # JS 語法
 
 - **上課播放、投影、線上開畫面講解**：直接用，包含收費課程
 - **簡報或貼文放截圖**：旁邊附一行
-  `BodyParts3D, Copyright© The Database Center for Life Science licensed by CC Attribution-Share Alike 2.1 Japan`
+  `BodyParts3D, © The Database Center for Life Science licensed under CC Attribution 4.0 International`
 - **發檔案給別人**：可以，`index.html` 與 `three.min.js` 放在一起即可。
-  收到的人同樣享有 CC BY-SA 的權利，不能在上面附加「不得外流」這類限制條款
+  保留上面那行標示即可
 
 ---
 
@@ -117,7 +117,7 @@ node --check <(抽出 <script> 內容)          # JS 語法
 
 ## 授權
 
-程式碼 MIT；資料依各自來源，其中骨骼網格為 **CC BY-SA 2.1 Japan（相同方式分享）**，
-因此內嵌網格的 `index.html` 也受此條款拘束。詳見 [`LICENSE-DATA.md`](LICENSE-DATA.md)。
+程式碼 MIT；資料依各自來源，骨骼網格與動作資料皆為 **CC BY 4.0**（須標示來源，不需相同方式分享）。
+BodyParts3D 於 2025-02-27 將授權由 CC BY-SA 2.1 Japan 改為 CC BY 4.0。詳見 [`LICENSE-DATA.md`](LICENSE-DATA.md)。
 
 引用時請一併標示原始資料集的作者——本工具只是呈現層，科學貢獻屬於他們。

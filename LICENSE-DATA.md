@@ -13,21 +13,16 @@
 
 ## 資料：依來源各自的授權
 
-### `build/anatomy.json` 與 `index.html` → CC BY-SA 2.1 Japan
+### `build/anatomy.json` → CC BY 4.0
 
-兩者包含或衍生自 BodyParts3D 的骨骼網格，該資料庫採用
-[CC Attribution-Share Alike 2.1 Japan](https://creativecommons.org/licenses/by-sa/2.1/jp/)。
-
-**「相同方式分享」的實際意義：**
+包含或衍生自 BodyParts3D 的骨骼網格。資料庫授權方於 2025-02-27 將授權改為
+[CC Attribution 4.0 International](https://creativecommons.org/licenses/by/4.0/)
+（[資料庫授權頁](https://dbarchive.biosciencedbc.jp/en/bodyparts3d/lic.html)；v1.12.2 以前本 repo 依舊授權 CC BY-SA 2.1 Japan 標示）。
 
 - 你可以自由使用、修改、再散布，包含商業用途
-- 但散布修改後的版本時，**必須以同一授權釋出**，不能改成 MIT 或閉源
-- 必須保留這段標示：
+- 必須保留這段標示，並註明有無修改：
 
-  > BodyParts3D, Copyright© The Database Center for Life Science licensed by CC Attribution-Share Alike 2.1 Japan
-
-`index.html` 是把網格資料內嵌進單一檔案的成品，因此整份檔案受此條款拘束。
-若你只想用 MIT 的部分，請使用 `build/template.html`（不含任何網格資料）。
+  > BodyParts3D, © The Database Center for Life Science licensed under CC Attribution 4.0 International
 
 ### `build/motion.json` → CC BY 4.0
 
@@ -35,11 +30,10 @@
 皆為 [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)。
 散布時須標示原作者與出處，完整引用見 `DATA-SOURCES.md`。
 
-合併到 `index.html` 之所以沒有衝突，理由不是「BY 4.0 允許衍生作品換授權」，
-而是 Creative Commons 官方 FAQ 明載的單向相容性：
-*"Works licensed under CC BY may be incorporated into works that are licensed under CC BY-SA."*
-BY 可以併進 BY-SA 的作品，反向不行。因此成品整份以 BY-SA 2.1 JP 散布是正確方向。
-（<https://creativecommons.org/faq/>）
+### `index.html`（成品）
+
+內嵌上面兩份 CC BY 4.0 資料與 MIT 程式碼。散布時保留頁面內「資料來源與授權」段落的標示即可，
+不需相同方式分享。
 
 ### `three.min.js` → MIT（three.js 原作者）
 
@@ -60,5 +54,5 @@ BY 可以併進 BY-SA 的作品，反向不行。因此成品整份以 BY-SA 2.1
 | `build/skeleton.json` | MIT | 否 |
 | `three.min.js` | MIT（three.js authors） | 否 |
 | `build/motion.json` | CC BY 4.0 | 否（須標示來源） |
-| `build/anatomy.json` | CC BY-SA 2.1 JP | **是** |
-| `index.html`（成品） | CC BY-SA 2.1 JP | **是** |
+| `build/anatomy.json` | CC BY 4.0 | 否（須標示來源） |
+| `index.html`（成品） | 內含 CC BY 4.0 資料＋MIT 程式碼 | 否（須保留標示） |
