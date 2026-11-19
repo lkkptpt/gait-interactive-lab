@@ -3,22 +3,22 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>步態互動實驗室 v1.12.3</title>
+<title>步態互動實驗室 v1.13.0</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Noto+Serif+TC:wght@900&family=IBM+Plex+Mono:wght@400&display=swap" rel="stylesheet">
 <style>
-:root{--stage:#0F1A24;--surface:#F4F2EE;--surface-2:#EAE7E1;--line:#DDD8D0;
-  --ink:#2E4257;--ink-2:#7D8A96;--accent:#3B5570;--accent-ink:#fff;--radius:3px}
+:root{--stage:#062433;--surface:#FFFFFF;--surface-2:#F2EDE0;--line:#E0D8C6;
+  --ink:#585657;--ink-2:#646162;--ink-heading:#00547A;--accent:#00547A;--accent-ink:#fff;--radius:3px}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
-  --surface:#16232E;--surface-2:#1D2C3A;--line:#2A3B4C;--ink:#E6EAEF;--ink-2:#8FA0B0;
-  --accent:#8FB6D6;--accent-ink:#0F1A24}}
-:root[data-theme="dark"]{--surface:#16232E;--surface-2:#1D2C3A;--line:#2A3B4C;
-  --ink:#E6EAEF;--ink-2:#8FA0B0;--accent:#8FB6D6;--accent-ink:#0F1A24}
+  --surface:#0A2B3B;--surface-2:#0F3649;--line:#1E4A5F;--ink:#F2EDE0;--ink-2:#A3B4BE;
+  --ink-heading:#F2EDE0;--accent:#7DBAD6;--accent-ink:#062433}}
+:root[data-theme="dark"]{--surface:#0A2B3B;--surface-2:#0F3649;--line:#1E4A5F;
+  --ink:#F2EDE0;--ink-2:#A3B4BE;--ink-heading:#F2EDE0;--accent:#7DBAD6;--accent-ink:#062433}
 *{box-sizing:border-box}
 html,body{margin:0;height:100%}
 body{background:var(--surface);color:var(--ink);
-  font-family:"Noto Sans TC",-apple-system,BlinkMacSystemFont,sans-serif;font-size:14px;line-height:1.6;
+  font-family:"Noto Sans TC",-apple-system,BlinkMacSystemFont,sans-serif;font-size:14px;line-height:1.6;font-variant-numeric:tabular-nums;
   -webkit-text-size-adjust:100%}
 .app{display:grid;grid-template-columns:232px minmax(0,1fr) 296px;height:100dvh;overflow:hidden}
 .panel{background:var(--surface);border-right:1px solid var(--line);overflow-y:auto;padding:14px 14px 40px}
@@ -26,9 +26,9 @@ body{background:var(--surface);color:var(--ink);
 /* 視窗：畫布用絕對定位鋪滿，不依賴百分比高度解析 */
 .stage{position:relative;background:var(--stage);min-width:0;min-height:360px;overflow:hidden}
 #c{position:absolute;top:0;left:0;width:100%;height:100%;display:block;touch-action:none}
-h1{font-size:15px;font-weight:700;margin:0 0 2px}
-.sub{font-size:11.5px;color:var(--ink-2);margin:0 0 16px;font-family:"IBM Plex Mono",monospace;line-height:1.5}
-h2{font-size:12px;font-weight:700;margin:20px 0 8px;padding-bottom:5px;border-bottom:1px solid var(--line)}
+h1{font-family:"Noto Serif TC",serif;font-size:17px;font-weight:900;color:var(--ink-heading);margin:0 0 2px;letter-spacing:.02em}
+.sub{font-size:11.5px;color:var(--ink-2);margin:0 0 16px;font-family:"Noto Sans TC",sans-serif;line-height:1.5}
+h2{font-size:12px;font-weight:700;color:var(--ink-heading);margin:20px 0 8px;padding-bottom:5px;border-bottom:1px solid var(--line)}
 h2:first-of-type{margin-top:14px}
 p.note{font-size:11.5px;color:var(--ink-2);line-height:1.55;margin:6px 0 0}
 details a,p.note a{color:var(--accent);text-decoration:underline;text-underline-offset:2px}
@@ -48,21 +48,21 @@ label.chk{display:flex;align-items:center;gap:7px;font-size:12.5px;padding:3px 0
 label.chk input{accent-color:var(--accent);margin:0}
 .slab{margin-bottom:12px}
 .slab .top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:3px}
-.slab .val{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--accent);font-variant-numeric:tabular-nums}
+.slab .val{font-family:"Noto Sans TC",sans-serif;font-size:12px;color:var(--accent);font-variant-numeric:tabular-nums}
 .slab .ends{display:flex;justify-content:space-between;font-size:10.5px;color:var(--ink-2);margin-top:1px}
 .prov{font-size:11px;line-height:1.5;margin:8px 0 14px;padding:7px 9px;border-left:2px solid var(--accent);
   background:var(--surface-2);color:var(--ink-2)}
 .prov b{color:var(--ink);font-weight:500}
-.hud{position:absolute;top:10px;left:12px;font-family:"IBM Plex Mono",monospace;
-  font-size:11.5px;color:#90A4B6;pointer-events:none;line-height:1.7;z-index:2}
-.hud b{color:#8FB6D6;font-weight:500;font-size:19px}
-.hud .ev{color:#E6EAEF;font-family:"Noto Sans TC",sans-serif;font-size:12.5px}
-#diag{color:#627689;font-size:10.5px;margin-top:4px;display:none}  /* 除錯用，預設隱藏，按 d 開關 */
-.pickname{position:absolute;top:10px;right:12px;font-size:12.5px;color:#E6EAEF;z-index:2;
-  background:rgba(15,26,36,.82);border:1px solid #2A3B4C;border-radius:var(--radius);
+.hud{position:absolute;top:10px;left:12px;font-family:"Noto Sans TC",sans-serif;
+  font-size:11.5px;color:#9DB3BF;pointer-events:none;line-height:1.7;z-index:2}
+.hud b{color:#7DBAD6;font-weight:500;font-size:19px}
+.hud .ev{color:#F2EDE0;font-family:"Noto Sans TC",sans-serif;font-size:12.5px}
+#diag{color:#5F8091;font-size:10.5px;margin-top:4px;display:none}  /* 除錯用，預設隱藏，按 d 開關 */
+.pickname{position:absolute;top:10px;right:12px;font-size:12.5px;color:#F2EDE0;z-index:2;
+  background:rgba(6,36,51,.82);border:1px solid #1E4A5F;border-radius:var(--radius);
   padding:4px 9px;pointer-events:none;opacity:0;transition:opacity .15s}
 .transport{position:absolute;left:12px;right:12px;bottom:12px;z-index:2;
-  background:rgba(15,26,36,.9);border:1px solid #2A3B4C;border-radius:var(--radius);padding:8px 11px;
+  background:rgba(6,36,51,.9);border:1px solid #1E4A5F;border-radius:var(--radius);padding:8px 11px;
   backdrop-filter:blur(6px)}
 .tline{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
 /* 速度檔位獨立成一組：窄螢幕時整組換到下一行，不會把時間軸擠掉或橫向溢出 */
@@ -73,30 +73,30 @@ label.chk input{accent-color:var(--accent);margin:0}
   .spd{order:4;flex:1 1 100%;justify-content:space-between}
   .spd button{flex:1}
 }
-.transport button{background:#1D2C3A;border-color:#2A3B4C;color:#E6EAEF}
-.transport button.on{background:#8FB6D6;color:#0F1A24;border-color:#8FB6D6}
+.transport button{background:#0F3649;border-color:#1E4A5F;color:#F2EDE0}
+.transport button.on{background:#7DBAD6;color:#062433;border-color:#7DBAD6}
 .track{position:relative;flex:1;height:30px}
 .track input[type=range]{position:absolute;left:0;right:0;top:11px;width:100%}
 .bands{position:absolute;left:0;right:0;top:0;height:7px;pointer-events:none}
-.bands i{position:absolute;top:0;height:7px;background:#8FB6D6;opacity:.28;border-radius:1px}
+.bands i{position:absolute;top:0;height:7px;background:#7DBAD6;opacity:.28;border-radius:1px}
 .marks{position:absolute;left:0;right:0;bottom:0;height:11px;pointer-events:none}
 .marks i{position:absolute;bottom:0;width:1px;height:7px;background:#ffc46b}
 .marks span{position:absolute;bottom:0;transform:translateX(-50%);font-size:9px;color:#ffc46b;
-  font-family:"IBM Plex Mono",monospace;white-space:nowrap}
-.transport .pct{font-family:"IBM Plex Mono",monospace;font-size:12px;color:#8FB6D6;min-width:46px;
+  font-family:"Noto Sans TC",sans-serif;white-space:nowrap}
+.transport .pct{font-family:"Noto Sans TC",sans-serif;font-size:12px;color:#7DBAD6;min-width:46px;
   text-align:right;font-variant-numeric:tabular-nums}
 .tabs{display:flex;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;margin-bottom:10px}
 .tabs button{flex:1;border:none;border-radius:0;border-right:1px solid var(--line);font-size:11.5px;padding:6px 4px;line-height:1.3}
 .tabs button:last-child{border-right:none}
-.tabs .kf{font-family:"IBM Plex Mono",monospace;display:block;font-size:13px}
+.tabs .kf{font-family:"Noto Sans TC",sans-serif;display:block;font-size:13px}
 .tabs .kfl{display:block;font-size:10px;color:var(--ink-2)}
 .tabs button.on .kfl{color:var(--accent-ink);opacity:.75}
 .charts{position:absolute;left:12px;right:12px;bottom:60px;z-index:2;display:flex;gap:8px}
 .charts.off{display:none}
-.chart{flex:1;background:rgba(15,26,36,.9);border:1px solid #2A3B4C;border-radius:var(--radius);padding:5px 7px 2px}
-.chart .ct{font-size:10.5px;color:#90A4B6;display:flex;justify-content:space-between;
+.chart{flex:1;background:rgba(6,36,51,.9);border:1px solid #1E4A5F;border-radius:var(--radius);padding:5px 7px 2px}
+.chart .ct{font-size:10.5px;color:#9DB3BF;display:flex;justify-content:space-between;
   font-family:"Noto Sans TC",sans-serif;line-height:1.4}
-.chart .ct b{color:#8FB6D6;font-weight:500;font-family:"IBM Plex Mono",monospace;font-size:11px}
+.chart .ct b{color:#7DBAD6;font-weight:500;font-family:"Noto Sans TC",sans-serif;font-size:11px}
 .chart svg{display:block;width:100%;height:auto}
 .coup{margin:10px 0 4px;background:var(--surface-2);border:1px solid var(--line);
   border-radius:var(--radius);padding:8px 9px 4px}
@@ -113,25 +113,25 @@ details summary{cursor:pointer;color:var(--ink);font-size:12px;font-weight:500}
 details p{margin:8px 0 0;line-height:1.6}
 table.ev{width:100%;border-collapse:collapse;font-size:11.5px;margin-top:6px}
 table.ev td{padding:2px 0;border-bottom:1px solid var(--line)}
-table.ev td:last-child{text-align:right;font-family:"IBM Plex Mono",monospace;color:var(--accent)}
+table.ev td:last-child{text-align:right;font-family:"Noto Sans TC",sans-serif;color:var(--accent)}
 @media (max-width:900px){
   .app{grid-template-columns:1fr;grid-template-rows:auto auto auto;height:auto;min-height:100dvh;overflow:visible}
   .stage{order:1;height:58vh}
   .panel{order:2;border:none;border-top:1px solid var(--line);overflow:visible}
   .panel--right{order:3;border-left:none}
 }
-#boot{position:fixed;inset:0;z-index:50;background:#0F1A24;display:flex;
+#boot{position:fixed;inset:0;z-index:50;background:#062433;display:flex;
   align-items:center;justify-content:center;transition:opacity .35s}
 #boot.gone{opacity:0;pointer-events:none}
 .boot-box{text-align:center;max-width:460px;padding:0 24px}
 .boot-wrap{display:inline-block;margin-top:18px;text-align:left}
-.boot-quote{color:#C9D6E2;font-size:14px;line-height:2}
-.boot-by{color:#7D8A96;font-size:12px;margin-top:10px;text-align:right}
+.boot-quote{color:#E4DFD2;font-size:14px;line-height:2}
+.boot-by{color:#9DB3BF;font-size:12px;margin-top:10px;text-align:right}
 @media (max-width:480px){.boot-quote{font-size:13px;line-height:1.9}}
-.boot-title{color:var(--accent);font-size:15px;font-weight:600;letter-spacing:.04em}
-.boot-msg{color:#627689;font-size:12px;line-height:1.7;margin-top:22px}
-.boot-bar{height:2px;background:#1D2C3A;margin-top:18px;overflow:hidden;border-radius:2px}
-.boot-bar i{display:block;height:100%;width:40%;background:var(--accent);
+.boot-title{color:#F2EDE0;font-family:"Noto Serif TC",serif;font-size:20px;font-weight:900;letter-spacing:.06em}
+.boot-msg{color:#5F8091;font-size:12px;line-height:1.7;margin-top:22px}
+.boot-bar{height:2px;background:#0F3649;margin-top:18px;overflow:hidden;border-radius:2px}
+.boot-bar i{display:block;height:100%;width:40%;background:#F37200;
   animation:bootslide 1.1s ease-in-out infinite}
 @keyframes bootslide{0%{transform:translateX(-100%)}100%{transform:translateX(250%)}}
 </style>
@@ -151,7 +151,7 @@ table.ev td:last-child{text-align:right;font-family:"IBM Plex Mono",monospace;co
 <div class="app">
   <aside class="panel">
     <h1>步態互動實驗室</h1>
-    <p class="sub">v1.12.3 · 公開版：34 個片段<br>骨骼網格 BodyParts3D（CC BY 4.0）· 動作資料 五個 CC BY 4.0 研究資料集<br>兩者皆經本工具改作；作者、出處、授權連結與改作內容見下方「資料來源與授權」</p>
+    <p class="sub">v1.13.0 · 公開版：34 個片段<br>骨骼網格 BodyParts3D（CC BY 4.0）· 動作資料 五個 CC BY 4.0 研究資料集<br>兩者皆經本工具改作；作者、出處、授權連結與改作內容見下方「資料來源與授權」</p>
 
     <details class="why">
       <summary>為什麼做這個</summary>
@@ -196,11 +196,11 @@ table.ev td:last-child{text-align:right;font-family:"IBM Plex Mono",monospace;co
       <button id="archToggle">足弓</button>
     </div>
     <div class="row" id="elbPose" style="margin-top:6px;align-items:center">
-      <span style="font-size:11px;color:#90A4B6;font-family:'Noto Sans TC',sans-serif">肘靜態角</span>
+      <span style="font-size:11px;color:#9DB3BF;font-family:'Noto Sans TC',sans-serif">肘靜態角</span>
       <button data-el="35" class="on" title="Yegian 2019 走路平均。量測上走路的肘其實維持半屈，只微動 ±7°">實測 35°</button>
       <button data-el="25" title="實測與視覺之間的折衷">折衷 25°</button>
       <button data-el="15" title="後擺時約 9°，符合「走路手臂是直的」視覺印象">視覺 15°</button>
-      <span style="font-size:10.5px;color:#627689;font-family:'Noto Sans TC',sans-serif">顯示常數（模型）；擺幅與肩肘耦合為實測，不受此切換影響</span>
+      <span style="font-size:10.5px;color:#5F8091;font-family:'Noto Sans TC',sans-serif">顯示常數（模型）；擺幅與肩肘耦合為實測，不受此切換影響</span>
     </div>
 
     <h2>與對照組比較</h2>
@@ -271,7 +271,7 @@ table.ev td:last-child{text-align:right;font-family:"IBM Plex Mono",monospace;co
     <div id="coupBox"></div>
 
     <h2>目前實際角度</h2>
-    <div id="readout" style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--ink-2);line-height:1.9"></div>
+    <div id="readout" style="font-family:'Noto Sans TC',sans-serif;font-size:12px;color:var(--ink-2);line-height:1.9"></div>
     <p class="note">＝ 試驗資料 ＋ 你設定的偏移。</p>
   </aside>
 </div>
@@ -302,13 +302,13 @@ var bin=(function(b64){var s=atob(b64),n=s.length,a=new Uint8Array(n);
 var canvas=document.getElementById('c'), stage=canvas.parentNode;
 var renderer=new THREE.WebGLRenderer({canvas:canvas,antialias:true});
 renderer.setPixelRatio(Math.min(devicePixelRatio||1,2));
-var scene=new THREE.Scene(); scene.background=new THREE.Color(0x0f1a24);
+var scene=new THREE.Scene(); scene.background=new THREE.Color(0x062433);
 var camera=new THREE.PerspectiveCamera(34,1,0.02,60);
 scene.add(new THREE.AmbientLight(0xffffff,0.34));
-scene.add(new THREE.HemisphereLight(0xd8e4ee,0x0d1620,0.85));
+scene.add(new THREE.HemisphereLight(0xd8e4ee,0x041c28,0.85));
 var kl=new THREE.DirectionalLight(0xffffff,0.66); kl.position.set(2,3.5,2.5); scene.add(kl);
-var fl=new THREE.DirectionalLight(0x8fb6d6,0.28); fl.position.set(-2.5,1.5,-2); scene.add(fl);
-var grid=new THREE.GridHelper(6,24,0x3b5570,0x24323f);
+var fl=new THREE.DirectionalLight(0x7dbad6,0.28); fl.position.set(-2.5,1.5,-2); scene.add(fl);
+var grid=new THREE.GridHelper(6,24,0x1f5a78,0x0f3346);
 grid.material.transparent=true; grid.material.opacity=0.5; scene.add(grid);
 
 /* ---- L2：骨架 ---- */
@@ -547,7 +547,7 @@ function updArch(){
   var txt='<span style="color:#ffc46b">足弓</span>　弓高 '+(h*1000).toFixed(1)+' mm';
   if(ARCH_REF!=null){
     var d=(h-ARCH_REF.h)*1000;
-    txt+='<span style="color:'+(d<-0.5?'#ff8a6b':'#90A4B6')+'">　'+
+    txt+='<span style="color:'+(d<-0.5?'#ff8a6b':'#9DB3BF')+'">　'+
          (d>=0?'+':'')+d.toFixed(1)+' mm</span><span style="opacity:.6">（相對貼平）</span>';
   }
   txt+='　弓角 '+ang.toFixed(1)+'°<span style="opacity:.6">　模型推算</span>';
@@ -1139,26 +1139,26 @@ function buildCharts(){
     var svg='<svg viewBox="0 0 '+CW+' '+CH+'" preserveAspectRatio="none">';
     (CLIP.bands||[]).forEach(function(b){
       svg+='<rect x="'+X(b.a)+'" y="'+PADT+'" width="'+(X(b.b)-X(b.a))+'" height="'+(CH-PADT-PADB)+
-           '" fill="#8FB6D6" opacity="0.09"/>'; });
-    if(lo<0&&hi>0) svg+='<line x1="0" y1="'+Y(0)+'" x2="'+CW+'" y2="'+Y(0)+'" stroke="#3A4C5E" stroke-width="0.6"/>';
+           '" fill="#7DBAD6" opacity="0.09"/>'; });
+    if(lo<0&&hi>0) svg+='<line x1="0" y1="'+Y(0)+'" x2="'+CW+'" y2="'+Y(0)+'" stroke="#2A5468" stroke-width="0.6"/>';
     (CLIP.events||[]).forEach(function(e){
       svg+='<line x1="'+X(e.p)+'" y1="'+PADT+'" x2="'+X(e.p)+'" y2="'+(CH-PADB)+
            '" stroke="#ffc46b" stroke-width="0.5" opacity="0.45"/>'; });
     if(sr.derived){
       if(other) svg+='<path d="'+path(other)+'" fill="none" stroke="#c98be0" stroke-width="1.2" opacity="0.85"/>';
-      if(mine)  svg+='<path d="'+path(mine)+'" fill="none" stroke="#8FB6D6" stroke-width="1.5"/>';
+      if(mine)  svg+='<path d="'+path(mine)+'" fill="none" stroke="#7DBAD6" stroke-width="1.5"/>';
     } else {
       if(cc) svg+='<path d="'+path(cc.data[sr.k[0]])+'" fill="none" stroke="#c98be0" stroke-width="1.2" opacity="0.85"/>';
       sr.k.forEach(function(k,idx){
         if(!G[k]) return;
-        svg+='<path d="'+path(G[k])+'" fill="none" stroke="'+(idx?'#7D8A96':'#8FB6D6')+
+        svg+='<path d="'+path(G[k])+'" fill="none" stroke="'+(idx?'#8C9CA5':'#7DBAD6')+
              '" stroke-width="'+(idx?1:1.5)+'" '+(idx?'stroke-dasharray="3 2"':'')+'/>';
       });
     }
     svg+='<line class="ph" x1="0" y1="0" x2="0" y2="'+(CH-PADB)+'" stroke="#fff" stroke-width="0.8" opacity="0.8"/>';
     var _u=sr.unit||'°';
-    svg+='<text x="1" y="'+(CH-2)+'" font-size="6" fill="#627689">'+lo.toFixed(0)+_u+'</text>';
-    svg+='<text x="'+(CW-1)+'" y="'+(CH-2)+'" font-size="6" fill="#627689" text-anchor="end">'+hi.toFixed(0)+_u+'</text>';
+    svg+='<text x="1" y="'+(CH-2)+'" font-size="6" fill="#5F8091">'+lo.toFixed(0)+_u+'</text>';
+    svg+='<text x="'+(CW-1)+'" y="'+(CH-2)+'" font-size="6" fill="#5F8091" text-anchor="end">'+hi.toFixed(0)+_u+'</text>';
     svg+='</svg>';
     d.innerHTML='<div class="ct"><span>'+sr.t+'　'+sr.neg+' ↔ '+sr.pos+
       (sr.derived?'<span style="opacity:.55">　模型推算</span>':'')+
@@ -1197,7 +1197,7 @@ function drawCoupling(id,side){
   }
   lo=-14; hi=14;   // 距下與距腿共用固定刻度，才看得出量級差距
   function Y(v){ return P/2+(hi-v)/(hi-lo)*(H-P); }
-  var col=['#8FB6D6','#ffc46b','#e86a3a'], nm=['額狀面 內翻','水平面 內收','矢狀面 蹠屈'];
+  var col=['#7DBAD6','#ffc46b','#e86a3a'], nm=['額狀面 內翻','水平面 內收','矢狀面 蹠屈'];
   var svg='<svg viewBox="0 0 '+W+' '+H+'">';
   svg+='<line x1="'+X(0)+'" y1="'+(P/2)+'" x2="'+X(0)+'" y2="'+(H-P/2)+'" stroke="var(--line)" stroke-width="0.7"/>';
   svg+='<line x1="'+P+'" y1="'+Y(0)+'" x2="'+(W-P)+'" y2="'+Y(0)+'" stroke="var(--line)" stroke-width="0.7"/>';
@@ -1318,7 +1318,7 @@ function setClip(id){
   if(ah){
     var a=c.arm;
     if(c.foot_only||!a) ah.innerHTML='';
-    else if(a.src==='own') ah.innerHTML='<span style="color:#90A4B6">手臂　實測</span>';
+    else if(a.src==='own') ah.innerHTML='<span style="color:#9DB3BF">手臂　實測</span>';
     else if(a.src==='borrowed') ah.innerHTML='<span style="color:var(--warn)">手臂　借用健康組平均（本片段無手臂資料）</span>';
     else ah.innerHTML='<span style="color:var(--warn)">手臂　無資料，靜止</span>';
   }
@@ -1751,13 +1751,13 @@ function tick(now){
     if(!cs){ el.innerHTML='<span style="opacity:.6">此 clip 無事件資料，未判定足地接觸狀態</span>'; return; }
     var dev=pelvisDev(phase)*100;
     var h=cs.map(function(c){
-      return '<span style="color:'+(c.ok?'#90A4B6':'#ff8a6b')+'">'+
+      return '<span style="color:'+(c.ok?'#9DB3BF':'#ff8a6b')+'">'+
         (c.side==='r'?'右':'左')+'足 '+c.txt+'</span>';}).join('　');
     var bad=Math.abs(dev)>2.0;
     // 顯示前先把會四捨五入成 0.0 的值夾成真正的 0，
     // 否則浮點誤差會讓同一個狀態一下顯示 +0.0 一下 -0.0
     var devS = Math.abs(dev)<0.05 ? '0.0' : (dev>0?'+':'')+dev.toFixed(1);
-    h+='　<span style="color:'+(bad?'#ff8a6b':'#90A4B6')+'">骨盆偏離 '+devS+' cm</span>';
+    h+='　<span style="color:'+(bad?'#ff8a6b':'#9DB3BF')+'">骨盆偏離 '+devS+' cm</span>';
     var gap=ankleGap();
     if(gap<0.08) h+='　<span style="color:#ff8a6b">兩踝距離 '+(gap*100).toFixed(1)+
        ' cm（過近，可能來自缺少額狀面資料）</span>';
