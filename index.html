@@ -3,18 +3,18 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>步態互動實驗室 v1.13.0</title>
+<title>步態互動實驗室 v1.13.1</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Noto+Serif+TC:wght@900&family=IBM+Plex+Mono:wght@400&display=swap" rel="stylesheet">
 <style>
 :root{--stage:#062433;--surface:#FFFFFF;--surface-2:#F2EDE0;--line:#E0D8C6;
-  --ink:#585657;--ink-2:#646162;--ink-heading:#00547A;--accent:#00547A;--accent-ink:#fff;--radius:3px}
+  --ink:#585657;--ink-2:#646162;--ink-heading:#00547A;--accent:#00547A;--accent-ink:#fff;--warn:#A8430F;--radius:3px}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
   --surface:#0A2B3B;--surface-2:#0F3649;--line:#1E4A5F;--ink:#F2EDE0;--ink-2:#A3B4BE;
-  --ink-heading:#F2EDE0;--accent:#7DBAD6;--accent-ink:#062433}}
+  --ink-heading:#F2EDE0;--accent:#7DBAD6;--accent-ink:#062433;--warn:#ff8a6b}}
 :root[data-theme="dark"]{--surface:#0A2B3B;--surface-2:#0F3649;--line:#1E4A5F;
-  --ink:#F2EDE0;--ink-2:#A3B4BE;--ink-heading:#F2EDE0;--accent:#7DBAD6;--accent-ink:#062433}
+  --ink:#F2EDE0;--ink-2:#A3B4BE;--ink-heading:#F2EDE0;--accent:#7DBAD6;--accent-ink:#062433;--warn:#ff8a6b}
 *{box-sizing:border-box}
 html,body{margin:0;height:100%}
 body{background:var(--surface);color:var(--ink);
@@ -24,7 +24,7 @@ body{background:var(--surface);color:var(--ink);
 .panel{background:var(--surface);border-right:1px solid var(--line);overflow-y:auto;padding:14px 14px 40px}
 .panel--right{border-right:none;border-left:1px solid var(--line)}
 /* 視窗：畫布用絕對定位鋪滿，不依賴百分比高度解析 */
-.stage{position:relative;background:var(--stage);min-width:0;min-height:360px;overflow:hidden}
+.stage{--warn:#ff8a6b;position:relative;background:var(--stage);min-width:0;min-height:360px;overflow:hidden}
 #c{position:absolute;top:0;left:0;width:100%;height:100%;display:block;touch-action:none}
 h1{font-family:"Noto Serif TC",serif;font-size:17px;font-weight:900;color:var(--ink-heading);margin:0 0 2px;letter-spacing:.02em}
 .sub{font-size:11.5px;color:var(--ink-2);margin:0 0 16px;font-family:"Noto Sans TC",sans-serif;line-height:1.5}
@@ -151,7 +151,7 @@ table.ev td:last-child{text-align:right;font-family:"Noto Sans TC",sans-serif;co
 <div class="app">
   <aside class="panel">
     <h1>步態互動實驗室</h1>
-    <p class="sub">v1.13.0 · 公開版：34 個片段<br>骨骼網格 BodyParts3D（CC BY 4.0）· 動作資料 五個 CC BY 4.0 研究資料集<br>兩者皆經本工具改作；作者、出處、授權連結與改作內容見下方「資料來源與授權」</p>
+    <p class="sub">v1.13.1 · 公開版：34 個片段<br>骨骼網格 BodyParts3D（CC BY 4.0）· 動作資料 五個 CC BY 4.0 研究資料集<br>兩者皆經本工具改作；作者、出處、授權連結與改作內容見下方「資料來源與授權」</p>
 
     <details class="why">
       <summary>為什麼做這個</summary>
@@ -1270,7 +1270,7 @@ function fmtMeta(c){
   if(c.note) h+='<br><span style="opacity:.75">'+c.note+'</span>';
   if(c.arm&&!c.foot_only) h+='<br><span style="'+(c.arm.src==='own'?'opacity:.75':'color:var(--warn)')+'">'+c.arm.note+'</span>';
   h+='<br><span style="opacity:.7">週期 '+(c.period||0).toFixed(2)+' s'+
-     (c.period_src?'（實測）':'<span style="color:var(--warn)">（未知，1× 不代表實際步速）</span>')+'　站立期 '+
+     (c.period_src?'（實測）':'</span><span style="color:var(--warn)">（未知，1× 不代表實際步速）</span><span style="opacity:.7">')+'　站立期 '+
      (((c.stats||{})['右站立期佔比'])||(c.stance_r!=null?c.stance_r.toFixed(1):'—'))+'%'+
      (c.stance_src?'<span style="opacity:.75">（'+c.stance_src+'）</span>':'')+'　髖偏移 '+
      ((c.hip_offset||0)>=0?'+':'')+(c.hip_offset||0).toFixed(1)+'°</span>';

@@ -32,6 +32,7 @@ build/
   build.py            把三份 JSON 塞進模板 → ../index.html
   check_build.py      檢查 41 個函式定義齊全（曾因字串取代刪掉三個函式而寫）
   check_cycles.py     檢查呼叫環都有阻斷旗標（曾因無窮遞迴而寫）
+  check_syntax.py     抽出內嵌 script 跑 node --check（取代原本永遠報錯的 sed 指令）
   build_*.py / patch_*.py / solve_*.js   各版本的資料處理腳本，留作來源追溯
 DATA-SOURCES.md       五個資料集的引用、處理方式、每個推得值的算法
 LICENSE / LICENSE-DATA.md
@@ -47,7 +48,7 @@ python3 build/build.py
 # 3. 三道檢查，缺一不可
 python3 build/check_build.py index.html
 python3 build/check_cycles.py index.html
-node --check <(sed -n '/<script>/,/<\/script>/p' index.html | sed '1d;$d')
+python3 build/check_syntax.py index.html
 # 4. 本機開 index.html 實際看一下（Playwright 截圖也行）
 # 5. commit + push（push 到 main 即發佈到 GitHub Pages）
 ```
@@ -72,6 +73,7 @@ node --check <(sed -n '/<script>/,/<\/script>/p' index.html | sed '1d;$d')
 - v1.12.2：上肢已加入（64 塊骨頭），手臂擺幅實測、靜態姿勢文獻常數，肘靜態角三檔可切
 - v1.12.3（2026-11-19）：骨骼網格授權標示改為 CC BY 4.0（BodyParts3D 2025-02-27 起的現行授權）
 - v1.13.0（2026-11-19）：配色與字體改用練健康品牌規範正式色值（strength #00547A 等），只換介面外殼；資料語意色（關節標記、警告、對照組）不動。不放練健康 logo，維持個人作品（見 build/retheme_lkk2.py）
+- v1.13.1（2026-11-19）：補上從未定義的 --warn（淺色面板 #A8430F、深色與 3D 舞台 #ff8a6b），借用／模型／未知的標示恢復上色
 - 足弓三型（站立期、走路合成、推進期放大）已完成
 - 已知限制列在 README「已知限制」段，不要重複造輪子去解已經標為限制的東西，除非有新資料
 
