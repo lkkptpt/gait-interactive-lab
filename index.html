@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>步態互動實驗室 v1.13.1</title>
+<title>步態互動實驗室 v1.13.2</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Noto+Serif+TC:wght@900&family=IBM+Plex+Mono:wght@400&display=swap" rel="stylesheet">
@@ -151,7 +151,7 @@ table.ev td:last-child{text-align:right;font-family:"Noto Sans TC",sans-serif;co
 <div class="app">
   <aside class="panel">
     <h1>步態互動實驗室</h1>
-    <p class="sub">v1.13.1 · 公開版：34 個片段<br>骨骼網格 BodyParts3D（CC BY 4.0）· 動作資料 五個 CC BY 4.0 研究資料集<br>兩者皆經本工具改作；作者、出處、授權連結與改作內容見下方「資料來源與授權」</p>
+    <p class="sub">v1.13.2 · 公開版：34 個片段<br>骨骼網格 BodyParts3D（CC BY 4.0）· 動作資料 五個 CC BY 4.0 研究資料集<br>兩者皆經本工具改作；作者、出處、授權連結與改作內容見下方「資料來源與授權」</p>
 
     <details class="why">
       <summary>為什麼做這個</summary>
@@ -816,8 +816,11 @@ var ARM_REST={};
   var a1=Math.atan2(el[0]-sh[0], sh[1]-el[1])/D2R;      // 肱骨：肘在肩前方為正
   var a2=Math.atan2(wr[0]-el[0], el[1]-wr[1])/D2R;      // 前臂：腕在肘前方為正
   var ad=Math.atan2(Math.abs(wr[2]-sh[2]), sh[1]-wr[1])/D2R;
-  ARM_REST[s]={flex:a1, elbow:a2-a1, add:ad};
+  ARM_REST[s]={flex:a1, elbow:a2-a1, add:ad,
+    // 前臂長軸（腕→肘，單位向量）：旋前旋後繞這條軸轉，腕的位置不動
+    pax:new THREE.Vector3(el[0]-wr[0], el[1]-wr[1], el[2]-wr[2]).normalize()};
 });
+var _qPron=new THREE.Quaternion();
 function hasArm(){ return !!(G && G['shoulder_flexion_r']); }
 /* 手臂的靜態姿勢：文獻常數（模型）。PiG 的肩肘絕對角度在兩個資料集互相矛盾
    （Bertaux 肩 −15°、肘 47°；Shida 肩 −7°、肘 12°），不可信，資料只取週期內變化量。
@@ -880,8 +883,10 @@ function pose(p){
     setJ('shoulder_'+s, (g?samp('shoulder_flexion_'+s,p):0) + ARM_POSE.sh - R.flex,
                         k*((g?samp('shoulder_adduction_'+s,p):0) + R.add),
                         k*(g?samp('shoulder_rotation_'+s,p):0), p);
-    setJ('elbow_'+s, (g?samp('elbow_flexion_'+s,p):0) + ARM_POSE.el - R.elbow,
-                     0, k*ARM_POSE.pron, p);
+    setJ('elbow_'+s, (g?samp('elbow_flexion_'+s,p):0) + ARM_POSE.el - R.elbow, 0, 0, p);
+    // 旋前繞前臂長軸，不繞鉛垂 Y 軸（v1.13.2 修正：繞 Y 會把腕甩到內側、手穿進骨盆）
+    if(R.pax){ _qPron.setFromAxisAngle(R.pax, k*ARM_POSE.pron*D2R);
+      nodes[JM['elbow_'+s].seg].quaternion.multiply(_qPron); live['elbow_'+s].tra=k*ARM_POSE.pron; }
     setJ('wrist_'+s, g?samp('wrist_flexion_'+s,p):0, 0, 0, p);
   });
   nodes.pelvis.position.y = PELV_Y;
